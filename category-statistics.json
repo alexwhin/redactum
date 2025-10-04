@@ -35,9 +35,5 @@
     "CI_CD_SECRETS": 7,
     "AUTH_SECRETS": 7
   },
-<<<<<<< HEAD
-  "lastUpdated": "2025-10-04T10:41:18.825Z"
-=======
-  "lastUpdated": "2025-10-04T10:57:16.389Z"
->>>>>>> 8ffc930 (chore: add .cmai to gitignore and update documentation)
+  "lastUpdated": "2025-10-04T11:01:02.740Z"
 }
