@@ -1,6 +1,6 @@
 {
   "name": "redactum",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Comprehensive PII redaction library for AI applications with framework adapters for LangChain, LlamaIndex, Haystack, OpenAI SDK, Anthropic SDK, and Vercel AI SDK",
   "type": "module",
   "main": "./dist/index.js",
@@ -31,7 +31,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "pnpm run stats:generate && concurrently \"pnpm run build:watch\" \"pnpm run typecheck:watch\" \"pnpm run stats:watch\" \"pnpm run docs:dev\"",
+    "dev": "pnpm run stats:generate && concurrently \"pnpm run build:watch\" \"pnpm run typecheck:watch\" \"pnpm run docs:dev\"",
     "build:watch": "tsup --watch",
     "test": "vitest",
     "test:ci": "vitest run",
@@ -140,6 +140,13 @@
     "node": ">=18.0.0"
   },
   "packageManager": "pnpm@10.14.0",
+  "pnpm": {
+    "overrides": {
+      "esbuild": ">=0.25.0",
+      "@conventional-changelog/git-client": ">=2.0.0",
+      "jsondiffpatch": ">=0.7.2"
+    }
+  },
   "dependencies": {
     "yaml": "^2.8.1"
   }
