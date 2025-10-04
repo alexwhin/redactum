@@ -69,6 +69,12 @@ jobs:
       - name: Validate Examples
         run: pnpm run validate:examples
 
+      - name: Generate Statistics
+        run: pnpm run stats:generate
+
+      - name: Generate Documentation
+        run: pnpm run docs:generate
+
       - name: Build Package
         run: pnpm run build
 

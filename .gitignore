@@ -148,6 +148,9 @@ docs/.vitepress/dist/
 docs/.vitepress/cache/
 docs/.vitepress/.temp/
 
+# Generated files
+category-statistics.json
+
 # User configuration files (examples are tracked)
 .redactumrc.json
 .redactumrc.js
