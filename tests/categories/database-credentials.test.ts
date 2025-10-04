@@ -367,6 +367,24 @@ describe("Database Credentials Redaction", () => {
     });
   });
 
+  describe("Elasticsearch connection strings", () => {
+    it("should redact Elasticsearch URLs", () => {
+      const input = "https://elastic:password@elasticsearch.local:9200";
+      const result = redactum(input, {
+        policies: ["ELASTICSEARCH_URL"],
+      });
+      expect(result.redactedText).toBe("[ELASTICSEARCH_URL]");
+    });
+
+    it("should redact HTTP Elasticsearch URLs", () => {
+      const input = "http://user:pass@es-cluster:9200/index";
+      const result = redactum(input, {
+        policies: ["ELASTICSEARCH_URL"],
+      });
+      expect(result.redactedText).toBe("[ELASTICSEARCH_URL]");
+    });
+  });
+
   describe("Integration with default categories", () => {
     it("should work without specifying categories", () => {
       const input = "postgres://admin:secret@localhost:5432/db";

@@ -59,6 +59,7 @@
     "docs:generate": "tsx scripts/generate-documentation.ts",
     "stats:generate": "tsx scripts/generate-statistics.ts",
     "stats:watch": "tsx scripts/watch-statistics.ts",
+    "validate:examples": "tsx scripts/validate-examples.ts",
     "prepare": "husky",
     "act": "bash act.sh"
   },

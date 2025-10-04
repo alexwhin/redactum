@@ -93,6 +93,12 @@ export default [
     },
   },
   {
+    files: ["scripts/**/*.ts"],
+    rules: {
+      "no-console": "off",
+    },
+  },
+  {
     ignores: [
       "dist/**",
       "coverage/**",
@@ -100,10 +106,10 @@ export default [
       "*.config.js",
       "test-package.mjs",
       "docs/.vitepress/**",
-      "scripts/**",
       "test-config.js",
       "redactum.config.example.js",
-      "examples/**", "*.config.ts"
+      "examples/**",
+      "*.config.ts",
     ],
   },
 ];

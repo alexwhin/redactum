@@ -46,19 +46,20 @@ function getCategoryDisplayName(category: PolicyCategory): string {
     ENCRYPTION_KEYS: "Encryption Keys",
     CONTAINER_REGISTRY: "Container Registries",
     INFRASTRUCTURE_SECRETS: "Infrastructure Secrets",
-    CUSTOM: "Custom"
+    CUSTOM: "Custom",
   };
+
   return categoryMap[category] || toHumanReadable(category);
 }
 
-const exampleMap: Record<string, string> = {
+export const exampleMap: Record<string, string> = {
   EMAIL_ADDRESS: "john@example.com",
   PHONE_NUMBER_US: "555-123-4567",
-  PHONE_NUMBER_INTERNATIONAL: "+44 20 7123 4567",
-  PHONE_NUMBER_UK: "+44 20 7123 4567",
+  PHONE_NUMBER_INTERNATIONAL: "Call +14155551234",
+  PHONE_NUMBER_UK: "+442071234567",
   PHONE_NUMBER_CANADIAN: "+1-416-555-0123",
   SSN: "123-45-6789",
-  CREDIT_CARD: "4111-1111-1111-1111",
+  CREDIT_CARD: "4111111111111111",
   IPV4_ADDRESS: "192.168.1.1",
   IPV6_ADDRESS: "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
   MAC_ADDRESS: "00:1B:44:11:3A:B7",
@@ -70,121 +71,149 @@ const exampleMap: Record<string, string> = {
   VIN: "1HGBH41JXMN109186",
   BANK_ACCOUNT_US: "123456789012",
   ROUTING_NUMBER_US: "021000021",
-  IBAN: "GB82 WEST 1234 5698 7654 32",
+  IBAN: "GB82WEST12345698765432",
   SWIFT_CODE: "BOFAUS3N",
   BITCOIN_ADDRESS: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
   ETHEREUM_ADDRESS: "0x742d35Cc6634C0532925a3b844Bc9e7595f5a123",
   MEDICAL_RECORD_NUMBER: "MRN-123456",
-  HEALTH_INSURANCE_ID: "HIB123456789",
+  HEALTH_INSURANCE_ID: "Insurance HIB123456789",
   URL_WITH_CREDENTIALS: "https://user:password@example.com",
-  JWT_TOKEN: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
-  API_KEY_GENERIC: "apikey_1234567890abcdef",
+  JWT_TOKEN:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+  API_KEY_GENERIC: "api_key: 1234567890abcdefghij",
   AWS_ACCESS_KEY: "AKIAIOSFODNN7EXAMPLE",
   AWS_SECRET_KEY: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-  AWS_SESSION_TOKEN: "FQoGZXIvYXdzEBYaDKJH...EXAMPLE",
+  AWS_SESSION_TOKEN:
+    "FQoGZXIvYXdzEBYaDKJHabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwx",
   GOOGLE_API_KEY: "AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI",
-  OPENAI_API_KEY: "sk-proj-abcdefghijklmnop1234567890",
-  ANTHROPIC_API_KEY: "sk-ant-api03-abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789012345678901234567890",
+  OPENAI_API_KEY: "sk-1234567890abcdefghijklmnopqrstuvwxyz",
+  ANTHROPIC_API_KEY:
+    "sk-ant-api03-abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789012345678901234567890",
   GITHUB_TOKEN: "ghp_abcdefghijklmnopqrstuvwxyz1234567890",
-  GITHUB_FINE_GRAINED_TOKEN: "github_pat_1234567890ABCDEFGHIJ_1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12",
+  GITHUB_FINE_GRAINED_TOKEN:
+    "github_pat_1234567890ABCDEFGHIJ_1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY",
   GITLAB_TOKEN: "glpat-abcdefghijklmnopqrst",
-  BITBUCKET_TOKEN: "ATBB1234567890abcdefghij",
+  BITBUCKET_TOKEN: "bitbucket-token: 1234567890abcdefghij",
   AZURE_SUBSCRIPTION_ID: "12345678-1234-1234-1234-123456789012",
   AZURE_CLIENT_ID: "12345678-1234-1234-1234-123456789012",
   AZURE_TENANT_ID: "12345678-1234-1234-1234-123456789012",
   DOCKER_HUB_TOKEN: "dckr_pat_abcd1234efgh5678ijkl9012mnop3456qrst",
-  DOCKER_REGISTRY_TOKEN: "dckr_reg_1234567890abcdef",
+  DOCKER_REGISTRY_TOKEN: "dckr_pat_abcd1234efgh5678ijkl9012mnop3456qrst",
   NPM_TOKEN: "npm_abcd1234efgh5678ijkl9012mnop3456qrst",
-  PYPI_TOKEN: "pypi-abcd1234efgh5678ijkl9012mnop3456qrstuvwx7890yzab1234cdef5678",
+  PYPI_TOKEN:
+    "pypi-abcd1234efgh5678ijkl9012mnop3456qrstuvwx7890yzab1234cdef567",
   RUBYGEMS_API_KEY: "rubygems_1234567890abcdef",
-  SLACK_WEBHOOK: "https://hooks.slack.com/services/T12345678/B123456789/abcdefghijklmnopqrstuvwx",
+  SLACK_WEBHOOK:
+    "https://hooks.slack.com/services/T12345678/B1234567890/abcdefghijklmnopqrstuvwx",
   SLACK_TOKEN: "xoxb-123456789012-123456789012-abcdefghijklmnopqrstuvwx",
-  DISCORD_TOKEN: "NzU0MzIxMDk4NzY1NDMyMTIz.X123456.abcdefghijklmnopqrstuvwxyz1234567890",
-  DISCORD_WEBHOOK: "https://discord.com/api/webhooks/123456789012345678/abcdefghijklmnopqrstuvwxyz1234567890",
+  DISCORD_TOKEN:
+    "NzU0MzIxMDk4NzY1NDMyMTIz.X123456.abcdefghijklmnopqrstuvwxyz1234567890",
+  DISCORD_WEBHOOK:
+    "https://discord.com/api/webhooks/123456789012345678/abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuvwxyz123456",
   TWILIO_ACCOUNT_SID: "AC12345678901234567890123456789012",
   TWILIO_AUTH_TOKEN: "1234567890abcdef1234567890abcdef",
   TWILIO_API_KEY: "SK1234567890abcdef1234567890abcdef",
-  SENDGRID_API_KEY: "SG.abcdefghijklmnop.qrstuvwxyz1234567890ABCDEFGHIJKLMNOP",
+  SENDGRID_API_KEY:
+    "SG.abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ1234",
   STRIPE_KEY: "sk_live_1234567890abcdefghijklmnop",
   SQUARE_ACCESS_TOKEN: "sq0atp-1234567890abcdef",
-  PAYPAL_CLIENT_ID: "AQkquBDf1zctJOWGKWUEtKXm6qVhueUEMvXO_-MCI4DQQ4-LWvkDLIN2fGsd",
+  PAYPAL_CLIENT_ID:
+    "AQkquBDf1zctJOWGKWUEtKXm6qVhueUEMvXO_-MCI4DQQ4-LWvkDLIN2fGsdabcdefghijklmnopqrstu",
   BRAINTREE_ACCESS_TOKEN: "access_token$sandbox$1234567890abcdef",
   MAILGUN_API_KEY: "key-1234567890abcdef1234567890abcdef",
   MAILCHIMP_API_KEY: "1234567890abcdef1234567890abcdef-us1",
   FIREBASE_API_KEY: "AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI",
-  FIREBASE_CONFIG: "firebaseConfig = { apiKey: \"AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI\" }",
-  SUPABASE_API_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFiY2RlZmdoaWprbG1ub3BxcnN0IiwiaWF0IjoxNjI3MjA4NTQyLCJleHAiOjE5NzQzNjM3NDJ9.abcdefghijklmnopqrstuvwxyz1234567890",
+  FIREBASE_CONFIG: "my-app-default-rtdb.us-central1.firebaseio.com",
+  SUPABASE_API_KEY:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFiY2RlZmdoaWprbG1ub3BxcnN0IiwiaWF0IjoxNjI3MjA4NTQyLCJleHAiOjE5NzQzNjM3NDJ9.abcdefghijklmnopqrstuvwxyz1234567890",
   SUPABASE_URL: "https://abcdefghijklmnopqrst.supabase.co",
-  VERCEL_TOKEN: "abcdefghijklmnopqrstuvwxyz1234567890",
+  VERCEL_TOKEN: "1234567890abcdef12345678",
   NETLIFY_ACCESS_TOKEN: "1234567890abcdef1234567890abcdef1234567890abcdef",
   NETLIFY_SITE_ID: "12345678-1234-1234-1234-123456789012",
   HEROKU_API_KEY: "12345678-1234-1234-1234-123456789012",
   RAILWAY_TOKEN: "12345678-1234-1234-1234-123456789012",
-  DIGITALOCEAN_TOKEN: "dop_v1_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcd",
-  GCP_SERVICE_ACCOUNT_KEY: "my-service-account@my-project.iam.gserviceaccount.com",
-  LINODE_API_TOKEN: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+  DIGITALOCEAN_TOKEN:
+    "dop_v1_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+  GCP_SERVICE_ACCOUNT_KEY:
+    "my-service-account@my-project.iam.gserviceaccount.com",
+  CREDIT_CARD_WITH_SEPARATORS: "4111-1111-1111-1111",
+  BASE64_URL_PARAM:
+    "https://example.com?token=aGVsbG93b3JsZHNlY3JldGtleXZhbHVl",
+  DOCKER_PASSWORD_FLAG: "docker login -u user -p mysecretpass123",
+  LINODE_API_TOKEN:
+    "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
   VULTR_API_KEY: "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
   MONGODB_CONNECTION_STRING: "mongodb://user:pass@host:27017/database",
-  POSTGRESQL_CONNECTION_STRING: "postgresql://user:password@localhost:5432/dbname",
+  POSTGRESQL_CONNECTION_STRING:
+    "postgresql://user:password@localhost:5432/dbname",
   MYSQL_CONNECTION_STRING: "mysql://user:password@localhost:3306/database",
   REDIS_CONNECTION_STRING: "redis://user:password@localhost:6379/0",
   ELASTICSEARCH_URL: "https://elastic:password@localhost:9200",
   RABBITMQ_CONNECTION_STRING: "amqp://user:password@localhost:5672/",
   KAFKA_CONNECTION_STRING: "localhost:9092",
   CASSANDRA_CONNECTION_STRING: "cassandra://user:pass@host:9042/keyspace",
-  DATABASE_CONNECTION_STRING: "Server=localhost;Database=myDb;User Id=myUser;Password=myPass;",
+  DATABASE_CONNECTION_STRING:
+    "Server=localhost;Database=myDb;User Id=myUser;Password=myPass;",
   DATABASE_URL: "postgres://user:pass@host:5432/dbname",
-  LDAP_CONNECTION_STRING: "ldap://cn=admin,dc=example,dc=com:password@ldap.example.com",
-  SSH_PRIVATE_KEY: "-----BEGIN RSA PRIVATE KEY-----\\nMIIEpAIBAAKCAQEA...",
-  RSA_PRIVATE_KEY: "-----BEGIN RSA PRIVATE KEY-----\\nMIIEpAIBAAKCAQEA...",
-  EC_PRIVATE_KEY: "-----BEGIN EC PRIVATE KEY-----\\nMHcCAQEEIA...",
-  OPENSSH_PRIVATE_KEY: "-----BEGIN OPENSSH PRIVATE KEY-----\\nb3BlbnNzaC1rZXktdjEA...",
-  GENERIC_PRIVATE_KEY: "-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQ...",
-  PGP_PRIVATE_KEY: "-----BEGIN PGP PRIVATE KEY BLOCK-----\\nVersion: GnuPG v1",
+  LDAP_CONNECTION_STRING:
+    "ldap://cn=admin,dc=example,dc=com:password@ldap.example.com",
+  SSH_PRIVATE_KEY:
+    "-----BEGIN RSA PRIVATE KEY----- MIIEpAIBAAKCAQEA... -----END RSA PRIVATE KEY-----",
+  RSA_PRIVATE_KEY:
+    "-----BEGIN RSA PRIVATE KEY----- MIIEpAIBAAKCAQEA... -----END RSA PRIVATE KEY-----",
+  EC_PRIVATE_KEY:
+    "-----BEGIN EC PRIVATE KEY----- MHcCAQEEIA... -----END EC PRIVATE KEY-----",
+  OPENSSH_PRIVATE_KEY:
+    "-----BEGIN OPENSSH PRIVATE KEY----- b3BlbnNzaC1rZXktdjEA... -----END OPENSSH PRIVATE KEY-----",
+  GENERIC_PRIVATE_KEY:
+    "-----BEGIN PRIVATE KEY----- MIIEvQIBADANBgkqhkiG9w0BAQ... -----END PRIVATE KEY-----",
+  PGP_PRIVATE_KEY: "-----BEGIN PGP PRIVATE KEY BLOCK----- Version: GnuPG v1",
   BASE64_ENCODED_SECRET: "U2VjcmV0S2V5MTIzNDU2Nzg5MA==",
   HEX_ENCODED_SECRET: "4d79537570657253656372657448657832303234",
   GENERIC_SECRET: "secret_1234567890abcdef",
   GENERIC_TOKEN: "token_1234567890abcdef",
   GENERIC_CREDENTIAL: "credential_1234567890abcdef",
   GENERIC_PASSWORD: "P@ssw0rd123!",
-  PASSWORD_ASSIGNMENT: "password = \"P@ssw0rd123!\"",
-  CERTIFICATE: "-----BEGIN CERTIFICATE-----\\nMIIDXTCCAkWgAwIBAgIJAKl...",
+  PASSWORD_ASSIGNMENT: 'password = "P@ssw0rd123!"',
+  CERTIFICATE: "-----BEGIN CERTIFICATE-----\nMIIDXTCCAkWgAwIBAgIJAKl...",
   ENVIRONMENT_VARIABLE_SECRET: "export API_KEY=sk-1234567890abcdef",
-  DOCKER_REGISTRY_AUTH: "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"dXNlcjpwYXNzd29yZA==\"}}}",
-  KUBERNETES_SECRET: "apiVersion: v1\\nkind: Secret\\ndata:\\n  password: cGFzc3dvcmQ=",
-  KUBERNETES_CONFIG: "kubeconfig: |\\n  apiVersion: v1\\n  clusters: [...]",
-  TERRAFORM_VARIABLE: "variable \"api_key\" { default = \"sk-1234567890abcdef\" }",
-  TERRAFORM_CLOUD_TOKEN: "1234567890abcdef.atlasv1.1234567890abcdefghijklmnopqrstuvwxyz",
+  DOCKER_REGISTRY_AUTH:
+    '{"auths":{"https://index.docker.io/v1/":{"auth":"dXNlcjpwYXNzd29yZA=="}}}',
+  KUBERNETES_SECRET: "kubernetes-secret: my-secret.default",
+  KUBERNETES_CONFIG: "apiVersion: v1\nkind: Config",
+  TERRAFORM_VARIABLE: 'variable "api_key" { default = "sk-1234567890abcdef" }',
+  TERRAFORM_CLOUD_TOKEN:
+    "12345678901234.atlasv1.123456789012345678901234567890123456789012345678901234",
   ANSIBLE_VAULT: "$ANSIBLE_VAULT;1.1;AES256\\n66383439383834353...",
   ANSIBLE_VAULT_PASSWORD: "ansible-vault-password-file: /path/to/vault-pass",
-  AETNA_MEMBER_ID: "W123456789",
-  BCBS_MEMBER_ID: "XYZ123456789",
-  UNITEDHEALTH_MEMBER_ID: "901234567",
+  AETNA_MEMBER_ID: "Aetna W123456789",
+  BCBS_MEMBER_ID: "BCBS XYZ123456789",
+  UNITEDHEALTH_MEMBER_ID: "United 901234567",
   UK_NHS_NUMBER: "123 456 7890",
-  CANADIAN_HEALTH_CARD: "1234-567-890",
+  CANADIAN_HEALTH_CARD: "1234567890",
   AUSTRALIAN_MEDICARE_NUMBER: "1234 56789 0",
   GERMAN_HEALTH_INSURANCE_NUMBER: "A123456789",
-  FRENCH_SOCIAL_SECURITY_NUMBER: "1 84 12 76 451 089 46",
-  EUROPEAN_HEALTH_INSURANCE_CARD: "80123456789012345678",
-  AUTO_INSURANCE_POLICY: "POL-AUTO-123456",
-  HOME_INSURANCE_POLICY: "HOME-2024-789012",
-  LIFE_INSURANCE_POLICY: "LIFE-POL-456789",
-  TRAVEL_INSURANCE_POLICY: "TRV-2024-123456",
-  WORKERS_COMPENSATION_CLAIM: "WC-2024-789456",
-  DISABILITY_INSURANCE_POLICY: "DIS-POL-123789",
-  DENTAL_INSURANCE_POLICY: "DENT-456123",
-  VISION_INSURANCE_POLICY: "VIS-789456",
-  US_HEALTH_INSURANCE_POLICY: "H123456789",
+  FRENCH_SOCIAL_SECURITY_NUMBER: "184127645108946",
+  EUROPEAN_HEALTH_INSURANCE_CARD: "EHIC 801234567890123",
+  AUTO_INSURANCE_POLICY: "Auto Policy: POLAUTO123",
+  HOME_INSURANCE_POLICY: "Home Policy: HOME2024789",
+  LIFE_INSURANCE_POLICY: "Life Policy: LIFEPOL456",
+  TRAVEL_INSURANCE_POLICY: "Travel Policy: TRV2024123",
+  WORKERS_COMPENSATION_CLAIM: "Workers Comp Claim: WC2024789",
+  DISABILITY_INSURANCE_POLICY: "Disability Policy: DISPOL123",
+  DENTAL_INSURANCE_POLICY: "Dental Policy: DENT456123",
+  VISION_INSURANCE_POLICY: "Vision Policy: VIS789456",
+  US_HEALTH_INSURANCE_POLICY: "Policy H123456789",
   US_INSURANCE_GROUP_NUMBER: "GRP123456",
-  US_INSURANCE_CLAIM_NUMBER: "CLM-2024-123456",
-  MEDICARE_NUMBER_US: "1EG4-TE5-MK72",
-  MEDICAID_NUMBER_US: "123456789A",
+  US_INSURANCE_CLAIM_NUMBER: "Claim CLM2024123456",
+  MEDICARE_NUMBER_US: "123-45-6789-A",
+  MEDICAID_NUMBER_US: "Medicaid 123456789A",
   NPI_NUMBER: "1234567890",
   PERSON_NAME: "John Doe",
-  EMPLOYEE_ID: "EMP-123456",
-  US_DRIVER_LICENSE: "D123-4567-8901",
+  EMPLOYEE_ID: "EMP 123456",
+  US_DRIVER_LICENSE: "D12345678",
   US_PASSPORT_NUMBER: "M12345678",
-  NATIONAL_ID: "ID-123456789",
+  NATIONAL_ID: "National ID: ID123456789",
   US_LICENSE_PLATE: "ABC-1234",
   US_ZIP_CODE: "12345",
   CANADIAN_POSTAL_CODE: "K1A 0B1",
@@ -204,79 +233,96 @@ const exampleMap: Record<string, string> = {
   US_EIN: "12-3456789",
   US_EIN_WITH_LABEL: "EIN: 12-3456789",
   US_EIN_PREFIXED: "EIN 12-3456789",
-  US_TIN_WITH_LABEL: "TIN: 123-45-6789",
-  GOOGLE_CLOUD_PROJECT_ID: "my-project-123456",
+  US_TIN_WITH_LABEL: "TIN 12-3456789",
+  GOOGLE_CLOUD_PROJECT_ID: "gcp-project-id: my-project-123456",
   KAFKA_BOOTSTRAP_SERVER: "kafka-broker1.example.com:9092",
-  CONTAINER_REGISTRY: "gcr.io/my-project/my-image:latest",
+  CONTAINER_REGISTRY: "us.gcr.io/my-project/my-image:latest",
   GIT_SSH_URL: "git@github.com:user/repo.git",
   API_ENDPOINT_URL: "https://api.example.com/v1/users",
   BUILD_NUMBER: "BUILD-2024.1.123",
   VERSION_TAG: "v1.2.3",
-  COMMIT_HASH: "a1b2c3d4e5f6789012345678901234567890abcd",
-  PR_ISSUE_NUMBER: "#1234",
+  COMMIT_HASH: "commit: a1b2c3d4e5f6789012345678901234567890abcd",
+  PR_ISSUE_NUMBER: "PR #1234",
   JIRA_TICKET: "PROJ-1234",
   AUTH0_DOMAIN: "myapp.auth0.com",
-  AUTH0_API_TOKEN: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik...",
-  VERCEL_DEPLOYMENT_URL: "my-app-git-main-myteam.vercel.app",
+  AUTH0_API_TOKEN:
+    "auth0-token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik",
+  VERCEL_DEPLOYMENT_URL: "https://my-app-git-main-myteam.vercel.app",
   SERVICE_ACCOUNT_EMAIL: "service-account@my-project.iam.gserviceaccount.com",
-  WEBHOOK_URL: "https://example.com/webhook/1234567890abcdef",
-  OAUTH_CLIENT_ID: "1234567890-abcdefghijklmnopqrstuvwxyz.apps.googleusercontent.com",
-  OAUTH_CLIENT_SECRET: "GOCSPX-1234567890abcdefghijklmnop",
-  OAUTH_REFRESH_TOKEN: "1//0gFU7...",
-  OAUTH_ACCESS_TOKEN: "ya29.a0ARrdaM...",
-  OKTA_API_TOKEN: "00Aa1234567890aBcDeFgHiJkLmNoPqRsTuVwXyZ",
-  KEYCLOAK_CLIENT_SECRET: "12345678-1234-1234-1234-123456789012",
+  WEBHOOK_URL: "https://hooks.example.com/webhook/1234567890abcdef",
+  OAUTH_CLIENT_ID: "client_id: 1234567890-abcdefghijklmnopqrstuvwxyz",
+  OAUTH_CLIENT_SECRET: "client_secret: GOCSPX-1234567890abcdefghijklmnop",
+  OAUTH_REFRESH_TOKEN: "refresh_token: 1//0gFU7abcdefghijklmnopqrstuvw",
+  OAUTH_ACCESS_TOKEN: "access_token: ya29.a0ARrdaMabcdefghijklmnopqr",
+  OKTA_API_TOKEN: "okta-token: 001234567890aBcDeFgHiJkLmNoPqRsTuVwXy",
+  KEYCLOAK_CLIENT_SECRET:
+    "keycloak-client-secret: 12345678-1234-1234-1234-123456789012",
   SHA_HASH: "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12",
-  JENKINS_TOKEN: "11a1234567890abcdef1234567890abcdef12",
-  CIRCLECI_TOKEN: "circle-token-1234567890abcdef",
-  TRAVIS_CI_TOKEN: "travis-token-1234567890abcdef",
-  GITLAB_CI_TOKEN: "ci-token-1234567890abcdef",
-  AZURE_DEVOPS_TOKEN: "52-char-token-1234567890abcdefghijklmnopqrstuvwxyz1234",
+  JENKINS_TOKEN: "jenkins-token: 11a1234567890abcdef1234567890abcd",
+  CIRCLECI_TOKEN: "circleci-token: 1234567890abcdef1234567890abcdef12345678",
+  TRAVIS_CI_TOKEN: "travis-token: 1234567890abcdefghijkl",
+  GITLAB_CI_TOKEN: "CI_JOB_TOKEN: 1234567890abcdef",
+  AZURE_DEVOPS_TOKEN:
+    "azdo-token: 1234567890abcdefghijklmnopqrstuvwxyz1234567890abcdef",
   BITBUCKET_TOKEN_ALT: "ATBB1234567890abcdefghij",
-  SENTRY_DSN: "https://1234567890abcdef@o123456.ingest.sentry.io/1234567",
-  NEW_RELIC_LICENSE_KEY: "1234567890abcdefghijklmnopqrstuvwxyz1234NRAL",
-  DATADOG_API_KEY: "1234567890abcdef1234567890abcdef",
-  PAGERDUTY_INTEGRATION_KEY: "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
-  GRAFANA_API_KEY: "glsa_1234567890abcdefghijklmnopqrstuvwxyz_12345678",
-  PROMETHEUS_REMOTE_WRITE: "https://prometheus-us-central1.grafana.net/api/prom/push",
-  SPLUNK_HEC_TOKEN: "12345678-1234-1234-1234-123456789012",
-  SUMO_LOGIC_COLLECTOR: "https://collectors.sumologic.com/receiver/v1/http/1234567890ABCDEF",
-  BUGSNAG_API_KEY: "1234567890abcdef1234567890abcdef",
-  ROLLBAR_ACCESS_TOKEN: "1234567890abcdef1234567890abcdef",
-  AIRBRAKE_API_KEY: "1234567890abcdef1234567890abcdef",
-  LOGDNA_INGESTION_KEY: "1234567890abcdef1234567890abcdef",
-  LOGGLY_TOKEN: "12345678-1234-1234-1234-123456789012",
-  PAPERTRAIL_TOKEN: "1234567890abcdef",
-  HASHICORP_VAULT_TOKEN: "hvs.1234567890abcdefghijklmnop",
-  AWS_SECRETS_MANAGER_ARN: "arn:aws:secretsmanager:us-east-1:123456789012:secret:MySecret-abcdef",
-  AZURE_KEY_VAULT_SECRET: "https://myvault.vault.azure.net/secrets/MySecret",
+  SENTRY_DSN:
+    "https://1234567890abcdef1234567890abcdef@1a2b3c.ingest.sentry.io/1234567",
+  NEW_RELIC_LICENSE_KEY:
+    "newrelic-key: 1234567890abcdef1234567890abcdef12345678",
+  DATADOG_API_KEY: "datadog-key: 1234567890abcdef1234567890abcdef",
+  PAGERDUTY_INTEGRATION_KEY: "pagerduty-key: 1234567890abcdef1234567890abcdef",
+  GRAFANA_API_KEY: "glsa_1234567890abcdefghijklmnopqrstuv_1a2b3c4d",
+  PROMETHEUS_REMOTE_WRITE:
+    "remote_write_url: https://prometheus-us-central1.grafana.net/api/v1/write",
+  SPLUNK_HEC_TOKEN: "Splunk 12345678-1234-1234-1234-123456789012",
+  SUMO_LOGIC_COLLECTOR:
+    "https://collectors.us2.sumologic.com/receiver/v1/http/1234567890ABCDEF",
+  BUGSNAG_API_KEY: "bugsnag-api-key: 1234567890abcdef1234567890abcdef",
+  ROLLBAR_ACCESS_TOKEN:
+    "rollbar-access-token: 1234567890abcdef1234567890abcdef",
+  AIRBRAKE_API_KEY: "airbrake-api-key: 1234567890abcdef1234567890abcdef",
+  LOGDNA_INGESTION_KEY:
+    "logdna-ingestion-key: 1234567890abcdef1234567890abcdef",
+  LOGGLY_TOKEN: "loggly-token: 12345678-1234-1234-1234-123456789012",
+  PAPERTRAIL_TOKEN: "papertrail-token: 1234567890abcdef1234567890abcdef",
+  HASHICORP_VAULT_TOKEN: "vault-token: s.1234567890abcdefghijklmnop",
+  AWS_SECRETS_MANAGER_ARN:
+    "arn:aws:secretsmanager:us-east-1:123456789012:secret:MySecret-abcdef",
+  AZURE_KEY_VAULT_SECRET:
+    "https://myvault.vault.azure.net/secrets/MySecret/1234567890abcdef1234567890abcdef",
   GCP_SECRET_MANAGER: "projects/123456/secrets/my-secret/versions/latest",
-  HELM_REPOSITORY_CREDENTIALS: "helm repo add myrepo https://charts.example.com --username user --password pass",
-  CONSUL_TOKEN: "12345678-1234-1234-1234-123456789012",
-  RANCHER_TOKEN: "token-12abc:1234567890abcdefghijklmnopqrstuvwxyz",
-  QUAY_IO_TOKEN: "robot$myrobot+deploy:1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  HELM_REPOSITORY_CREDENTIALS: "helm-repo-password: 1234567890abcdef",
+  CONSUL_TOKEN: "consul-token: 12345678-1234-1234-1234-123456789012",
+  RANCHER_TOKEN: "token-12abc:12345",
+  QUAY_IO_TOKEN: "quay.io-token: 1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ123456",
   JFROG_ARTIFACTORY_TOKEN: "AKCp1234567890abcdefghijklmnopqrstuvwxyz",
-  NEXUS_REPOSITORY_TOKEN: "1234567890abcdef-1234-1234-1234-123456789012",
+  NEXUS_REPOSITORY_TOKEN: "nexus-token: 1234567890abcdef-1234-1234-1234",
   CLOUDFLARE_API_TOKEN: "1234567890abcdefghijklmnopqrstuvwxyz1234",
-  SSH_KEY_FINGERPRINT: "SHA256:1234567890abcdefghijklmnopqrstuvwxyz/12345",
-  SONARQUBE_TOKEN: "sqa_1234567890abcdef1234567890abcdef12345678",
+  SSH_KEY_FINGERPRINT: "SHA256:1234567890abcdefghijklmnopqrstuvwxyz1234567",
+  PGP_KEY_ID: "0x1234567890ABCDEF",
+  AGE_SECRET_KEY: "AGE-SECRET-KEY-1QYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQY",
+  AGE_PUBLIC_KEY: "age1abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuv",
+  AWS_KMS_KEY_ID: "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012",
+  GCP_KMS_KEY: "projects/my-project/locations/us-central1/keyRings/my-keyring/cryptoKeys/my-key",
+  AZURE_KEY_IDENTIFIER: "https://myvault.vault.azure.net/keys/mykey/1234567890abcdef1234567890abcdef",
+  MASTER_KEY: "master_key: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY3ODkwYWJjZGVmZ2g=",
+  SONARQUBE_TOKEN: "sqp_1234567890abcdef1234567890abcdef12345678",
   LAUNCHDARKLY_SDK_KEY: "sdk-12345678-1234-1234-1234-123456789012",
-  SEGMENT_WRITE_KEY: "1234567890abcdefghijklmnopqrstuv",
-  MIXPANEL_API_SECRET: "1234567890abcdef1234567890abcdef",
-  ALGOLIA_API_KEY: "1234567890abcdef1234567890abcdef",
-  ELASTIC_CLOUD_ID: "my-deployment:dXMtZWFzdC0xLmF3cy5mb3VuZC5pbyRjZWM2ZjI2MWE3NGJmMjRjZTMzYmI4ODExYjg0Mjk0ZiRjNmMyY2E2ZDA0MjI0OWFmMGNjN2Q3YTllOTYyNTc0Mw=="
+  SEGMENT_WRITE_KEY: "segment-writekey: 1234567890abcdefghijklmnop123456",
+  MIXPANEL_API_SECRET: "mixpanel-secret: 1234567890abcdef1234567890abcdef",
+  ALGOLIA_API_KEY: "algolia-api-key: 1234567890abcdef1234567890abcdef",
+  ELASTIC_CLOUD_ID:
+    "elastic-cloud-id: dXMtZWFzdC0xLmF3cy5mb3VuZC5pbyRjZWM2ZjI2MWE3NGJmMjRjZTMzYmI4ODExYjg0Mjk0ZiRjNmMyY2E2ZDA0MjI0OWFmMGNjN2Q3YTllOTYyNTc0Mw==",
 };
 
-const policiesByCategory = POLICIES.reduce(
-  (acc, policy) => {
-    if (!acc[policy.category]) {
-      acc[policy.category] = [];
-    }
-    acc[policy.category]!.push(policy);
-    return acc;
-  },
-  {} as Record<string, typeof POLICIES>
-);
+const policiesByCategory = POLICIES.reduce((acc, policy) => {
+  if (!acc[policy.category]) {
+    acc[policy.category] = [];
+  }
+  acc[policy.category]!.push(policy);
+
+  return acc;
+}, {} as Record<string, typeof POLICIES>);
 
 const categoryOrder: PolicyCategory[] = [
   "DEV_IDENTIFIER" as PolicyCategory,
@@ -321,7 +367,7 @@ const sortedCategories = categoryOrder
 
 let markdown = `# Policies
 
-Redactum provides **${POLICIES.length} battle-tested policies** organized into **${sortedCategories.length} categories** to protect sensitive data across your entire stack.
+<PatternStats />
 
 From API keys and database credentials to personal information and financial data, each policy is designed to catch real-world patterns while minimizing false positives. Use them individually or combine categories to match your security requirements.
 
@@ -336,7 +382,8 @@ for (const [category, policies] of sortedCategories) {
 
   for (const policy of policies) {
     const example = exampleMap[policy.name] || "[REDACTED]";
-    markdown += `| \`${policy.name}\` | ${example} |\n`;
+    const displayExample = example.replace(/\n/g, " ");
+    markdown += `| \`${policy.name}\` | \`${displayExample}\` |\n`;
   }
   markdown += `\n`;
 }
@@ -344,6 +391,6 @@ for (const [category, policies] of sortedCategories) {
 const outputPath = join(process.cwd(), "docs", "api", "policies.md");
 writeFileSync(outputPath, markdown);
 
-console.log(`✅ Generated policies documentation at ${outputPath}`);
-console.log(`📊 Total policies: ${POLICIES.length}`);
-console.log(`📁 Categories: ${sortedCategories.length}`);
+console.log(`Generated policies documentation at ${outputPath}`);
+console.log(`Total policies: ${POLICIES.length}`);
+console.log(`Categories: ${sortedCategories.length}`);

@@ -1,4 +1,4 @@
-# ⛨ redactum - automated PII and secret redaction for AI applications
+# ⛨ redactum - automated PII and secret redaction
 
 [![NPM Version](https://img.shields.io/npm/v/redactum?logo=npm&color=f11f7a)](https://www.npmjs.com/package/redactum)
 [![Codecov](https://img.shields.io/codecov/c/github/alexwhin/redactum?logo=codecov&color=f11f7a)](https://codecov.io/gh/alexwhin/redactum)
@@ -17,7 +17,7 @@ Fast, zero-dependency PII redaction library for TypeScript and JavaScript that a
 - 🔑 Developer secrets (API keys, database URLs, JWT tokens)
 - 🏗️ Infrastructure details (IP addresses, AWS credentials)
 
-**180+ built-in patterns across 32 categories** for comprehensive detection of personal, financial, and technical sensitive data.
+**191 built-in patterns across 32 categories** for comprehensive detection of personal, financial, and technical sensitive data.
 
 ## Installation
 

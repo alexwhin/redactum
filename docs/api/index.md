@@ -131,7 +131,7 @@ interface Policy {
 
 | Constant | Type | Value |
 |----------|------|-------|
-| `POLICIES` | `Policy[]` | All 180+ built-in policies |
+| `POLICIES` | `Policy[]` | All 191 built-in policies |
 | `DEFAULT_REPLACEMENT` | `string` | `"[REDACTED]"` |
 | `DEFAULT_ENABLED_CATEGORIES` | `PolicyCategory[]` | All except CUSTOM |
 

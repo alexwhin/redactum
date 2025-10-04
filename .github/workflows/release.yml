@@ -66,6 +66,9 @@ jobs:
       - name: Run Tests
         run: pnpm run test:ci
 
+      - name: Validate Examples
+        run: pnpm run validate:examples
+
       - name: Build Package
         run: pnpm run build
 

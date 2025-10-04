@@ -11,6 +11,25 @@ export const POLICIES: Policy[] = [
     replacement: "[EMAIL]",
   },
   {
+    name: "OPENAI_API_KEY",
+    pattern: /\bsk-[a-zA-Z0-9]{20,}\b/g,
+    category: PolicyCategory.API_KEY,
+    replacement: "[OPENAI_KEY]",
+  },
+  {
+    name: "ANTHROPIC_API_KEY",
+    pattern: /\bsk-ant-[a-zA-Z0-9-_]{95,}\b/g,
+    category: PolicyCategory.API_KEY,
+    replacement: "[ANTHROPIC_KEY]",
+  },
+  {
+    name: "UUID",
+    pattern:
+      /\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b/gi,
+    category: PolicyCategory.DIGITAL_IDENTITY,
+    replacement: "[UUID]",
+  },
+  {
     name: "PHONE_NUMBER_UK",
     pattern: /(?:\+44|0)[1-9]\d{8,9}\b/g,
     category: PolicyCategory.PHONE,
@@ -25,7 +44,7 @@ export const POLICIES: Policy[] = [
   },
   {
     name: "PHONE_NUMBER_INTERNATIONAL",
-    pattern: /\b\+[1-9]\d{1,14}\b/g,
+    pattern: /(?:^|(?<=\s))\+[1-9]\d{1,14}\b/g,
     category: PolicyCategory.PHONE,
     replacement: "[PHONE]",
   },
@@ -49,6 +68,13 @@ export const POLICIES: Policy[] = [
     replacement: "[CREDIT_CARD]",
   },
   {
+    name: "CREDIT_CARD_WITH_SEPARATORS",
+    pattern:
+      /\b(?:4\d{3}[-\s]\d{4}[-\s]\d{4}[-\s]\d{4}|5[1-5]\d{2}[-\s]\d{4}[-\s]\d{4}[-\s]\d{4}|3[47]\d{2}[-\s]\d{6}[-\s]\d{5}|3(?:0[0-5]|[68]\d)\d[-\s]\d{6}[-\s]\d{5}|6(?:011|5\d{2})[-\s]\d{4}[-\s]\d{4}[-\s]\d{4})\b/g,
+    category: PolicyCategory.CREDIT_CARD,
+    replacement: "[CREDIT_CARD]",
+  },
+  {
     name: "IPV4_ADDRESS",
     pattern:
       /\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/g,
@@ -57,21 +83,9 @@ export const POLICIES: Policy[] = [
   },
   {
     name: "IPV6_ADDRESS",
-    pattern: /\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b|::1\b|::\b/g,
+    pattern: /\b(?!fe80:|::1\b|::\b|2001:db8:)(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b/gi,
     category: PolicyCategory.IP_ADDRESS,
     replacement: "[IP]",
-  },
-  {
-    name: "OPENAI_API_KEY",
-    pattern: /\bsk-[a-zA-Z0-9]{20,}\b/g,
-    category: PolicyCategory.API_KEY,
-    replacement: "[OPENAI_KEY]",
-  },
-  {
-    name: "ANTHROPIC_API_KEY",
-    pattern: /\bsk-ant-[a-zA-Z0-9-_]{95,}\b/g,
-    category: PolicyCategory.API_KEY,
-    replacement: "[ANTHROPIC_KEY]",
   },
   {
     name: "GITHUB_TOKEN",
@@ -96,6 +110,12 @@ export const POLICIES: Policy[] = [
     pattern: /\beyJ[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\b/g,
     category: PolicyCategory.API_KEY,
     replacement: "[JWT_TOKEN]",
+  },
+  {
+    name: "BASE64_URL_PARAM",
+    pattern: /([?&][a-zA-Z_]+=)([A-Za-z0-9+/]{20,}={0,2})/g,
+    category: PolicyCategory.DEV_SECRET,
+    replacement: "$1[BASE64]",
   },
   {
     name: "API_KEY_GENERIC",
@@ -170,11 +190,10 @@ export const POLICIES: Policy[] = [
     replacement: "password=\"[PASSWORD]\"",
   },
   {
-    name: "ENVIRONMENT_VARIABLE_SECRET",
-    pattern:
-      /\b([A-Z_][A-Z0-9_]*(?:PASSWORD|PASSWD|PWD|SECRET|TOKEN|KEY)[A-Z0-9_]*)=(.+?)(?=\s+[A-Z_]|\s*$)/g,
+    name: "DOCKER_PASSWORD_FLAG",
+    pattern: /(docker\s+\w+\s+.*?-p\s+)(\S+)/gi,
     category: PolicyCategory.DEV_SECRET,
-    replacement: "$1=[REDACTED]",
+    replacement: "$1[PASSWORD]",
   },
   {
     name: "DATE_OF_BIRTH",
@@ -511,13 +530,6 @@ export const POLICIES: Policy[] = [
     replacement: "[MAC_ADDRESS]",
   },
   {
-    name: "UUID",
-    pattern:
-      /\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b/gi,
-    category: PolicyCategory.DIGITAL_IDENTITY,
-    replacement: "[UUID]",
-  },
-  {
     name: "SHA_HASH",
     pattern: /\b[a-f0-9]{40}\b|\b[a-f0-9]{64}\b|\b[a-f0-9]{96}\b/gi,
     category: PolicyCategory.DIGITAL_IDENTITY,
@@ -736,9 +748,9 @@ export const POLICIES: Policy[] = [
   },
   {
     name: "ENVIRONMENT_VARIABLE_SECRET",
-    pattern: /\b[A-Z_][A-Z0-9_]*=(?:["']([^"']{8,})["']|([^\s:]{8,}))\b/g,
+    pattern: /\b([A-Z_][A-Z0-9_]*(?:PASSWORD|PASSWD|PWD|SECRET|TOKEN|KEY)[A-Z0-9_]*)=(.+?)(?=\s+[A-Z_]|\s*$)/g,
     category: PolicyCategory.DEV_SECRET,
-    replacement: "[ENV_VAR]",
+    replacement: "$1=[REDACTED]",
   },
   {
     name: "KUBERNETES_SECRET",
@@ -759,6 +771,52 @@ export const POLICIES: Policy[] = [
       /\bMD5:[a-f0-9]{2}(:[a-f0-9]{2}){15}\b|\bSHA256:[A-Za-z0-9+/]{43}=?\b/g,
     category: PolicyCategory.ENCRYPTION_KEYS,
     replacement: "[SSH_KEY_FINGERPRINT]",
+  },
+  {
+    name: "PGP_KEY_ID",
+    pattern: /\b(?:0x)?[A-F0-9]{8,40}\b/g,
+    category: PolicyCategory.ENCRYPTION_KEYS,
+    replacement: "[PGP_KEY_ID]",
+  },
+  {
+    name: "AGE_SECRET_KEY",
+    pattern: /\bAGE-SECRET-KEY-1[A-Z0-9]{58}\b/g,
+    category: PolicyCategory.ENCRYPTION_KEYS,
+    replacement: "[AGE_SECRET_KEY]",
+  },
+  {
+    name: "AGE_PUBLIC_KEY",
+    pattern: /\bage1[a-z0-9]{58}\b/g,
+    category: PolicyCategory.ENCRYPTION_KEYS,
+    replacement: "[AGE_PUBLIC_KEY]",
+  },
+  {
+    name: "AWS_KMS_KEY_ID",
+    pattern:
+      /\b(?:arn:aws:kms:[a-z0-9-]+:\d{12}:key\/)?[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\b/g,
+    category: PolicyCategory.ENCRYPTION_KEYS,
+    replacement: "[KMS_KEY_ID]",
+  },
+  {
+    name: "GCP_KMS_KEY",
+    pattern:
+      /\bprojects\/[^/]+\/locations\/[^/]+\/keyRings\/[^/]+\/cryptoKeys\/[^\s]+/g,
+    category: PolicyCategory.ENCRYPTION_KEYS,
+    replacement: "[GCP_KMS_KEY]",
+  },
+  {
+    name: "AZURE_KEY_IDENTIFIER",
+    pattern:
+      /\bhttps:\/\/[a-zA-Z0-9-]+\.vault\.azure\.net\/keys\/[a-zA-Z0-9-]+\/[a-f0-9]{32}\b/g,
+    category: PolicyCategory.ENCRYPTION_KEYS,
+    replacement: "[AZURE_KEY_ID]",
+  },
+  {
+    name: "MASTER_KEY",
+    pattern:
+      /\b(?:master[_-]?key|encryption[_-]?key|secret[_-]?key)[\s:=]+[A-Za-z0-9+/]{32,}={0,2}\b/gi,
+    category: PolicyCategory.ENCRYPTION_KEYS,
+    replacement: "[MASTER_KEY]",
   },
   {
     name: "BUILD_NUMBER",

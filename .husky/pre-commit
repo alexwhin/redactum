@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
-pnpm run lint:fix
-pnpm run stats:generate
+pnpm run lint:fix || exit 1
+pnpm run typecheck || exit 1
+pnpm run test:ci || exit 1
+pnpm run stats:generate || exit 1
+pnpm run validate:examples || exit 1
 git add category-statistics.json

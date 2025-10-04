@@ -1,8 +1,84 @@
 import { describe, it, expect } from "vitest";
 import { POLICIES, DEFAULT_ENABLED_CATEGORIES } from "../src/constants.js";
 import { PolicyCategory } from "../src/types/index.js";
+import { exampleMap } from "../scripts/generate-documentation.js";
+import { readFileSync, readdirSync } from "fs";
+import { join } from "path";
 
 describe("constants", () => {
+  describe("policy test coverage", () => {
+    it("should have a test file for every category with policies", () => {
+      const categoriesWithPolicies = new Set(POLICIES.map((p) => p.category));
+      const testFiles = readdirSync(join(process.cwd(), "tests", "categories"))
+        .filter((f) => f.endsWith(".test.ts"))
+        .map((f) => f.replace(".test.ts", ""));
+
+      const requiredCategoriesWithTests = Array.from(categoriesWithPolicies).filter(
+        (c) => c !== PolicyCategory.CUSTOM,
+      );
+
+      const missingRequiredTestFiles: string[] = [];
+
+      for (const category of requiredCategoriesWithTests) {
+        const expectedTestFile = category.toLowerCase().replace(/_/g, "-");
+
+        if (!testFiles.includes(expectedTestFile)) {
+          missingRequiredTestFiles.push(
+            `${category} -> tests/categories/${expectedTestFile}.test.ts`,
+          );
+        }
+      }
+
+      expect(
+        missingRequiredTestFiles,
+        `The following REQUIRED categories are missing test files:\n${missingRequiredTestFiles.join("\n")}\n\nCreate test files for these categories in tests/categories/`,
+      ).toHaveLength(0);
+    });
+
+    it("should have an example in exampleMap for every policy", () => {
+      const policiesWithoutExamples: string[] = [];
+
+      for (const policy of POLICIES) {
+        if (!exampleMap[policy.name]) {
+          policiesWithoutExamples.push(policy.name);
+        }
+      }
+
+      expect(
+        policiesWithoutExamples,
+        `The following policies are missing examples in scripts/generate-documentation.ts:\n${policiesWithoutExamples.join("\n")}`,
+      ).toHaveLength(0);
+    });
+
+    it("should have test coverage for every policy pattern", () => {
+      const testDirectory = join(process.cwd(), "tests", "categories");
+      const testFiles = readdirSync(testDirectory).filter((f) =>
+        f.endsWith(".test.ts"),
+      );
+
+      const testedPolicyNames = new Set<string>();
+
+      for (const testFile of testFiles) {
+        const content = readFileSync(join(testDirectory, testFile), "utf-8");
+
+        for (const policy of POLICIES) {
+          if (content.includes(`"${policy.name}"`)) {
+            testedPolicyNames.add(policy.name);
+          }
+        }
+      }
+
+      const untestedPolicies = POLICIES.filter(
+        (p) => !testedPolicyNames.has(p.name),
+      ).map((p) => `${p.name} (${p.category})`);
+
+      expect(
+        untestedPolicies,
+        `The following policies are missing test coverage:\n${untestedPolicies.join("\n")}\n\nAdd tests for these policies in tests/categories/`,
+      ).toHaveLength(0);
+    });
+  });
+
   describe("POLICIES", () => {
     it("should have patterns for categories that are implemented", () => {
       const categoriesWithPatterns = new Set(POLICIES.map(p => p.category));
