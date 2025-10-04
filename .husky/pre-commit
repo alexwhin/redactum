@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+pnpm run lint:fix
+pnpm run stats:generate
+git add category-statistics.json

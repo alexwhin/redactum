@@ -1,0 +1,33 @@
+{
+  "$schema": "https://raw.githubusercontent.com/alexwhin/redactum/main/schema/config-schema.json",
+  "replacement": "[REDACTED]",
+  "categories": {
+    "EMAIL": true,
+    "PHONE": true,
+    "SSN": true,
+    "CREDIT_CARD": true,
+    "IP_ADDRESS": true,
+    "API_KEY": true,
+    "AWS_KEY": true,
+    "PRIVATE_KEY": true,
+    "DATABASE_CREDENTIALS": true,
+    "DEV_SECRET": true,
+    "ADDRESS": false,
+    "PERSON_NAME": false,
+    "MEDICAL": false
+  },
+  "customPolicies": [
+    {
+      "name": "EMPLOYEE_ID",
+      "pattern": "EMP-\\d{6}",
+      "replacement": "[EMPLOYEE_ID]",
+      "mode": "replace"
+    },
+    {
+      "name": "PROJECT_CODE",
+      "pattern": "PROJ-[A-Z]{3}-\\d{4}",
+      "replacement": "[PROJECT]",
+      "mode": "replace"
+    }
+  ]
+}

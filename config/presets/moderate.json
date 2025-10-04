@@ -1,0 +1,40 @@
+{
+  "$schema": "../schema/config-schema.json",
+  "replacement": "[REDACTED]",
+  "globalMode": "replace",
+  "preserveLength": true,
+  "preserveFormat": false,
+  "categories": {
+    "EMAIL": true,
+    "PHONE": true,
+    "SSN": true,
+    "CREDIT_CARD": true,
+    "IP_ADDRESS": false,
+    "API_KEY": true,
+    "AWS_KEY": true,
+    "PRIVATE_KEY": true,
+    "ADDRESS": false,
+    "DATE_OF_BIRTH": false,
+    "PERSON_NAME": false,
+    "GOVERNMENT_ID": true,
+    "FINANCIAL": true,
+    "MEDICAL": false,
+    "DIGITAL_IDENTITY": true,
+    "GEOGRAPHIC": false,
+    "EMPLOYEE_ID": false,
+    "VEHICLE": false,
+    "DEV_SECRET": true,
+    "DEV_IDENTIFIER": false
+  },
+  "security": {
+    "preventRegexDos": true,
+    "maxPatternLength": 1000,
+    "maxCustomPatterns": 100,
+    "auditLog": false
+  },
+  "performance": {
+    "maxInputSize": 10485760,
+    "timeout": 30000,
+    "cachePatterns": true
+  }
+}

@@ -1,0 +1,163 @@
+# Redactum Configuration Example (YAML)
+# This file demonstrates all available configuration options
+
+# Basic redaction settings
+mask: "*"
+replacement: "[REDACTED]"
+globalMode: replace
+preserveLength: false
+preserveFormat: false
+
+# Language settings
+locale: en
+detectLanguage: false
+
+# Categories can be specified as an array or object
+categories:
+  # Core PII categories
+  EMAIL:
+    enabled: true
+    mode: replace
+    replacement: "[EMAIL]"
+  PHONE:
+    enabled: true
+    mode: replace
+    replacement: "[PHONE]"
+  SSN:
+    enabled: true
+    mode: hash
+    replacement: "[SSN_HASH]"
+  CREDIT_CARD:
+    enabled: true
+    mode: mask
+    replacement: "[CARD]"
+  
+  # Security categories
+  API_KEY: true
+  AWS_KEY: true
+  PRIVATE_KEY: true
+  DEV_SECRET: true
+  
+  # Personal information
+  ADDRESS: false
+  PERSON_NAME: false
+  DATE_OF_BIRTH: false
+  
+  # Financial & Medical
+  FINANCIAL: true
+  MEDICAL: false
+  
+  # Other categories
+  GOVERNMENT_ID: true
+  DIGITAL_IDENTITY: true
+  GEOGRAPHIC: false
+  EMPLOYEE_ID: false
+  VEHICLE: false
+  DEV_IDENTIFIER: false
+
+# Custom patterns for organization-specific data
+customPatterns:
+  - name: Employee Badge
+    pattern: 'BADGE-[A-Z]{2}\d{6}'
+    replacement: '[BADGE]'
+    mode: replace
+    
+  - name: Customer ID
+    pattern: 'CUST-\d{10}'
+    replacement: '[CUSTOMER_ID]'
+    mode: hash
+    
+  - name: Internal URLs
+    pattern: 'https://internal\.company\.com/[^\s]+'
+    replacement: '[INTERNAL_URL]'
+    mode: replace
+
+# Hash configuration for hash mode
+hashOptions:
+  algorithm: sha256
+  salt: "your-secret-salt-here"
+  encoding: hex
+
+# Encryption configuration (if using encrypt mode)
+encryptOptions:
+  algorithm: aes-256-gcm
+  # key: "your-encryption-key"  # Store securely, not in config!
+  # iv: "initialization-vector"
+
+# Performance tuning
+performance:
+  maximumInputSize: 10485760        # 10MB
+  timeout: 30000                # 30 seconds
+  cachePatterns: true           # Cache compiled regex patterns
+  streamThreshold: 1048576      # 1MB - use streaming for larger inputs
+
+# Security settings
+security:
+  preventRegexDos: true         # Validate patterns for ReDoS
+  maximumPatternLength: 1000        # Maximum regex pattern length
+  maximumCustomPatterns: 100        # Maximum number of custom patterns
+  auditLog: false               # Enable audit logging
+
+# Environment-specific configurations
+env:
+  development:
+    security:
+      auditLog: false
+    performance:
+      timeout: 60000
+      
+  production:
+    security:
+      auditLog: true
+      preventRegexDos: true
+    performance:
+      cachePatterns: true
+      timeout: 10000
+      
+  test:
+    categories:
+      - EMAIL
+      - PHONE
+    security:
+      auditLog: false
+
+# Preset configurations
+presets:
+  strict:
+    categories:
+      EMAIL: true
+      PHONE: true
+      SSN: true
+      CREDIT_CARD: true
+      IP_ADDRESS: true
+      API_KEY: true
+      AWS_KEY: true
+      PRIVATE_KEY: true
+      FINANCIAL: true
+      GOVERNMENT_ID: true
+      MEDICAL: true
+      DEV_SECRET: true
+    preserveLength: false
+    security:
+      preventRegexDos: true
+      
+  moderate:
+    categories:
+      EMAIL: true
+      PHONE: true
+      SSN: true
+      CREDIT_CARD: true
+      API_KEY: true
+      AWS_KEY: true
+      PRIVATE_KEY: true
+      FINANCIAL: true
+      DEV_SECRET: true
+    preserveLength: true
+    
+  minimal:
+    categories:
+      - CREDIT_CARD
+      - SSN
+      - API_KEY
+      - PRIVATE_KEY
+    preserveLength: false

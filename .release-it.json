@@ -1,0 +1,39 @@
+{
+  "git": {
+    "commitMessage": "chore: release v${version}",
+    "tagName": "v${version}",
+    "requireUpstream": false,
+    "requireCleanWorkingDir": true,
+    "push": true
+  },
+  "github": {
+    "release": true,
+    "releaseName": "v${version}"
+  },
+  "npm": {
+    "publish": true,
+    "publishArgs": ["--provenance", "--no-git-checks"]
+  },
+  "hooks": {
+    "before:init": ["pnpm run lint", "pnpm run typecheck", "pnpm run test:ci", "pnpm run build"]
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": {
+        "name": "conventionalcommits",
+        "types": [
+          { "type": "feat", "section": "Features" },
+          { "type": "fix", "section": "Bug Fixes" },
+          { "type": "perf", "section": "Performance Improvements" },
+          { "type": "refactor", "section": "Code Refactoring" },
+          { "type": "test", "section": "Tests" },
+          { "type": "docs", "section": "Documentation" },
+          { "type": "chore", "section": "Maintenance", "hidden": false }
+        ],
+        "ignorePattern": "^chore: release"
+      },
+      "infile": "CHANGELOG.md",
+      "header": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n"
+    }
+  }
+}

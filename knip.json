@@ -1,0 +1,7 @@
+{
+  "entry": ["src/**/*.ts"],
+  "project": ["src/**/*.ts"],
+  "ignore": ["**/*.test.ts", "**/*.spec.ts", "vitest.setup.ts"],
+  "ignoreBinaries": ["tar", "du"],
+  "ignoreDependencies": ["@langchain/core", "llamaindex", "ai"]
+}

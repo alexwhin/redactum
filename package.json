@@ -1,0 +1,146 @@
+{
+  "name": "redactum",
+  "version": "1.0.0",
+  "description": "Comprehensive PII redaction library for AI applications with framework adapters for LangChain, LlamaIndex, Haystack, OpenAI SDK, Anthropic SDK, and Vercel AI SDK",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./providers": {
+      "types": "./dist/providers/index.d.ts",
+      "import": "./dist/providers/index.js",
+      "require": "./dist/providers/index.cjs"
+    },
+    "./providers/base": {
+      "types": "./dist/providers/base/index.d.ts",
+      "import": "./dist/providers/base/index.js",
+      "require": "./dist/providers/base/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "pnpm run stats:generate && concurrently \"pnpm run build:watch\" \"pnpm run typecheck:watch\" \"pnpm run stats:watch\" \"pnpm run docs:dev\"",
+    "build:watch": "tsup --watch",
+    "test": "vitest",
+    "test:ci": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepublishOnly": "pnpm run clean && pnpm run lint && pnpm run typecheck && pnpm run test:ci && pnpm run build",
+    "prepack": "pnpm run clean && pnpm run build",
+    "clean": "rm -rf dist *.tgz test-results.junit.xml",
+    "clean:all": "rm -rf dist coverage docs/.vitepress/dist docs/.vitepress/cache docs/api-reference *.tgz test-results.junit.xml",
+    "release": "release-it",
+    "release:dry": "release-it --dry-run",
+    "release:ci": "release-it --ci",
+    "analyze": "pnpm pack && tar -tzf *.tgz && rm -f *.tgz",
+    "size": "du -sh dist/ 2>/dev/null || echo 'No dist directory'",
+    "knip": "knip",
+    "knip:fix": "knip --fix",
+    "docs": "pnpm run docs:generate && vitepress dev docs --no-open",
+    "docs:dev": "vitepress dev docs --no-open",
+    "docs:build": "pnpm run docs:generate && vitepress build docs",
+    "docs:preview": "vitepress preview docs --no-open",
+    "docs:serve": "pnpm run docs:build && pnpm run docs:preview",
+    "docs:generate": "tsx scripts/generate-documentation.ts",
+    "stats:generate": "tsx scripts/generate-statistics.ts",
+    "stats:watch": "tsx scripts/watch-statistics.ts",
+    "prepare": "husky",
+    "act": "bash act.sh"
+  },
+  "keywords": [
+    "pii",
+    "redaction",
+    "privacy",
+    "langchain",
+    "llamaindex",
+    "openai",
+    "anthropic",
+    "vercel-ai",
+    "ai",
+    "security",
+    "data-protection",
+    "gdpr",
+    "anonymize",
+    "typescript"
+  ],
+  "author": "Alex Whinfield",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexwhin/redactum.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexwhin/redactum/issues"
+  },
+  "homepage": "https://github.com/alexwhin/redactum#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "provenance": true
+  },
+  "peerDependencies": {
+    "@anthropic-ai/sdk": "^0.24.0",
+    "@langchain/core": "^0.3.0",
+    "ai": "^3.0.0",
+    "llamaindex": "^0.12.0",
+    "openai": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@langchain/core": {
+      "optional": true
+    },
+    "llamaindex": {
+      "optional": true
+    },
+    "ai": {
+      "optional": true
+    },
+    "openai": {
+      "optional": true
+    },
+    "@anthropic-ai/sdk": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.35.0",
+    "@release-it/conventional-changelog": "^10.0.1",
+    "@types/node": "^24.5.2",
+    "@typescript-eslint/eslint-plugin": "^8.44.0",
+    "@typescript-eslint/parser": "^8.44.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.35.0",
+    "eslint-plugin-tsdoc": "^0.4.0",
+    "husky": "^9.1.7",
+    "knip": "^5.63.1",
+    "release-it": "^19.0.5",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitepress": "^1.6.4",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "pnpm@10.14.0",
+  "dependencies": {
+    "yaml": "^2.8.1"
+  }
+}
