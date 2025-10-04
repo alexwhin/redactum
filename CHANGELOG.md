@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [1.0.4](https://github.com/alexwhin/redactum/compare/v1.0.3...v1.0.4) (2025-10-04)
+
+### Maintenance
+
+* enhance pre-commit checks and add example validation step ([63023c8](https://github.com/alexwhin/redactum/commit/63023c8daee327b5667618e6bb5075af48976a97))
+
 ## [1.0.3](https://github.com/alexwhin/redactum/compare/v1.0.1...v1.0.3) (2025-10-04)
 
 ### Maintenance

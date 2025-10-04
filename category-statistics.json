@@ -35,9 +35,5 @@
     "CI_CD_SECRETS": 7,
     "AUTH_SECRETS": 7
   },
-<<<<<<< HEAD
-  "lastUpdated": "2025-10-04T11:23:34.269Z"
-=======
-  "lastUpdated": "2025-10-04T17:00:07.564Z"
->>>>>>> 71e4c27 (chore: enhance pre-commit checks and add example validation step)
+  "lastUpdated": "2025-10-04T17:02:42.778Z"
 }
