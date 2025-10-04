@@ -666,11 +666,23 @@ export const POLICIES: Policy[] = [
     replacement: "[DO_TOKEN]",
   },
   {
-    name: "CLOUDFLARE_API_TOKEN",
-    pattern:
-      /\bcloudflare[\s_-]?(?:api[\s_-]?)?(?:token|key)[\s:#=-]*([a-zA-Z0-9_-]{40})\b/gi,
+    name: "VERCEL_TOKEN",
+    pattern: /\b[a-zA-Z0-9]{24}\b/g,
     category: PolicyCategory.CLOUD_CREDENTIALS,
-    replacement: "[CLOUDFLARE_TOKEN]",
+    replacement: "[VERCEL_TOKEN]",
+  },
+  {
+    name: "RAILWAY_TOKEN",
+    pattern: /\b[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\b/gi,
+    category: PolicyCategory.CLOUD_CREDENTIALS,
+    replacement: "[RAILWAY_TOKEN]",
+  },
+  {
+    name: "GCP_SERVICE_ACCOUNT_KEY",
+    pattern:
+      /\b[a-z0-9_-]+@[a-z0-9_-]+\.iam\.gserviceaccount\.com\b/gi,
+    category: PolicyCategory.CLOUD_CREDENTIALS,
+    replacement: "[GCP_SERVICE_ACCOUNT]",
   },
   {
     name: "MONGODB_CONNECTION_STRING",

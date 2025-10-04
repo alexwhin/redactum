@@ -1,5 +1,5 @@
 {
-  "totalPatterns": 180,
+  "totalPatterns": 182,
   "totalCategories": 32,
   "patternsByCategory": {
     "EMAIL": 1,
@@ -25,7 +25,7 @@
     "GEOGRAPHIC": 4,
     "EMPLOYEE_ID": 1,
     "VEHICLE": 2,
-    "CLOUD_CREDENTIALS": 4,
+    "CLOUD_CREDENTIALS": 6,
     "DEV_IDENTIFIER": 16,
     "PACKAGE_REGISTRY": 5,
     "INFRASTRUCTURE_SECRETS": 10,
@@ -35,5 +35,9 @@
     "CI_CD_SECRETS": 7,
     "AUTH_SECRETS": 7
   },
+<<<<<<< HEAD
   "lastUpdated": "2025-10-04T10:41:18.825Z"
+=======
+  "lastUpdated": "2025-10-04T10:57:16.389Z"
+>>>>>>> 8ffc930 (chore: add .cmai to gitignore and update documentation)
 }

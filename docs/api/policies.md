@@ -1,6 +1,6 @@
 # Policies
 
-Redactum provides **180 battle-tested policies** organized into **32 categories** to protect sensitive data across your entire stack.
+Redactum provides **182 battle-tested policies** organized into **32 categories** to protect sensitive data across your entire stack.
 
 From API keys and database credentials to personal information and financial data, each policy is designed to catch real-world patterns while minimizing false positives. Use them individually or combine categories to match your security requirements.
 
@@ -59,7 +59,9 @@ From API keys and database credentials to personal information and financial dat
 | `AZURE_SUBSCRIPTION_ID` | 12345678-1234-1234-1234-123456789012 |
 | `HEROKU_API_KEY` | 12345678-1234-1234-1234-123456789012 |
 | `DIGITALOCEAN_TOKEN` | dop_v1_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcd |
-| `CLOUDFLARE_API_TOKEN` | 1234567890abcdefghijklmnopqrstuvwxyz1234 |
+| `VERCEL_TOKEN` | abcdefghijklmnopqrstuvwxyz1234567890 |
+| `RAILWAY_TOKEN` | 12345678-1234-1234-1234-123456789012 |
+| `GCP_SERVICE_ACCOUNT_KEY` | my-service-account@my-project.iam.gserviceaccount.com |
 
 ## API Keys
 
