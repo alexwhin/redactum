@@ -1,4 +1,4 @@
-# 🛡️ redactum - automated PII and secret redaction for AI applications
+# ⛨ redactum - automated PII and secret redaction for AI applications
 
 [![NPM Version](https://img.shields.io/npm/v/redactum?logo=npm&color=f11f7a)](https://www.npmjs.com/package/redactum)
 [![Codecov](https://img.shields.io/codecov/c/github/alexwhin/redactum?logo=codecov&color=f11f7a)](https://codecov.io/gh/alexwhin/redactum)
