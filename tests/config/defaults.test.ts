@@ -2,7 +2,6 @@ import { describe, it, expect } from "vitest";
 import {
   getDefaultConfig,
   CONFIG_FILE_NAMES,
-  CONFIG_SCHEMA_URL,
 } from "../../src/config/defaults.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
@@ -144,12 +143,5 @@ describe("CONFIG_FILE_NAMES", () => {
     const configIndex = CONFIG_FILE_NAMES.indexOf("redactum.config.json");
 
     expect(rcIndex).toBeLessThan(configIndex);
-  });
-});
-
-describe("CONFIG_SCHEMA_URL", () => {
-  it("should be a valid URL string", () => {
-    expect(typeof CONFIG_SCHEMA_URL).toBe("string");
-    expect(CONFIG_SCHEMA_URL).toMatch(/^https?:\/\//);
   });
 });

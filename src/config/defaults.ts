@@ -254,6 +254,3 @@ export const CONFIG_FILE_NAMES = [
   "redactum.config.yaml",
   "redactum.config.yml",
 ];
-
-export const CONFIG_SCHEMA_URL =
-  "https://raw.githubusercontent.com/your-org/redactum/main/schema/config-schema.json";
