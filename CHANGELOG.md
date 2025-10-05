@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [1.1.0](https://github.com/alexwhin/redactum/compare/v1.0.9...v1.1.0) (2025-10-05)
+
+### Features
+
+* expand detection with JDBC, SMTP, AWS, GCP, Azure patterns ([c0ea853](https://github.com/alexwhin/redactum/commit/c0ea85314f9d76e1f475ba62d6825974624faf93))
+
 ## [1.0.9](https://github.com/alexwhin/redactum/compare/v1.0.8...v1.0.9) (2025-10-05)
 
 ### Documentation
