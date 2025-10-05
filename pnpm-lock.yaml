@@ -14,19 +14,19 @@ importers:
   .:
     dependencies:
       '@anthropic-ai/sdk':
-        specifier: 0.24.0
+        specifier: '>=0.24.0'
         version: 0.24.0
       '@langchain/core':
-        specifier: 0.3.0
+        specifier: '>=0.3.0'
         version: 0.3.0(openai@4.0.0)
       ai:
-        specifier: 3.0.0
+        specifier: '>=3.0.0'
         version: 3.0.0(react@18.3.1)(solid-js@1.9.9)(svelte@5.39.8)(vue@3.5.22(typescript@5.9.2))(zod@3.25.76)
       llamaindex:
-        specifier: 0.12.0
+        specifier: '>=0.12.0'
         version: 0.12.0(rxjs@7.8.2)(tree-sitter@0.22.4)(web-tree-sitter@0.24.7)(zod@3.25.76)
       openai:
-        specifier: 4.0.0
+        specifier: '>=4.0.0'
         version: 4.0.0
       yaml:
         specifier: 2.8.1
