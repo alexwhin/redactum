@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [1.0.9](https://github.com/alexwhin/redactum/compare/v1.0.8...v1.0.9) (2025-10-05)
+
+### Documentation
+
+* add CONTRIBUTING.md and SECURITY.md ([0d66682](https://github.com/alexwhin/redactum/commit/0d666825352cd95c0ae1a39cd86da5ee4ae41dfe))
+* reorganize test pattern coverage ([50bede3](https://github.com/alexwhin/redactum/commit/50bede3f69c151049cda1c1054505b6d3b7be4c0))
+
 ## [1.0.8](https://github.com/alexwhin/redactum/compare/v1.0.7...v1.0.8) (2025-10-05)
 
 ### Maintenance
