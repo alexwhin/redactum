@@ -1,36 +1,24 @@
-import { describe, it, expect } from "vitest";
-import { POLICIES } from "../../src/constants.js";
+import { describe } from "vitest";
+import {
+  testPolicySuite,
+  testCategoryCoverage,
+} from "../policy-test-helpers.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("employee id patterns", () => {
-  const employeeIdPatterns = POLICIES.filter(
-    (p) => p.category === PolicyCategory.EMPLOYEE_ID,
-  );
-
-  it("should have employee ID patterns", () => {
-    expect(employeeIdPatterns.length).toBeGreaterThan(0);
-  });
+  testCategoryCoverage(PolicyCategory.EMPLOYEE_ID, ["EMPLOYEE_ID"]);
 
   describe("EMPLOYEE_ID", () => {
-    const pattern = employeeIdPatterns.find((p) => p.name === "EMPLOYEE_ID");
-
-    it("should detect employee IDs", () => {
-      expect(pattern).toBeTruthy();
-      expect("EMP 123456".match(pattern!.pattern)).toBeTruthy();
-      expect("employee: ABC12345".match(pattern!.pattern)).toBeTruthy();
-      expect("badge# 987654".match(pattern!.pattern)).toBeTruthy();
-      expect("staff: XYZW1234".match(pattern!.pattern)).toBeTruthy();
+    testPolicySuite({
+      policyName: "EMPLOYEE_ID",
+      replacement: "[EMPLOYEE_ID]",
+      shouldMatch: [
+        "EMP 123456",
+        "employee: ABC12345",
+        "badge# 987654",
+        "staff: XYZW1234",
+      ],
+      shouldNotMatch: ["EMP 123", "employee", "regular text"],
     });
-
-    it("should not match invalid employee IDs", () => {
-      expect("EMP 123".match(pattern!.pattern)).toBeFalsy();
-      expect("employee".match(pattern!.pattern)).toBeFalsy();
-    });
-  });
-
-  it("should not have false positives", () => {
-    const pattern = employeeIdPatterns.find((p) => p.name === "EMPLOYEE_ID");
-
-    expect("regular text".match(pattern!.pattern)).toBeFalsy();
   });
 });

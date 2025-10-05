@@ -1,55 +1,72 @@
-import { describe, it, expect } from "vitest";
-import { POLICIES } from "../../src/constants.js";
+import { describe } from "vitest";
+import {
+  testPolicySuite,
+  testCategoryCoverage,
+} from "../policy-test-helpers.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("cloud credentials patterns", () => {
-  const cloudPatterns = POLICIES.filter(p => p.category === PolicyCategory.CLOUD_CREDENTIALS);
+  testCategoryCoverage(PolicyCategory.CLOUD_CREDENTIALS, [
+    "AZURE_SUBSCRIPTION_ID",
+    "HEROKU_API_KEY",
+    "DIGITALOCEAN_TOKEN",
+    "RAILWAY_TOKEN",
+    "GCP_SERVICE_ACCOUNT_KEY",
+  ]);
 
-  it("should have cloud credentials patterns", () => {
-    expect(cloudPatterns.length).toBeGreaterThan(0);
+  describe("AZURE_SUBSCRIPTION_ID", () => {
+    testPolicySuite({
+      policyName: "AZURE_SUBSCRIPTION_ID",
+      replacement: "[AZURE_SUBSCRIPTION_ID]",
+      shouldMatch: [
+        "12345678-1234-1234-1234-123456789012",
+        "abcdef01-2345-6789-abcd-ef0123456789",
+      ],
+      shouldNotMatch: ["not-a-uuid"],
+    });
   });
 
-  it("should detect Azure Subscription IDs", () => {
-    const pattern = cloudPatterns.find(p => p.name === "AZURE_SUBSCRIPTION_ID");
-    expect(pattern).toBeTruthy();
-
-    expect("12345678-1234-1234-1234-123456789012".match(pattern!.pattern)).toBeTruthy();
-    expect("abcdef01-2345-6789-abcd-ef0123456789".match(pattern!.pattern)).toBeTruthy();
+  describe("HEROKU_API_KEY", () => {
+    testPolicySuite({
+      policyName: "HEROKU_API_KEY",
+      replacement: "[HEROKU_API_KEY]",
+      shouldMatch: ["12345678-1234-1234-1234-123456789012"],
+      shouldNotMatch: ["not-a-uuid"],
+    });
   });
 
-  it("should detect Heroku API Keys", () => {
-    const pattern = cloudPatterns.find(p => p.name === "HEROKU_API_KEY");
-    expect(pattern).toBeTruthy();
-
-    expect("12345678-1234-1234-1234-123456789012".match(pattern!.pattern)).toBeTruthy();
+  describe("DIGITALOCEAN_TOKEN", () => {
+    testPolicySuite({
+      policyName: "DIGITALOCEAN_TOKEN",
+      replacement: "[DO_TOKEN]",
+      shouldMatch: [
+        "dop_v1_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+      ],
+      shouldNotMatch: ["dop_v1_short"],
+    });
   });
 
-  it("should detect DigitalOcean tokens", () => {
-    const pattern = cloudPatterns.find(p => p.name === "DIGITALOCEAN_TOKEN");
-    expect(pattern).toBeTruthy();
-
-    expect("dop_v1_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef".match(pattern!.pattern)).toBeTruthy();
+  describe("RAILWAY_TOKEN", () => {
+    testPolicySuite({
+      policyName: "RAILWAY_TOKEN",
+      replacement: "[RAILWAY_TOKEN]",
+      shouldMatch: [
+        "12345678-1234-1234-1234-123456789012",
+        "abcdef01-2345-6789-abcd-ef0123456789",
+      ],
+      shouldNotMatch: ["railway.app"],
+    });
   });
 
-  it("should detect Railway tokens", () => {
-    const pattern = cloudPatterns.find(p => p.name === "RAILWAY_TOKEN");
-    expect(pattern).toBeTruthy();
-
-    expect("12345678-1234-1234-1234-123456789012".match(pattern!.pattern)).toBeTruthy();
-    expect("abcdef01-2345-6789-abcd-ef0123456789".match(pattern!.pattern)).toBeTruthy();
-  });
-
-  it("should detect GCP service account keys", () => {
-    const pattern = cloudPatterns.find(p => p.name === "GCP_SERVICE_ACCOUNT_KEY");
-    expect(pattern).toBeTruthy();
-
-    expect("my-service-account@my-project.iam.gserviceaccount.com".match(pattern!.pattern)).toBeTruthy();
-    expect("app-123@example-project-456.iam.gserviceaccount.com".match(pattern!.pattern)).toBeTruthy();
-  });
-
-  it("should not have false positives", () => {
-    const railwayPattern = cloudPatterns.find(p => p.name === "RAILWAY_TOKEN");
-
-    expect("railway.app".match(railwayPattern!.pattern)).toBeFalsy();
+  describe("GCP_SERVICE_ACCOUNT_KEY", () => {
+    testPolicySuite({
+      policyName: "GCP_SERVICE_ACCOUNT_KEY",
+      replacement: "[GCP_SERVICE_ACCOUNT]",
+      shouldMatch: [
+        "my-service-account@my-project.iam.gserviceaccount.com",
+        "app-123@example-project-456.iam.gserviceaccount.com",
+      ],
+      shouldNotMatch: ["user@example.com"],
+    });
   });
 });

@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { getDefaultConfig, CONFIG_FILE_NAMES, CONFIG_SCHEMA_URL } from "../../src/config/defaults.js";
+import {
+  getDefaultConfig,
+  CONFIG_FILE_NAMES,
+  CONFIG_SCHEMA_URL,
+} from "../../src/config/defaults.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("getDefaultConfig", () => {
@@ -20,7 +24,7 @@ describe("getDefaultConfig", () => {
     const config = getDefaultConfig();
 
     expect(config.categories).toBeInstanceOf(Map);
-    
+
     const allCategories = Object.values(PolicyCategory);
     expect(config.categories.size).toBe(allCategories.length);
 
@@ -60,7 +64,6 @@ describe("getDefaultConfig", () => {
 
     const lesseSensitiveCategories = [
       PolicyCategory.ADDRESS,
-      PolicyCategory.DATE_OF_BIRTH,
       PolicyCategory.MEDICAL,
       PolicyCategory.GEOGRAPHIC,
       PolicyCategory.EMPLOYEE_ID,
@@ -139,7 +142,7 @@ describe("CONFIG_FILE_NAMES", () => {
   it("should prioritize .redactumrc files over redactum.config files", () => {
     const rcIndex = CONFIG_FILE_NAMES.indexOf(".redactumrc.json");
     const configIndex = CONFIG_FILE_NAMES.indexOf("redactum.config.json");
-    
+
     expect(rcIndex).toBeLessThan(configIndex);
   });
 });

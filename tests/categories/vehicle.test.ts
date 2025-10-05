@@ -1,29 +1,32 @@
-import { describe, it, expect } from "vitest";
-import { POLICIES } from "../../src/constants.js";
+import { describe } from "vitest";
+import {
+  testPolicySuite,
+  testCategoryCoverage,
+} from "../policy-test-helpers.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("vehicle patterns", () => {
-  const vehiclePatterns = POLICIES.filter(p => p.category === PolicyCategory.VEHICLE);
+  testCategoryCoverage(PolicyCategory.VEHICLE, ["VIN", "US_LICENSE_PLATE"]);
 
-  it("should have vehicle patterns", () => {
-    expect(vehiclePatterns.length).toBeGreaterThan(0);
+  describe("VIN", () => {
+    testPolicySuite({
+      policyName: "VIN",
+      replacement: "[VIN]",
+      shouldMatch: [
+        "1HGBH41JXMN109186",
+        "JH4KA7561PC008269",
+        "WVWZZZ3CZHE051389",
+      ],
+      shouldNotMatch: ["ABC123", "1234567890", "INVALID-VIN"],
+    });
   });
 
-  it("should detect US license plates", () => {
-    const pattern = vehiclePatterns.find(p => p.name === "US_LICENSE_PLATE");
-    expect(pattern).toBeTruthy();
-
-    expect("ABC-1234".match(pattern!.pattern)).toBeTruthy();
-    expect("123-ABC".match(pattern!.pattern)).toBeTruthy();
-    expect("XYZ123".match(pattern!.pattern)).toBeTruthy();
-  });
-
-  it("should detect VIN numbers", () => {
-    const pattern = vehiclePatterns.find(p => p.name === "VIN");
-    expect(pattern).toBeTruthy();
-
-    expect("1HGBH41JXMN109186".match(pattern!.pattern)).toBeTruthy();
-    expect("JH4KA7561PC008269".match(pattern!.pattern)).toBeTruthy();
-    expect("WVWZZZ3CZHE051389".match(pattern!.pattern)).toBeTruthy();
+  describe("US_LICENSE_PLATE", () => {
+    testPolicySuite({
+      policyName: "US_LICENSE_PLATE",
+      replacement: "[LICENSE_PLATE]",
+      shouldMatch: ["ABC-1234", "123-ABC", "XYZ123"],
+      shouldNotMatch: ["A", "123", "TOOLONG1234567890"],
+    });
   });
 });

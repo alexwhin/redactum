@@ -512,7 +512,6 @@ Create a `.redactumrc.json` file in your project root:
     "CREDIT_CARD": true,
     "API_KEY": true,
     "PRIVATE_KEY": true,
-    "PERSON_NAME": false,
     "ADDRESS": false
   },
   "customPatterns": [

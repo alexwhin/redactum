@@ -13,7 +13,6 @@
     "DATABASE_CREDENTIALS": true,
     "DEV_SECRET": true,
     "ADDRESS": false,
-    "PERSON_NAME": false,
     "MEDICAL": false
   },
   "customPolicies": [

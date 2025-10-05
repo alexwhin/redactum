@@ -6,7 +6,7 @@ export {
   redactumGetEnabledCategories,
   redactumGetEnabledPolicies,
   redactumGetPatterns,
-  redactumGetAllPatterns
+  redactumGetAllPatterns,
 } from "./core/redactum.js";
 
 export { PolicyCategory, Policies } from "./types/index.js";
@@ -24,17 +24,16 @@ export {
   DEFAULT_REPLACEMENT,
   DEFAULT_ENABLED_CATEGORIES,
 } from "./constants.js";
-export { redactumCalculateEntropy, redactumLooksLikeSecret } from "./utils/entropy.js";
+export {
+  redactumCalculateEntropy,
+  redactumLooksLikeSecret,
+} from "./utils/entropy.js";
 export {
   redactumValidateOptions,
   redactumValidatePolicy,
 } from "./utils/validation.js";
 
-export {
-  loadConfig,
-  getConfig,
-  clearConfigCache,
-} from "./config/index.js";
+export { loadConfig, getConfig, clearConfigCache } from "./config/index.js";
 export type {
   RedactionConfig,
   ConfigFile,
@@ -44,15 +43,8 @@ export type {
   CategoryConfig,
   HashAlgorithm,
 } from "./config/types.js";
-export {
-  validateConfig,
-} from "./config/validator.js";
-export {
-  mergeConfigs,
-} from "./config/merger.js";
-export {
-  getDefaultConfig,
-  CONFIG_FILE_NAMES,
-} from "./config/defaults.js";
+export { validateConfig } from "./config/validator.js";
+export { mergeConfigs } from "./config/merger.js";
+export { getDefaultConfig, CONFIG_FILE_NAMES } from "./config/defaults.js";
 
 export * from "./providers/index.js";

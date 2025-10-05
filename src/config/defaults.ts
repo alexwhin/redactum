@@ -59,12 +59,6 @@ const DEFAULT_CATEGORIES: Record<
     replacement: "[ADDRESS]",
     preserveFormat: false,
   },
-  [PolicyCategory.DATE_OF_BIRTH]: {
-    enabled: false,
-    mode: "replace",
-    replacement: "[DOB]",
-    preserveFormat: false,
-  },
   [PolicyCategory.GOVERNMENT_ID]: {
     enabled: true,
     mode: "replace",

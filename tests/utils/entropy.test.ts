@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { redactumCalculateEntropy, redactumLooksLikeSecret } from "../../src/utils/entropy.js";
+import {
+  redactumCalculateEntropy,
+  redactumLooksLikeSecret,
+} from "../../src/utils/entropy.js";
 
 describe("entropy utilities", () => {
   describe("redactumCalculateEntropy", () => {

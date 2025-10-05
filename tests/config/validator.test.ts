@@ -1,6 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { validateConfig } from "../../src/config/validator.js";
-import type { RedactionConfig, CategoryConfig } from "../../src/config/types.js";
+import type {
+  RedactionConfig,
+  CategoryConfig,
+} from "../../src/config/types.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("validateConfig", () => {
@@ -57,7 +60,8 @@ describe("validateConfig", () => {
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual({
         path: "globalMode",
-        message: "Global mode must be one of: mask, replace, remove, hash, encrypt",
+        message:
+          "Global mode must be one of: mask, replace, remove, hash, encrypt",
         value: "invalid",
       });
     });
@@ -97,7 +101,10 @@ describe("validateConfig", () => {
 
     it("should reject invalid categories in array", () => {
       const config: RedactionConfig = {
-        categories: ["EMAIL" as PolicyCategory, "INVALID_CATEGORY" as PolicyCategory],
+        categories: [
+          "EMAIL" as PolicyCategory,
+          "INVALID_CATEGORY" as PolicyCategory,
+        ],
       };
       const result = validateConfig(config);
       expect(result.valid).toBe(false);
@@ -235,7 +242,8 @@ describe("validateConfig", () => {
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual({
         path: "customPolicies[0].pattern",
-        message: "Pattern may cause catastrophic backtracking (ReDoS vulnerability)",
+        message:
+          "Pattern may cause catastrophic backtracking (ReDoS vulnerability)",
         value: "(a+)+b",
       });
     });
@@ -450,7 +458,7 @@ describe("validateConfig", () => {
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual({
         path: "locale",
-        message: "Invalid locale format. Expected format: \"en\" or \"en-US\"",
+        message: 'Invalid locale format. Expected format: "en" or "en-US"',
         value: "english",
       });
     });

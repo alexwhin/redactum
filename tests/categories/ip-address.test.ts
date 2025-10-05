@@ -1,59 +1,67 @@
-import { describe, it, expect } from "vitest";
-import { POLICIES } from "../../src/constants.js";
+import { describe } from "vitest";
+import {
+  testPolicySuite,
+  testCategoryCoverage,
+} from "../policy-test-helpers.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("ip address patterns", () => {
-  const ipPatterns = POLICIES.filter(
-    (p) => p.category === PolicyCategory.IP_ADDRESS,
-  );
-
-  it("should have IP address patterns", () => {
-    expect(ipPatterns.length).toBeGreaterThan(0);
-  });
+  testCategoryCoverage(PolicyCategory.IP_ADDRESS, [
+    "IPV4_ADDRESS",
+    "IPV6_ADDRESS",
+  ]);
 
   describe("IPV4_ADDRESS", () => {
-    const pattern = ipPatterns.find((p) => p.name === "IPV4_ADDRESS");
-
-    it("should detect IPv4 addresses", () => {
-      expect(pattern).toBeTruthy();
-      expect("192.168.1.1".match(pattern!.pattern)).toBeTruthy();
-      expect("10.0.0.1".match(pattern!.pattern)).toBeTruthy();
-      expect("255.255.255.255".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should not match invalid IPv4 addresses", () => {
-      expect("256.256.256.256".match(pattern!.pattern)).toBeFalsy();
-      expect("192.168.1".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "IPV4_ADDRESS",
+      replacement: "[IP]",
+      shouldMatch: [
+        "192.168.1.1",
+        "10.0.0.1",
+        "255.255.255.255",
+        "172.16.0.1",
+        "8.8.8.8",
+        "127.0.0.1",
+        "0.0.0.0",
+        "203.0.113.0",
+        "198.51.100.42",
+      ],
+      shouldNotMatch: [
+        "256.256.256.256",
+        "192.168.1",
+        "regular text",
+        "192.168.1.256",
+        "999.999.999.999",
+        "192.168",
+        "abc.def.ghi.jkl",
+        "ip-address",
+      ],
     });
   });
 
   describe("IPV6_ADDRESS", () => {
-    const pattern = ipPatterns.find((p) => p.name === "IPV6_ADDRESS");
-
-    it("should detect IPv6 addresses", () => {
-      expect(pattern).toBeTruthy();
-      expect("2001:0db8:85a3:0000:0000:8a2e:0370:7334".match(pattern!.pattern)).toBeTruthy();
-      expect("2607:f8b0:4005:0805:0000:0000:0000:200e".match(pattern!.pattern)).toBeTruthy();
+    testPolicySuite({
+      policyName: "IPV6_ADDRESS",
+      replacement: "[IP]",
+      shouldMatch: [
+        "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+        "2607:f8b0:4005:0805:0000:0000:0000:200e",
+        "2001:0db8:0000:0000:0000:0000:0000:0001",
+        "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+        "0000:0000:0000:0000:0000:0000:0000:0000",
+        "2001:4860:4860:0000:0000:0000:0000:8888",
+        "abcd:ef01:2345:6789:abcd:ef01:2345:6789",
+      ],
+      shouldNotMatch: [
+        "fe80::1",
+        "::1",
+        "::",
+        "2001:db8::1",
+        "not-an-ipv6",
+        "2001:0db8:85a3",
+        "2001:db8",
+        "gggg:0000:0000:0000:0000:0000:0000:0001",
+      ],
     });
-
-    it("should not match reserved IPv6 addresses", () => {
-      expect("fe80::1".match(pattern!.pattern)).toBeFalsy();
-      expect("::1".match(pattern!.pattern)).toBeFalsy();
-      expect("::".match(pattern!.pattern)).toBeFalsy();
-      expect("2001:db8::1".match(pattern!.pattern)).toBeFalsy();
-    });
-
-    it("should not match invalid IPv6 addresses", () => {
-      expect("not-an-ipv6".match(pattern!.pattern)).toBeFalsy();
-      expect("2001:0db8:85a3".match(pattern!.pattern)).toBeFalsy();
-    });
-  });
-
-  it("should not have false positives", () => {
-    const ipv4Pattern = ipPatterns.find((p) => p.name === "IPV4_ADDRESS");
-    const ipv6Pattern = ipPatterns.find((p) => p.name === "IPV6_ADDRESS");
-
-    expect("regular text".match(ipv4Pattern!.pattern)).toBeFalsy();
-    expect("regular text".match(ipv6Pattern!.pattern)).toBeFalsy();
   });
 });

@@ -1,14 +1,17 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { 
-  getConfig, 
-  clearConfigCache, 
+import {
+  getConfig,
+  clearConfigCache,
   loadConfig,
   getDefaultConfig,
   validateConfig,
   mergeConfigs,
   ConfigValidationException,
 } from "../../src/config/index.js";
-import type { ConfigLoaderOptions, ResolvedConfig } from "../../src/config/index.js";
+import type {
+  ConfigLoaderOptions,
+  ResolvedConfig,
+} from "../../src/config/index.js";
 
 vi.mock("../../src/config/loader.js", () => ({
   loadConfig: vi.fn(),
@@ -73,7 +76,9 @@ describe("getConfig", () => {
       },
     };
 
-    const { loadConfig: mockLoadConfig } = await import("../../src/config/loader.js");
+    const { loadConfig: mockLoadConfig } = await import(
+      "../../src/config/loader.js"
+    );
     vi.mocked(mockLoadConfig).mockResolvedValue(mockConfig);
 
     const config1 = await getConfig();
@@ -125,8 +130,12 @@ describe("getConfig", () => {
       mask: "#",
     };
 
-    const { loadConfig: mockLoadConfig } = await import("../../src/config/loader.js");
-    vi.mocked(mockLoadConfig).mockResolvedValueOnce(mockConfig1).mockResolvedValueOnce(mockConfig2);
+    const { loadConfig: mockLoadConfig } = await import(
+      "../../src/config/loader.js"
+    );
+    vi.mocked(mockLoadConfig)
+      .mockResolvedValueOnce(mockConfig1)
+      .mockResolvedValueOnce(mockConfig2);
 
     const config1 = await getConfig();
     expect(config1.mask).toBe("*");
@@ -142,7 +151,9 @@ describe("getConfig", () => {
 
   it("should handle loading errors", async () => {
     const error = new Error("Failed to load config");
-    const { loadConfig: mockLoadConfig } = await import("../../src/config/loader.js");
+    const { loadConfig: mockLoadConfig } = await import(
+      "../../src/config/loader.js"
+    );
     vi.mocked(mockLoadConfig).mockRejectedValue(error);
 
     await expect(getConfig()).rejects.toThrow("Failed to load config");
@@ -185,12 +196,14 @@ describe("clearConfigCache", () => {
       },
     };
 
-    const { loadConfig: mockLoadConfig } = await import("../../src/config/loader.js");
+    const { loadConfig: mockLoadConfig } = await import(
+      "../../src/config/loader.js"
+    );
     vi.mocked(mockLoadConfig).mockClear();
     vi.mocked(mockLoadConfig).mockResolvedValue(mockConfig);
 
     const initialCallCount = vi.mocked(mockLoadConfig).mock.calls.length;
-    
+
     await getConfig();
     clearConfigCache();
     await getConfig();
@@ -209,7 +222,7 @@ describe("ConfigValidationException", () => {
   it("should be constructible", () => {
     const errors = [{ path: "test", message: "test error", value: "test" }];
     const exception = new ConfigValidationException("Test error", errors);
-    
+
     expect(exception).toBeInstanceOf(Error);
     expect(exception.message).toBe("Test error");
     expect(exception.errors).toBe(errors);

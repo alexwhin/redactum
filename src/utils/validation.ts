@@ -18,7 +18,7 @@ import { POLICIES } from "../constants.js";
  */
 export function redactumValidateOptions(options: RedactumOptions): void {
   if (options.policies) {
-    const validPolicyNames = POLICIES.map(p => p.name);
+    const validPolicyNames = POLICIES.map((p) => p.name);
     for (const policyName of options.policies) {
       if (!validPolicyNames.includes(policyName as string)) {
         throw new Error(`Invalid policy name: ${policyName}`);
@@ -42,7 +42,7 @@ export function redactumValidateOptions(options: RedactumOptions): void {
   }
 
   if (options.excludePatterns) {
-    const validPolicyNames = POLICIES.map(p => p.name);
+    const validPolicyNames = POLICIES.map((p) => p.name);
     for (const excludePattern of options.excludePatterns) {
       if (!(excludePattern.pattern instanceof RegExp)) {
         throw new Error("Exclude pattern must have a valid RegExp pattern");
@@ -55,7 +55,9 @@ export function redactumValidateOptions(options: RedactumOptions): void {
 
         for (const policyName of excludePattern.policies) {
           if (!validPolicyNames.includes(policyName as string)) {
-            throw new Error(`Invalid policy name in exclude pattern: ${policyName}`);
+            throw new Error(
+              `Invalid policy name in exclude pattern: ${policyName}`
+            );
           }
         }
       }

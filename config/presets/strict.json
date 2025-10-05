@@ -14,8 +14,6 @@
     "AWS_KEY": true,
     "PRIVATE_KEY": true,
     "ADDRESS": true,
-    "DATE_OF_BIRTH": true,
-    "PERSON_NAME": true,
     "GOVERNMENT_ID": true,
     "FINANCIAL": true,
     "MEDICAL": true,

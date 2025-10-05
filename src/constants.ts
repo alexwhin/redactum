@@ -12,7 +12,7 @@ export const POLICIES: Policy[] = [
   },
   {
     name: "OPENAI_API_KEY",
-    pattern: /\bsk-[a-zA-Z0-9]{20,}\b/g,
+    pattern: /\bsk-(?:proj-)?[a-zA-Z0-9]{32,}\b/g,
     category: PolicyCategory.API_KEY,
     replacement: "[OPENAI_KEY]",
   },
@@ -70,7 +70,7 @@ export const POLICIES: Policy[] = [
   {
     name: "CREDIT_CARD_WITH_SEPARATORS",
     pattern:
-      /\b(?:4\d{3}[-\s]\d{4}[-\s]\d{4}[-\s]\d{4}|5[1-5]\d{2}[-\s]\d{4}[-\s]\d{4}[-\s]\d{4}|3[47]\d{2}[-\s]\d{6}[-\s]\d{5}|3(?:0[0-5]|[68]\d)\d[-\s]\d{6}[-\s]\d{5}|6(?:011|5\d{2})[-\s]\d{4}[-\s]\d{4}[-\s]\d{4})\b/g,
+      /\b(?:4\d{3}[-\s]\d{4}[-\s]\d{4}[-\s]\d{4}|5[1-5]\d{2}[-\s]\d{4}[-\s]\d{4}[-\s]\d{4}|3[47]\d{2}[-\s]\d{6}[-\s]\d{5}|3(?:0[0-5]|[68]\d)\d[-\s]\d{6}[-\s]\d{4}|6(?:011|5\d{2})[-\s]\d{4}[-\s]\d{4}[-\s]\d{4})\b/g,
     category: PolicyCategory.CREDIT_CARD,
     replacement: "[CREDIT_CARD]",
   },
@@ -83,19 +83,20 @@ export const POLICIES: Policy[] = [
   },
   {
     name: "IPV6_ADDRESS",
-    pattern: /\b(?!fe80:|::1\b|::\b|2001:db8:)(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b/gi,
+    pattern:
+      /\b(?!fe80:|::1\b|::\b|2001:db8:)(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b/gi,
     category: PolicyCategory.IP_ADDRESS,
     replacement: "[IP]",
   },
   {
     name: "GITHUB_TOKEN",
-    pattern: /\b(?:ghp_|gho_|ghu_|ghs_|ghr_)[a-zA-Z0-9]{36}\b/g,
+    pattern: /\b(?:ghp_|gho_|ghu_|ghs_|ghr_)[a-zA-Z0-9]{36,40}\b/g,
     category: PolicyCategory.API_KEY,
     replacement: "[GITHUB_TOKEN]",
   },
   {
     name: "GITHUB_FINE_GRAINED_TOKEN",
-    pattern: /\bgithub_pat_[a-zA-Z0-9_]{82}\b/g,
+    pattern: /\bgithub_pat_[a-zA-Z0-9]{20,22}_[a-zA-Z0-9]{59,}\b/g,
     category: PolicyCategory.API_KEY,
     replacement: "[GITHUB_PAT]",
   },
@@ -132,7 +133,7 @@ export const POLICIES: Policy[] = [
   },
   {
     name: "AWS_SECRET_KEY",
-    pattern: /\b[A-Za-z0-9/+=]{40}\b/g,
+    pattern: /(?<![A-Za-z0-9/+=-])[A-Za-z0-9/+=]{40}(?![A-Za-z0-9/+=])/g,
     category: PolicyCategory.AWS_KEY,
     replacement: "[AWS_SECRET]",
   },
@@ -166,7 +167,7 @@ export const POLICIES: Policy[] = [
   {
     name: "GENERIC_PRIVATE_KEY",
     pattern:
-      /-----BEGIN (?:DSA |EC |RSA )?PRIVATE KEY-----[\s\S]*?-----END (?:DSA |EC |RSA )?PRIVATE KEY-----/g,
+      /-----BEGIN (?:DSA |EC |RSA |OPENSSH )?PRIVATE KEY-----[\s\S]*?-----END (?:DSA |EC |RSA |OPENSSH )?PRIVATE KEY-----/g,
     category: PolicyCategory.PRIVATE_KEY,
     replacement: "[PRIVATE_KEY]",
   },
@@ -187,27 +188,13 @@ export const POLICIES: Policy[] = [
     name: "PASSWORD_ASSIGNMENT",
     pattern: /(?:password|passwd|pwd)[\s]*[:=][\s]*["']([^"']{8,})["']/gi,
     category: PolicyCategory.API_KEY,
-    replacement: "password=\"[PASSWORD]\"",
+    replacement: 'password="[PASSWORD]"',
   },
   {
     name: "DOCKER_PASSWORD_FLAG",
     pattern: /(docker\s+\w+\s+.*?-p\s+)(\S+)/gi,
     category: PolicyCategory.DEV_SECRET,
     replacement: "$1[PASSWORD]",
-  },
-  {
-    name: "DATE_OF_BIRTH",
-    pattern:
-      /\b(?:0?[1-9]|1[0-2])[-/](?:0?[1-9]|[12]\d|3[01])[-/](?:19[0-9]{2}|20[0-9]{2})\b/g,
-    category: PolicyCategory.DATE_OF_BIRTH,
-    replacement: "[DOB]",
-  },
-  {
-    name: "US_STREET_ADDRESS",
-    pattern:
-      /\b\d{1,5}\s+[\w\s]{1,50}\s+(?:street|st|avenue|ave|road|rd|highway|hwy|boulevard|blvd|lane|ln|drive|dr|court|ct|circle|cir|plaza|pl)\b/gi,
-    category: PolicyCategory.ADDRESS,
-    replacement: "[ADDRESS]",
   },
   {
     name: "US_DRIVER_LICENSE",
@@ -495,19 +482,20 @@ export const POLICIES: Policy[] = [
   },
   {
     name: "BITCOIN_ADDRESS",
-    pattern: /\b[13][a-km-zA-HJ-NP-Z1-9]{25,34}\b|\bbc1[a-z0-9]{39,59}\b/g,
+    pattern:
+      /\b(?!1{20,})[13][a-km-zA-HJ-NP-Z1-9]{25,34}\b|(?!(?:bc1|tb1|bcrt1)(?:q{38,}|[\u200b\s]*q[\u200b\s]*q[\u200b\s]*q[\u200b\s]*q{34,}))(?:bc1|tb1|bcrt1)(?:[\u200b\s]*[a-z0-9]){38,87}\b|(?!BC1Q{38,})BC1(?:[\u200b\s]*[A-Z0-9]){38,87}\b/g,
     category: PolicyCategory.DIGITAL_IDENTITY,
     replacement: "[BITCOIN_ADDRESS]",
   },
   {
     name: "ETHEREUM_ADDRESS",
-    pattern: /\b0x[a-fA-F0-9]{40}\b/g,
+    pattern: /\b0x(?:[\u200b\s]*[a-fA-F0-9]){40}\b/g,
     category: PolicyCategory.DIGITAL_IDENTITY,
     replacement: "[ETH_ADDRESS]",
   },
   {
     name: "MAC_ADDRESS",
-    pattern: /\b(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}\b/g,
+    pattern: /(?<![:-])(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}\b(?![:-])/g,
     category: PolicyCategory.DIGITAL_IDENTITY,
     replacement: "[MAC_ADDRESS]",
   },
@@ -561,25 +549,25 @@ export const POLICIES: Policy[] = [
   },
   {
     name: "GOOGLE_API_KEY",
-    pattern: /\bAIza[0-9A-Za-z\-_]{35}\b/g,
+    pattern: /\bAIzaSy[0-9A-Za-z_-]{32,39}\b/g,
     category: PolicyCategory.API_KEY,
     replacement: "[GOOGLE_API_KEY]",
   },
   {
     name: "SLACK_TOKEN",
-    pattern: /\bxox[bpars]-[0-9]{10,12}-[0-9]{10,12}-[a-zA-Z0-9]{24}\b/g,
+    pattern: /\bxox[bpars]-[0-9]{10,12}-[0-9]{10,12}-[a-zA-Z0-9]{24,32}\b/g,
     category: PolicyCategory.API_KEY,
     replacement: "[SLACK_TOKEN]",
   },
   {
     name: "PAYPAL_CLIENT_ID",
-    pattern: /\bA[a-zA-Z0-9_-]{80}\b/g,
+    pattern: /\bA[a-zA-Z0-9_-]{79,82}\b/g,
     category: PolicyCategory.API_KEY,
     replacement: "[PAYPAL_CLIENT_ID]",
   },
   {
     name: "TWILIO_API_KEY",
-    pattern: /\bSK[a-z0-9]{32}\b/g,
+    pattern: /\bSK[a-zA-Z0-9]{31,32}\b/g,
     category: PolicyCategory.API_KEY,
     replacement: "[TWILIO_API_KEY]",
   },
@@ -588,25 +576,6 @@ export const POLICIES: Policy[] = [
     pattern: /\bSG\.[a-zA-Z0-9_-]{66}\b/g,
     category: PolicyCategory.API_KEY,
     replacement: "[SENDGRID_API_KEY]",
-  },
-  {
-    name: "PO_BOX",
-    pattern: /\b(?:PO|P\.O\.|Post Office)\s+Box\s+[0-9]+\b/gi,
-    category: PolicyCategory.ADDRESS,
-    replacement: "[PO_BOX]",
-  },
-  {
-    name: "APARTMENT_NUMBER",
-    pattern: /\b(?:apt|apartment|unit|suite|ste)\s*\.?\s*[#]?[0-9A-Z]+\b/gi,
-    category: PolicyCategory.ADDRESS,
-    replacement: "[APT]",
-  },
-  {
-    name: "INTERNATIONAL_ADDRESS",
-    pattern:
-      /\b[0-9]+[\s,]+[A-Za-z0-9\s,.-]{5,50}[\s,]+[A-Za-z\s]{2,30}[\s,]+[A-Z0-9]{2,10}\b/g,
-    category: PolicyCategory.ADDRESS,
-    replacement: "[ADDRESS]",
   },
   {
     name: "AZURE_SUBSCRIPTION_ID",
@@ -618,7 +587,7 @@ export const POLICIES: Policy[] = [
   {
     name: "GOOGLE_CLOUD_PROJECT_ID",
     pattern:
-      /\bgcp[\s_-]?project[\s_-]?id[\s:#=-]*([a-z][-a-z0-9]{4,28}[a-z0-9])\b/gi,
+      /(?:gcp[\s_-]?project[\s_-]?id[\s:#=-]+|--project[=\s]+|(?:PROJECT(?:_ID)?)[=\s]+|projects\/|gcloud\s+(?:config\s+set\s+)?project\s+)([a-z][-a-z0-9]{4,28}[a-z0-9])\b/g,
     category: PolicyCategory.DEV_IDENTIFIER,
     replacement: "[GCP_PROJECT_ID]",
   },
@@ -661,14 +630,14 @@ export const POLICIES: Policy[] = [
   },
   {
     name: "RAILWAY_TOKEN",
-    pattern: /\b[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\b/gi,
+    pattern:
+      /\b[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\b/gi,
     category: PolicyCategory.CLOUD_CREDENTIALS,
     replacement: "[RAILWAY_TOKEN]",
   },
   {
     name: "GCP_SERVICE_ACCOUNT_KEY",
-    pattern:
-      /\b[a-z0-9_-]+@[a-z0-9_-]+\.iam\.gserviceaccount\.com\b/gi,
+    pattern: /\b[a-z0-9_-]+@[a-z0-9_-]+\.iam\.gserviceaccount\.com\b/gi,
     category: PolicyCategory.CLOUD_CREDENTIALS,
     replacement: "[GCP_SERVICE_ACCOUNT]",
   },
@@ -724,7 +693,8 @@ export const POLICIES: Policy[] = [
   },
   {
     name: "ENVIRONMENT_VARIABLE_SECRET",
-    pattern: /\b([A-Z_][A-Z0-9_]*(?:PASSWORD|PASSWD|PWD|SECRET|TOKEN|KEY)[A-Z0-9_]*)=(.+?)(?=\s+[A-Z_]|\s*$)/g,
+    pattern:
+      /\b([A-Z_][A-Z0-9_]*(?:PASSWORD|PASSWD|PWD|SECRET|TOKEN|KEY)[A-Z0-9_]*)=(.+?)(?=\s+[A-Z_]|\s*$)/g,
     category: PolicyCategory.DEV_SECRET,
     replacement: "$1=[REDACTED]",
   },
@@ -901,14 +871,14 @@ export const POLICIES: Policy[] = [
   {
     name: "JENKINS_TOKEN",
     pattern:
-      /\b(?:jenkins|hudson)[\s_-]?(?:token|api[\s_-]?key)[\s:#=-]*([a-f0-9]{32,34})\b/gi,
+      /\b(?:jenkins|hudson)[\s_-]?(?:token|api[\s_-]?key)[\s:#=-]*([a-zA-Z0-9]{32,40})\b/gi,
     category: PolicyCategory.CI_CD_SECRETS,
     replacement: "[JENKINS_TOKEN]",
   },
   {
     name: "CIRCLECI_TOKEN",
     pattern:
-      /\bcircleci[\s_-]?(?:token|api[\s_-]?key)[\s:#=-]*([a-f0-9]{40})\b/gi,
+      /\bcircleci[\s_-]?(?:token|api[\s_-]?key)[\s:#=-]*([a-zA-Z0-9]{39,43})\b/gi,
     category: PolicyCategory.CI_CD_SECRETS,
     replacement: "[CIRCLECI_TOKEN]",
   },
@@ -991,7 +961,7 @@ export const POLICIES: Policy[] = [
   {
     name: "OAUTH_REFRESH_TOKEN",
     pattern:
-      /\b(?:refresh[\s_-]?token|REFRESH_TOKEN)[\s:#=-]*([a-zA-Z0-9._/-]{30,})\b/gi,
+      /\b(?:refresh[\s_-]?token|REFRESH_TOKEN)[\s:#=-]*((?:1\/\/0)?[a-zA-Z0-9._/-]{28,})\b/gi,
     category: PolicyCategory.AUTH_SECRETS,
     replacement: "[OAUTH_REFRESH_TOKEN]",
   },
@@ -1077,7 +1047,8 @@ export const POLICIES: Policy[] = [
   },
   {
     name: "OKTA_API_TOKEN",
-    pattern: /\b(?:okta[\s_-]?(?:token|api[\s_-]?key)|00[a-zA-Z0-9_-]{40})\b/gi,
+    pattern:
+      /\b(?:okta[\s_-]?(?:token|api[\s_-]?key)[\s:#=-]+[a-zA-Z0-9_-]{40,}|00[a-zA-Z0-9_-]{40})\b/gi,
     category: PolicyCategory.AUTH_SECRETS,
     replacement: "[OKTA_TOKEN]",
   },
@@ -1091,7 +1062,7 @@ export const POLICIES: Policy[] = [
   {
     name: "KEYCLOAK_CLIENT_SECRET",
     pattern:
-      /\bkeycloak[\s_-]?client[\s_-]?secret[\s:#=-]*([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})\b/gi,
+      /\bkeycloak[\s_-]?client[\s_-]?secret[\s:#=-]*([a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12})\b/gi,
     category: PolicyCategory.AUTH_SECRETS,
     replacement: "[KEYCLOAK_SECRET]",
   },
@@ -1212,6 +1183,6 @@ export const POLICIES: Policy[] = [
   },
 ];
 
-export const DEFAULT_ENABLED_CATEGORIES = Object.values(
-  PolicyCategory
-).filter((category) => category !== PolicyCategory.CUSTOM);
+export const DEFAULT_ENABLED_CATEGORIES = Object.values(PolicyCategory).filter(
+  (category) => category !== PolicyCategory.CUSTOM
+);

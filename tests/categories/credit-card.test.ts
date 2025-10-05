@@ -1,38 +1,67 @@
-import { describe, it, expect } from "vitest";
-import { POLICIES } from "../../src/constants.js";
+import { describe } from "vitest";
+import {
+  testPolicySuite,
+  testCategoryCoverage,
+} from "../policy-test-helpers.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("credit card patterns", () => {
-  const ccPatterns = POLICIES.filter(p => p.category === PolicyCategory.CREDIT_CARD);
+  testCategoryCoverage(PolicyCategory.CREDIT_CARD, [
+    "CREDIT_CARD",
+    "CREDIT_CARD_WITH_SEPARATORS",
+  ]);
 
-  it("should have credit card patterns", () => {
-    expect(ccPatterns.length).toBeGreaterThan(0);
+  describe("CREDIT_CARD", () => {
+    testPolicySuite({
+      policyName: "CREDIT_CARD",
+      replacement: "[CREDIT_CARD]",
+      shouldMatch: [
+        "4111111111111111",
+        "5555555555554444",
+        "378282246310005",
+        "6011111111111117",
+        "36227206271667",
+        "5105105105105100",
+        "4012888888881881",
+        "4222222222222220",
+      ],
+      shouldNotMatch: [
+        "1234567890",
+        "not-a-card",
+        "411111111111111",
+        "12345678901234",
+        "12345678901234567",
+        "0000000000000000",
+        "4111-1111-1111-1111",
+      ],
+    });
   });
 
-  it("should detect credit card numbers without separators", () => {
-    const pattern = ccPatterns.find(p => p.name === "CREDIT_CARD");
-    expect(pattern).toBeTruthy();
-
-    expect("4111111111111111".match(pattern!.pattern)).toBeTruthy();
-    expect("5555555555554444".match(pattern!.pattern)).toBeTruthy();
-    expect("378282246310005".match(pattern!.pattern)).toBeTruthy();
-  });
-
-  it("should detect credit card numbers with dashes", () => {
-    const pattern = ccPatterns.find(p => p.name === "CREDIT_CARD_WITH_SEPARATORS");
-    expect(pattern).toBeTruthy();
-
-    expect("4111-1111-1111-1111".match(pattern!.pattern)).toBeTruthy();
-    expect("5555-5555-5555-4444".match(pattern!.pattern)).toBeTruthy();
-    expect("3782-822463-10005".match(pattern!.pattern)).toBeTruthy();
-  });
-
-  it("should detect credit card numbers with spaces", () => {
-    const pattern = ccPatterns.find(p => p.name === "CREDIT_CARD_WITH_SEPARATORS");
-    expect(pattern).toBeTruthy();
-
-    expect("4111 1111 1111 1111".match(pattern!.pattern)).toBeTruthy();
-    expect("5555 5555 5555 4444".match(pattern!.pattern)).toBeTruthy();
-    expect("3782 822463 10005".match(pattern!.pattern)).toBeTruthy();
+  describe("CREDIT_CARD_WITH_SEPARATORS", () => {
+    testPolicySuite({
+      policyName: "CREDIT_CARD_WITH_SEPARATORS",
+      replacement: "[CREDIT_CARD]",
+      shouldMatch: [
+        "4111-1111-1111-1111",
+        "5555-5555-5555-4444",
+        "3782-822463-10005",
+        "4111 1111 1111 1111",
+        "5555 5555 5555 4444",
+        "3782 822463 10005",
+        "6011-1111-1111-1117",
+        "3622-720627-1667",
+        "4012-8888-8888-1881",
+        "5105-1051-0510-5100",
+      ],
+      shouldNotMatch: [
+        "4111111111111111",
+        "1234-5678-9012-3456",
+        "not-a-card",
+        "1111-1111-1111-1111",
+        "0000-0000-0000-0000",
+        "1234 5678 9012",
+        "abcd-efgh-ijkl-mnop",
+      ],
+    });
   });
 });

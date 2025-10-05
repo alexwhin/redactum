@@ -1,67 +1,41 @@
-import { describe, it, expect } from "vitest";
-import { POLICIES } from "../../src/constants.js";
+import { describe } from "vitest";
+import {
+  testPolicySuite,
+  testCategoryCoverage,
+} from "../policy-test-helpers.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("financial patterns", () => {
-  const financialPatterns = POLICIES.filter(
-    (p) => p.category === PolicyCategory.FINANCIAL,
-  );
-
-  it("should have financial patterns", () => {
-    expect(financialPatterns.length).toBeGreaterThan(0);
-  });
+  testCategoryCoverage(PolicyCategory.FINANCIAL, [
+    "ROUTING_NUMBER_US",
+    "IBAN",
+    "SWIFT_CODE",
+  ]);
 
   describe("ROUTING_NUMBER_US", () => {
-    const pattern = financialPatterns.find(
-      (p) => p.name === "ROUTING_NUMBER_US",
-    );
-
-    it("should detect US routing numbers", () => {
-      expect(pattern).toBeTruthy();
-      expect("021000021".match(pattern!.pattern)).toBeTruthy();
-      expect("123456789".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should not match invalid routing numbers", () => {
-      expect("12345678".match(pattern!.pattern)).toBeFalsy();
-      expect("1234567890".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "ROUTING_NUMBER_US",
+      replacement: "[ROUTING_NUMBER]",
+      shouldMatch: ["021000021", "123456789"],
+      shouldNotMatch: ["12345678", "1234567890"],
     });
   });
 
   describe("IBAN", () => {
-    const pattern = financialPatterns.find((p) => p.name === "IBAN");
-
-    it("should detect IBAN numbers", () => {
-      expect(pattern).toBeTruthy();
-      expect("GB82WEST12345698765432".match(pattern!.pattern)).toBeTruthy();
-      expect("DE89370400440532013000".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should not match invalid IBAN numbers", () => {
-      expect("GB82WEST".match(pattern!.pattern)).toBeFalsy();
-      expect("invalid-iban".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "IBAN",
+      replacement: "[IBAN]",
+      shouldMatch: ["GB82WEST12345698765432", "DE89370400440532013000"],
+      shouldNotMatch: ["GB82WEST", "invalid-iban", "regular text"],
     });
   });
 
   describe("SWIFT_CODE", () => {
-    const pattern = financialPatterns.find((p) => p.name === "SWIFT_CODE");
-
-    it("should detect SWIFT codes", () => {
-      expect(pattern).toBeTruthy();
-      expect("BOFAUS3N".match(pattern!.pattern)).toBeTruthy();
-      expect("DEUTDEFF".match(pattern!.pattern)).toBeTruthy();
-      expect("BOFAUS3NXXX".match(pattern!.pattern)).toBeTruthy();
+    testPolicySuite({
+      policyName: "SWIFT_CODE",
+      replacement: "[SWIFT]",
+      shouldMatch: ["BOFAUS3N", "DEUTDEFF", "BOFAUS3NXXX"],
+      shouldNotMatch: ["BOFA", "bofaus3n"],
     });
-
-    it("should not match invalid SWIFT codes", () => {
-      expect("BOFA".match(pattern!.pattern)).toBeFalsy();
-      expect("bofaus3n".match(pattern!.pattern)).toBeFalsy();
-    });
-  });
-
-  it("should not have false positives", () => {
-    const ibanPattern = financialPatterns.find((p) => p.name === "IBAN");
-
-    expect("regular text".match(ibanPattern!.pattern)).toBeFalsy();
   });
 });

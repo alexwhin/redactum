@@ -1,295 +1,185 @@
-import { describe, it, expect } from "vitest";
-import { POLICIES } from "../../src/constants.js";
+import { describe } from "vitest";
+import {
+  testPolicySuite,
+  testCategoryCoverage,
+} from "../policy-test-helpers.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("monitoring secrets patterns", () => {
-  const monitoringSecretsPatterns = POLICIES.filter(
-    (p) => p.category === PolicyCategory.MONITORING_SECRETS,
-  );
-
-  it("should have monitoring secrets patterns", () => {
-    expect(monitoringSecretsPatterns.length).toBeGreaterThan(0);
-  });
+  testCategoryCoverage(PolicyCategory.MONITORING_SECRETS, [
+    "SENTRY_DSN",
+    "NEW_RELIC_LICENSE_KEY",
+    "DATADOG_API_KEY",
+    "PAGERDUTY_INTEGRATION_KEY",
+    "GRAFANA_API_KEY",
+    "PROMETHEUS_REMOTE_WRITE",
+    "SPLUNK_HEC_TOKEN",
+    "SUMO_LOGIC_COLLECTOR",
+    "BUGSNAG_API_KEY",
+    "ROLLBAR_ACCESS_TOKEN",
+    "AIRBRAKE_API_KEY",
+    "LOGDNA_INGESTION_KEY",
+    "LOGGLY_TOKEN",
+    "PAPERTRAIL_TOKEN",
+  ]);
 
   describe("SENTRY_DSN", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "SENTRY_DSN",
-    );
-
-    it("should detect Sentry DSN URLs", () => {
-      expect(pattern).toBeTruthy();
-      expect(
-        "https://1234567890abcdef1234567890abcdef@1a2b3c.ingest.sentry.io/1234567".match(
-          pattern!.pattern,
-        ),
-      ).toBeTruthy();
-    });
-
-    it("should not match invalid Sentry DSNs", () => {
-      expect("https://sentry.io/project".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "SENTRY_DSN",
+      replacement: "[SENTRY_DSN]",
+      shouldMatch: [
+        "https://1234567890abcdef1234567890abcdef@1a2b3c.ingest.sentry.io/1234567",
+      ],
+      shouldNotMatch: ["https://sentry.io/project", "regular text"],
     });
   });
 
   describe("NEW_RELIC_LICENSE_KEY", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "NEW_RELIC_LICENSE_KEY",
-    );
-
-    it("should detect New Relic license keys", () => {
-      expect(pattern).toBeTruthy();
-      expect(
-        "newrelic-key: 1234567890abcdef1234567890abcdef12345678".match(pattern!.pattern),
-      ).toBeTruthy();
-      expect(
-        "newrelic_license_key: 1234567890abcdef1234567890abcdef12345678".match(
-          pattern!.pattern,
-        ),
-      ).toBeTruthy();
-    });
-
-    it("should not match invalid New Relic keys", () => {
-      expect("newrelic-key: short".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "NEW_RELIC_LICENSE_KEY",
+      replacement: "[NEW_RELIC_KEY]",
+      shouldMatch: [
+        "newrelic-key: 1234567890abcdef1234567890abcdef12345678",
+        "newrelic_license_key: 1234567890abcdef1234567890abcdef12345678",
+      ],
+      shouldNotMatch: ["newrelic-key: short", "invalid"],
     });
   });
 
   describe("DATADOG_API_KEY", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "DATADOG_API_KEY",
-    );
-
-    it("should detect Datadog API keys", () => {
-      expect(pattern).toBeTruthy();
-      expect("datadog-key: 1234567890abcdef1234567890abcdef".match(pattern!.pattern)).toBeTruthy();
-      expect(
-        "datadog_api_key: abcdef1234567890abcdef1234567890".match(pattern!.pattern),
-      ).toBeTruthy();
-    });
-
-    it("should not match invalid Datadog keys", () => {
-      expect("datadog-key: short".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "DATADOG_API_KEY",
+      replacement: "[DATADOG_API_KEY]",
+      shouldMatch: [
+        "datadog-key: 1234567890abcdef1234567890abcdef",
+        "datadog_api_key: abcdef1234567890abcdef1234567890",
+      ],
+      shouldNotMatch: ["datadog-key: short", "invalid"],
     });
   });
 
   describe("PAGERDUTY_INTEGRATION_KEY", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "PAGERDUTY_INTEGRATION_KEY",
-    );
-
-    it("should detect PagerDuty integration keys", () => {
-      expect(pattern).toBeTruthy();
-      expect(
-        "pagerduty-key: 1234567890abcdef1234567890abcdef".match(pattern!.pattern),
-      ).toBeTruthy();
-      expect(
-        "pagerduty_integration_key: abcdef1234567890abcdef1234567890".match(pattern!.pattern),
-      ).toBeTruthy();
-    });
-
-    it("should not match invalid PagerDuty keys", () => {
-      expect("pagerduty-key: short".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "PAGERDUTY_INTEGRATION_KEY",
+      replacement: "[PAGERDUTY_KEY]",
+      shouldMatch: [
+        "pagerduty-key: 1234567890abcdef1234567890abcdef",
+        "pagerduty_integration_key: abcdef1234567890abcdef1234567890",
+      ],
+      shouldNotMatch: ["pagerduty-key: short", "invalid"],
     });
   });
 
   describe("GRAFANA_API_KEY", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "GRAFANA_API_KEY",
-    );
-
-    it("should detect Grafana API keys", () => {
-      expect(pattern).toBeTruthy();
-      expect(
-        "glsa_1234567890abcdefghijklmnopqrstuv_1a2b3c4d".match(pattern!.pattern),
-      ).toBeTruthy();
-      expect("grafana-api-key: glsa_abcdefghijklmnopqrstuvwxyz123456_12345678".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should not match invalid Grafana keys", () => {
-      expect("glsa_short_123".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "GRAFANA_API_KEY",
+      replacement: "[GRAFANA_API_KEY]",
+      shouldMatch: [
+        "glsa_1234567890abcdefghijklmnopqrstuv_1a2b3c4d",
+        "grafana-api-key: glsa_abcdefghijklmnopqrstuvwxyz123456_12345678",
+      ],
+      shouldNotMatch: ["glsa_short_123", "invalid"],
     });
   });
 
   describe("PROMETHEUS_REMOTE_WRITE", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "PROMETHEUS_REMOTE_WRITE",
-    );
-
-    it("should detect Prometheus remote write URLs", () => {
-      expect(pattern).toBeTruthy();
-      expect(
-        "remote_write_url: https://prometheus-us-central1.grafana.net/api/v1/write".match(
-          pattern!.pattern,
-        ),
-      ).toBeTruthy();
-      expect(
-        "prometheus_url: https://prometheus.example.com/api/v1/write".match(
-          pattern!.pattern,
-        ),
-      ).toBeTruthy();
-    });
-
-    it("should not match invalid Prometheus URLs", () => {
-      expect("remote_write_url: https://example.com".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "PROMETHEUS_REMOTE_WRITE",
+      replacement: "[PROMETHEUS_REMOTE_WRITE]",
+      shouldMatch: [
+        "remote_write_url: https://prometheus-us-central1.grafana.net/api/v1/write",
+        "prometheus_url: https://prometheus.example.com/api/v1/write",
+      ],
+      shouldNotMatch: ["remote_write_url: https://example.com", "invalid"],
     });
   });
 
   describe("SPLUNK_HEC_TOKEN", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "SPLUNK_HEC_TOKEN",
-    );
-
-    it("should detect Splunk HEC tokens", () => {
-      expect(pattern).toBeTruthy();
-      expect("Splunk 12345678-1234-1234-1234-123456789012".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should not match invalid Splunk tokens", () => {
-      expect("Splunk 12345678-1234".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "SPLUNK_HEC_TOKEN",
+      replacement: "[SPLUNK_HEC_TOKEN]",
+      shouldMatch: ["Splunk 12345678-1234-1234-1234-123456789012"],
+      shouldNotMatch: ["Splunk 12345678-1234", "invalid"],
     });
   });
 
   describe("SUMO_LOGIC_COLLECTOR", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "SUMO_LOGIC_COLLECTOR",
-    );
-
-    it("should detect Sumo Logic collector URLs", () => {
-      expect(pattern).toBeTruthy();
-      expect(
-        "https://collectors.us2.sumologic.com/receiver/v1/http/1234567890ABCDEF".match(
-          pattern!.pattern,
-        ),
-      ).toBeTruthy();
-    });
-
-    it("should not match invalid Sumo Logic URLs", () => {
-      expect("https://sumologic.com/collector".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "SUMO_LOGIC_COLLECTOR",
+      replacement: "[SUMOLOGIC_COLLECTOR]",
+      shouldMatch: [
+        "https://collectors.us2.sumologic.com/receiver/v1/http/1234567890ABCDEF",
+      ],
+      shouldNotMatch: ["https://sumologic.com/collector", "invalid"],
     });
   });
 
   describe("BUGSNAG_API_KEY", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "BUGSNAG_API_KEY",
-    );
-
-    it("should detect Bugsnag API keys", () => {
-      expect(pattern).toBeTruthy();
-      expect(
-        "bugsnag-api-key: 1234567890abcdef1234567890abcdef".match(pattern!.pattern),
-      ).toBeTruthy();
-    });
-
-    it("should not match invalid Bugsnag keys", () => {
-      expect("bugsnag-api-key: short".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "BUGSNAG_API_KEY",
+      replacement: "[BUGSNAG_API_KEY]",
+      shouldMatch: ["bugsnag-api-key: 1234567890abcdef1234567890abcdef"],
+      shouldNotMatch: ["bugsnag-api-key: short", "invalid"],
     });
   });
 
   describe("ROLLBAR_ACCESS_TOKEN", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "ROLLBAR_ACCESS_TOKEN",
-    );
-
-    it("should detect Rollbar access tokens", () => {
-      expect(pattern).toBeTruthy();
-      expect(
-        "rollbar-access-token: 1234567890abcdef1234567890abcdef".match(pattern!.pattern),
-      ).toBeTruthy();
-      expect(
-        "rollbar_post_server_item: abcdef1234567890abcdef1234567890".match(pattern!.pattern),
-      ).toBeTruthy();
-    });
-
-    it("should not match invalid Rollbar tokens", () => {
-      expect("rollbar-access-token: short".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "ROLLBAR_ACCESS_TOKEN",
+      replacement: "[ROLLBAR_TOKEN]",
+      shouldMatch: [
+        "rollbar-access-token: 1234567890abcdef1234567890abcdef",
+        "rollbar_post_server_item: abcdef1234567890abcdef1234567890",
+      ],
+      shouldNotMatch: ["rollbar-access-token: short", "invalid"],
     });
   });
 
   describe("AIRBRAKE_API_KEY", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "AIRBRAKE_API_KEY",
-    );
-
-    it("should detect Airbrake API keys", () => {
-      expect(pattern).toBeTruthy();
-      expect(
-        "airbrake-api-key: 1234567890abcdef1234567890abcdef".match(pattern!.pattern),
-      ).toBeTruthy();
-      expect(
-        "airbrake_project_key: abcdef1234567890abcdef1234567890".match(pattern!.pattern),
-      ).toBeTruthy();
-    });
-
-    it("should not match invalid Airbrake keys", () => {
-      expect("airbrake-api-key: short".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "AIRBRAKE_API_KEY",
+      replacement: "[AIRBRAKE_KEY]",
+      shouldMatch: [
+        "airbrake-api-key: 1234567890abcdef1234567890abcdef",
+        "airbrake_project_key: abcdef1234567890abcdef1234567890",
+      ],
+      shouldNotMatch: ["airbrake-api-key: short", "invalid"],
     });
   });
 
   describe("LOGDNA_INGESTION_KEY", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "LOGDNA_INGESTION_KEY",
-    );
-
-    it("should detect LogDNA ingestion keys", () => {
-      expect(pattern).toBeTruthy();
-      expect(
-        "logdna-ingestion-key: 1234567890abcdef1234567890abcdef".match(pattern!.pattern),
-      ).toBeTruthy();
-      expect(
-        "logdna_api_key: abcdef1234567890abcdef1234567890".match(pattern!.pattern),
-      ).toBeTruthy();
-    });
-
-    it("should not match invalid LogDNA keys", () => {
-      expect("logdna-ingestion-key: short".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "LOGDNA_INGESTION_KEY",
+      replacement: "[LOGDNA_KEY]",
+      shouldMatch: [
+        "logdna-ingestion-key: 1234567890abcdef1234567890abcdef",
+        "logdna_api_key: abcdef1234567890abcdef1234567890",
+      ],
+      shouldNotMatch: ["logdna-ingestion-key: short", "invalid"],
     });
   });
 
   describe("LOGGLY_TOKEN", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "LOGGLY_TOKEN",
-    );
-
-    it("should detect Loggly tokens", () => {
-      expect(pattern).toBeTruthy();
-      expect(
-        "loggly-token: 12345678-1234-1234-1234-123456789012".match(pattern!.pattern),
-      ).toBeTruthy();
-      expect(
-        "loggly_customer_token: abcdef01-2345-6789-abcd-ef0123456789".match(
-          pattern!.pattern,
-        ),
-      ).toBeTruthy();
-    });
-
-    it("should not match invalid Loggly tokens", () => {
-      expect("loggly-token: 12345678-1234".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "LOGGLY_TOKEN",
+      replacement: "[LOGGLY_TOKEN]",
+      shouldMatch: [
+        "loggly-token: 12345678-1234-1234-1234-123456789012",
+        "loggly_customer_token: abcdef01-2345-6789-abcd-ef0123456789",
+      ],
+      shouldNotMatch: ["loggly-token: 12345678-1234", "invalid"],
     });
   });
 
   describe("PAPERTRAIL_TOKEN", () => {
-    const pattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "PAPERTRAIL_TOKEN",
-    );
-
-    it("should detect Papertrail tokens", () => {
-      expect(pattern).toBeTruthy();
-      expect(
-        "papertrail-token: 1234567890abcdef1234567890abcdef".match(pattern!.pattern),
-      ).toBeTruthy();
-      expect(
-        "papertrail_api_token: abcdefghijklmnopqrstuvwxyz123456".match(pattern!.pattern),
-      ).toBeTruthy();
+    testPolicySuite({
+      policyName: "PAPERTRAIL_TOKEN",
+      replacement: "[PAPERTRAIL_TOKEN]",
+      shouldMatch: [
+        "papertrail-token: 1234567890abcdef1234567890abcdef",
+        "papertrail_api_token: abcdefghijklmnopqrstuvwxyz123456",
+      ],
+      shouldNotMatch: ["papertrail-token: short", "invalid"],
     });
-
-    it("should not match invalid Papertrail tokens", () => {
-      expect("papertrail-token: short".match(pattern!.pattern)).toBeFalsy();
-    });
-  });
-
-  it("should not have false positives", () => {
-    const sentryPattern = monitoringSecretsPatterns.find(
-      (p) => p.name === "SENTRY_DSN",
-    );
-
-    expect("regular text".match(sentryPattern!.pattern)).toBeFalsy();
   });
 });

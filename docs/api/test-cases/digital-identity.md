@@ -1,0 +1,58 @@
+---
+prev: false
+next: false
+search: false
+---
+
+# Digital Identity Test Cases
+
+[← Back to Test Cases](/api/test-cases)
+
+This page shows 44 test cases that validate Digital Identity patterns.
+
+| Policy | Test Case |
+|--------|-----------|
+| `UUID` | `550e8400-e29b-41d4-a716-446655440000` |
+| `UUID` | `123e4567-e89b-12d3-a456-426614174000` |
+| `BITCOIN_ADDRESS` | `1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa` |
+| `BITCOIN_ADDRESS` | `3J98t1WpEZ73CNmYviecrnyiWrnqRhWNLy` |
+| `BITCOIN_ADDRESS` | `bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq` |
+| `BITCOIN_ADDRESS` | `BC1QW508D6QEJXTDG4Y5R3ZARVARY0C5XW7KQ9E2A` |
+| `BITCOIN_ADDRESS` | `bc1p5cyxnuxmeuwuvkwfem96lxxss6ly3x7p4hqf6h` |
+| `BITCOIN_ADDRESS` | `(bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq),` |
+| `BITCOIN_ADDRESS` | `Pay to: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa.` |
+| `BITCOIN_ADDRESS` | `bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq?amount=0.01` |
+| `BITCOIN_ADDRESS` | `bc1qar0srrr7xfkvy5l643lydnw9re59gtzzw\u200bf5mdq` |
+| `BITCOIN_ADDRESS` | `tb1qfmv0k0s5l4m8y6n7p8q9r0stuvwx2yz3abcd0e` |
+| `BITCOIN_ADDRESS` | `bcrt1qy352eufvywh6r5z2m0m4tl0s4l7t9v5x3n0svk` |
+| `ETHEREUM_ADDRESS` | `0x742d35Cc6634C0532925a3b844Bc9e7595f5a123` |
+| `ETHEREUM_ADDRESS` | `0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B` |
+| `ETHEREUM_ADDRESS` | `0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae` |
+| `ETHEREUM_ADDRESS` | `0xDE0B295669A9FD93D5F28D9EC85E40F4CB697BAE` |
+| `ETHEREUM_ADDRESS` | `0x5aAeb6053f3E94C9b9A09f33669435E7Ef1BeAed` |
+| `ETHEREUM_ADDRESS` | `Send to: 0x742d35Cc6634C0532925a3b844Bc9e7595f5a123.` |
+| `ETHEREUM_ADDRESS` | `(0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B)` |
+| `ETHEREUM_ADDRESS` | `ethereum:0x742d35Cc6634C0532925a3b844Bc9e7595f5a123` |
+| `ETHEREUM_ADDRESS` | `0x0000000000000000000000000000000000000000` |
+| `ETHEREUM_ADDRESS` | `0xdAC17F958D2ee523a2206206994597C13D831ec7` |
+| `ETHEREUM_ADDRESS` | `Contract: 0x742d35Cc6634C0532925a3b844Bc9e7595f5a123,` |
+| `ETHEREUM_ADDRESS` | `0x742d35Cc6634C0532925a3b844Bc9e7595f5\u200ba123` |
+| `MAC_ADDRESS` | `00:1B:44:11:3A:B7` |
+| `MAC_ADDRESS` | `AA:BB:CC:DD:EE:FF` |
+| `MAC_ADDRESS` | `aa:bb:cc:dd:ee:ff` |
+| `MAC_ADDRESS` | `00-1B-44-11-3A-B7` |
+| `MAC_ADDRESS` | `AA-BB-CC-DD-EE-FF` |
+| `MAC_ADDRESS` | `aa-bb-cc-dd-ee-ff` |
+| `MAC_ADDRESS` | `01:23:45:67:89:AB` |
+| `MAC_ADDRESS` | `Device MAC: 00:1B:44:11:3A:B7` |
+| `MAC_ADDRESS` | `MAC 00:1B:44:11:3A:B7 detected` |
+| `MAC_ADDRESS` | `(00:1B:44:11:3A:B7)` |
+| `MAC_ADDRESS` | `00:1B:44:11:3A:B7,` |
+| `MAC_ADDRESS` | `ff:ff:ff:ff:ff:ff` |
+| `MAC_ADDRESS` | `00:00:00:00:00:00` |
+| `MAC_ADDRESS` | `02:00:5e:00:00:00` |
+| `SHA_HASH` | `2fd4e1c67a2d28fced849ee1bb76e7391b93eb12` |
+| `SHA_HASH` | `da39a3ee5e6b4b0d3255bfef95601890afd80709` |
+| `SHA_HASH` | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `SHA_HASH` | `2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae` |
+| `SHA_HASH` | `38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b` |

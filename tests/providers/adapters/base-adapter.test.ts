@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
 import { BaseAdapter } from "../../../src/providers/adapters/base-adapter.js";
-import type { PolicyName} from "../../../src/types/index.js";
+import type { PolicyName } from "../../../src/types/index.js";
 import { PolicyCategory } from "../../../src/types/index.js";
 
 class TestAdapter extends BaseAdapter<string, string> {
   readonly providerName = "TestProvider";
   readonly version = "1.0.0";
-  
+
   async transform(input: string): Promise<string> {
     const result = this.provider.redact({ content: input });
 
@@ -60,10 +60,18 @@ describe("BaseAdapter", () => {
 
   it("should handle multiple categories", async () => {
     const adapter = new TestAdapter({
-      policies: ["EMAIL_ADDRESS", "PHONE_NUMBER_US", "PHONE_NUMBER_UK", "PHONE_NUMBER_CANADIAN", "PHONE_NUMBER_INTERNATIONAL"] as PolicyName[],
+      policies: [
+        "EMAIL_ADDRESS",
+        "PHONE_NUMBER_US",
+        "PHONE_NUMBER_UK",
+        "PHONE_NUMBER_CANADIAN",
+        "PHONE_NUMBER_INTERNATIONAL",
+      ] as PolicyName[],
     });
 
-    const result = await adapter.transform("Email: test@example.com, Phone: 555-123-4567");
+    const result = await adapter.transform(
+      "Email: test@example.com, Phone: 555-123-4567"
+    );
     expect(result).toBe("Email: [EMAIL], Phone: [PHONE]");
   });
 });

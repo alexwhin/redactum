@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
-import type { UniversalRedactionConfig, UniversalRedactionResult } from "../../../src/providers/base/types.js";
+import type {
+  UniversalRedactionConfig,
+  UniversalRedactionResult,
+} from "../../../src/providers/base/types.js";
 import { PolicyCategory } from "../../../src/types/index.js";
 
 describe("Provider Types", () => {
@@ -22,15 +25,17 @@ describe("Provider Types", () => {
       redactionResult: {
         text: "test@example.com",
         redactedText: "redacted text",
-        findings: [{
-          category: PolicyCategory.EMAIL,
-          policyName: "EMAIL_ADDRESS",
-          value: "test@example.com",
-          match: "test@example.com",
-          start: 0,
-          end: 16,
-          replacement: "[EMAIL]",
-        }],
+        findings: [
+          {
+            category: PolicyCategory.EMAIL,
+            policyName: "EMAIL_ADDRESS",
+            value: "test@example.com",
+            match: "test@example.com",
+            start: 0,
+            end: 16,
+            replacement: "[EMAIL]",
+          },
+        ],
         stats: {
           totalFindings: 1,
           findingsByCategory: {

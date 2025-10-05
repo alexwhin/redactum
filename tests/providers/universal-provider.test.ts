@@ -31,17 +31,28 @@ describe("UniversalProvider", () => {
 
   it("should handle multiple categories", () => {
     const provider = new UniversalProvider({
-      policies: ["EMAIL_ADDRESS", "PHONE_NUMBER_US", "PHONE_NUMBER_UK", "PHONE_NUMBER_CANADIAN", "PHONE_NUMBER_INTERNATIONAL"],
+      policies: [
+        "EMAIL_ADDRESS",
+        "PHONE_NUMBER_US",
+        "PHONE_NUMBER_UK",
+        "PHONE_NUMBER_CANADIAN",
+        "PHONE_NUMBER_INTERNATIONAL",
+      ],
     });
 
-    const result = provider.redact("Email: test@example.com, Phone: 555-123-4567");
+    const result = provider.redact(
+      "Email: test@example.com, Phone: 555-123-4567"
+    );
     expect(result.content).toBe("Email: [EMAIL], Phone: [PHONE]");
     expect(result.redactionResult.findings).toHaveLength(2);
   });
 
   it("should preserve metadata", () => {
     const provider = new UniversalProvider();
-    const result = provider.redact({ content: "test", metadata: { source: "test.txt" } });
+    const result = provider.redact({
+      content: "test",
+      metadata: { source: "test.txt" },
+    });
 
     expect(result.providerMetadata).toEqual({ source: "test.txt" });
   });
@@ -53,7 +64,9 @@ describe("UniversalProvider", () => {
 
     const result = provider.redact("test@example.com and another@example.com");
     expect(result.redactionResult.stats.totalFindings).toBe(2);
-    expect(result.redactionResult.stats.findingsByCategory[PolicyCategory.EMAIL]).toBe(2);
+    expect(
+      result.redactionResult.stats.findingsByCategory[PolicyCategory.EMAIL]
+    ).toBe(2);
     expect(result.processingTime).toBeGreaterThanOrEqual(0);
   });
 });

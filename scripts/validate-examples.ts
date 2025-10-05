@@ -27,7 +27,7 @@ function truncate(str: string, maxLen: number): string {
     return str;
   }
 
-  return `${str.substring(0, maxLen - 3)  }...`;
+  return `${str.substring(0, maxLen - 3)}...`;
 }
 
 function validateExamples(): ValidationResult[] {
@@ -75,11 +75,11 @@ function printResults(results: ValidationResult[]): void {
   );
   console.log("─".repeat(120));
   console.log(
-    `${colors.bright}Status${colors.reset} │ ${ 
-      `${colors.bright}Policy Name${colors.reset}`.padEnd(45) 
-      } │ ${ 
-      `${colors.bright}Example${colors.reset}`.padEnd(50) 
-      } │ ` +
+    `${colors.bright}Status${
+      colors.reset
+    } │ ${`${colors.bright}Policy Name${colors.reset}`.padEnd(
+      45
+    )} │ ${`${colors.bright}Example${colors.reset}`.padEnd(50)} │ ` +
       `${colors.bright}Result${colors.reset}`
   );
   console.log("─".repeat(120));

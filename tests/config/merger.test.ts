@@ -1,6 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { mergeConfigs } from "../../src/config/merger.js";
-import type { RedactionConfig, CategoryConfig } from "../../src/config/types.js";
+import type {
+  RedactionConfig,
+  CategoryConfig,
+} from "../../src/config/types.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 type MergeableConfig = RedactionConfig & {
@@ -15,14 +18,14 @@ describe("mergeConfigs", () => {
         mask: "*",
         replacement: "[REDACTED]",
       };
-      
+
       const override: RedactionConfig = {
         mask: "#",
         replacement: "[HIDDEN]",
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result).toEqual({
         mask: "#",
         replacement: "[HIDDEN]",
@@ -35,13 +38,13 @@ describe("mergeConfigs", () => {
         replacement: "[REDACTED]",
         globalMode: "replace",
       };
-      
+
       const override: RedactionConfig = {
         mask: "#",
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result).toEqual({
         mask: "#",
         replacement: "[REDACTED]",
@@ -54,14 +57,14 @@ describe("mergeConfigs", () => {
         mask: "*",
         preserveLength: true,
       };
-      
+
       const override: RedactionConfig = {
         mask: undefined,
         preserveLength: undefined,
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result).toEqual({
         mask: "*",
         preserveLength: true,
@@ -74,13 +77,13 @@ describe("mergeConfigs", () => {
       const base: RedactionConfig = {
         categories: [PolicyCategory.EMAIL, PolicyCategory.PHONE],
       };
-      
+
       const override: RedactionConfig = {
         categories: [PolicyCategory.SSN],
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result.categories).toEqual([PolicyCategory.SSN]);
     });
 
@@ -88,16 +91,16 @@ describe("mergeConfigs", () => {
       const base: RedactionConfig = {
         categories: [PolicyCategory.EMAIL, PolicyCategory.PHONE],
       };
-      
+
       const override: RedactionConfig = {
         categories: {
           [PolicyCategory.EMAIL]: false,
           [PolicyCategory.SSN]: true,
         } as Record<PolicyCategory, boolean>,
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result.categories).toEqual({
         [PolicyCategory.EMAIL]: false,
         [PolicyCategory.PHONE]: true,
@@ -116,7 +119,7 @@ describe("mergeConfigs", () => {
           },
         } as Record<PolicyCategory, boolean | CategoryConfig>,
       };
-      
+
       const override: RedactionConfig = {
         categories: {
           [PolicyCategory.EMAIL]: false,
@@ -126,9 +129,9 @@ describe("mergeConfigs", () => {
           [PolicyCategory.SSN]: true,
         } as Record<PolicyCategory, boolean | CategoryConfig>,
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result.categories).toEqual({
         [PolicyCategory.EMAIL]: false,
         [PolicyCategory.PHONE]: {
@@ -144,11 +147,11 @@ describe("mergeConfigs", () => {
       const base: RedactionConfig = {
         categories: [PolicyCategory.EMAIL],
       };
-      
+
       const override: RedactionConfig = {};
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result.categories).toEqual([PolicyCategory.EMAIL]);
     });
   });
@@ -169,7 +172,7 @@ describe("mergeConfigs", () => {
           },
         ],
       };
-      
+
       const override: RedactionConfig = {
         customPolicies: [
           {
@@ -184,9 +187,9 @@ describe("mergeConfigs", () => {
           },
         ],
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result.customPolicies).toEqual([
         {
           name: "Pattern1",
@@ -215,13 +218,13 @@ describe("mergeConfigs", () => {
           },
         ],
       };
-      
+
       const override: RedactionConfig = {
         customPolicies: [],
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result.customPolicies).toEqual([]);
     });
   });
@@ -235,16 +238,16 @@ describe("mergeConfigs", () => {
           encoding: "hex",
         },
       };
-      
+
       const override: RedactionConfig = {
         hashOptions: {
           algorithm: "sha512",
           encoding: "base64",
         },
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result.hashOptions).toEqual({
         algorithm: "sha512",
         salt: "base-salt",
@@ -260,16 +263,16 @@ describe("mergeConfigs", () => {
           cachePatterns: true,
         },
       };
-      
+
       const override: RedactionConfig = {
         performance: {
           maximumInputSize: 2000,
           streamThreshold: 512,
         },
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result.performance).toEqual({
         maximumInputSize: 2000,
         timeout: 5000,
@@ -285,16 +288,16 @@ describe("mergeConfigs", () => {
           maximumPatternLength: 500,
         },
       };
-      
+
       const override: RedactionConfig = {
         security: {
           auditLog: true,
           maximumCustomPatterns: 50,
         },
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result.security).toEqual({
         preventRegexDos: true,
         maximumPatternLength: 500,
@@ -305,7 +308,7 @@ describe("mergeConfigs", () => {
 
     it("should handle undefined nested objects in base", () => {
       const base: RedactionConfig = {};
-      
+
       const override: RedactionConfig = {
         hashOptions: {
           algorithm: "sha256",
@@ -314,13 +317,13 @@ describe("mergeConfigs", () => {
           timeout: 10000,
         },
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result.hashOptions).toEqual({
         algorithm: "sha256",
       });
-      
+
       expect(result.performance).toEqual({
         timeout: 10000,
       });
@@ -339,7 +342,7 @@ describe("mergeConfigs", () => {
           },
         },
       };
-      
+
       const override: MergeableConfig = {
         env: {
           production: {
@@ -351,9 +354,9 @@ describe("mergeConfigs", () => {
           },
         },
       };
-      
+
       const result = mergeConfigs(base, override) as MergeableConfig;
-      
+
       expect(result.env).toEqual({
         development: {
           mask: "*",
@@ -376,7 +379,7 @@ describe("mergeConfigs", () => {
           },
         },
       };
-      
+
       const override: MergeableConfig = {
         presets: {
           strict: {
@@ -388,9 +391,9 @@ describe("mergeConfigs", () => {
           },
         },
       };
-      
+
       const result = mergeConfigs(base, override) as MergeableConfig;
-      
+
       expect(result.presets).toEqual({
         strict: {
           categories: [PolicyCategory.EMAIL, PolicyCategory.PHONE],
@@ -408,13 +411,13 @@ describe("mergeConfigs", () => {
       const base: RedactionConfig = {
         locale: "en",
       };
-      
+
       const override: RedactionConfig = {
         locale: ["en", "es"],
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result.locale).toEqual(["en", "es"]);
     });
 
@@ -422,13 +425,13 @@ describe("mergeConfigs", () => {
       const base: RedactionConfig = {
         locale: ["en", "fr"],
       };
-      
+
       const override: RedactionConfig = {
         mask: "#",
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result.locale).toEqual(["en", "fr"]);
     });
   });
@@ -455,7 +458,7 @@ describe("mergeConfigs", () => {
           },
         ],
       };
-      
+
       const override: RedactionConfig = {
         replacement: "[HIDDEN]",
         categories: {
@@ -475,9 +478,9 @@ describe("mergeConfigs", () => {
           },
         ],
       };
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result).toEqual({
         mask: "*",
         replacement: "[HIDDEN]",
@@ -507,9 +510,9 @@ describe("mergeConfigs", () => {
     it("should handle empty objects", () => {
       const base: RedactionConfig = {};
       const override: RedactionConfig = {};
-      
+
       const result = mergeConfigs(base, override);
-      
+
       expect(result).toEqual({});
     });
 
@@ -524,7 +527,7 @@ describe("mergeConfigs", () => {
         locale: "en",
         detectLanguage: false,
       };
-      
+
       const override: RedactionConfig = {
         mask: "#",
         categories: [PolicyCategory.PHONE],

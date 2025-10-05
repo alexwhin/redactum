@@ -31,7 +31,7 @@ function main(): void {
   const stats = generatePatternStats();
   const outputPath = join(process.cwd(), "category-statistics.json");
 
-  writeFileSync(outputPath, `${JSON.stringify(stats, null, 2)  }\n`);
+  writeFileSync(outputPath, `${JSON.stringify(stats, null, 2)}\n`);
 
   console.log(
     `Generated pattern stats: ${stats.totalPatterns} patterns across ${stats.totalCategories} categories`

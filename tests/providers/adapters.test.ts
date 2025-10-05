@@ -17,7 +17,7 @@ describe("Provider Adapters", () => {
         metadata: { source: "test" },
       });
 
-      const transformed = await adapter.transform([doc]) as Document[];
+      const transformed = (await adapter.transform([doc])) as Document[];
       expect(transformed[0]?.pageContent).toBe("Contact me at [EMAIL]");
       expect(transformed[0]?.metadata["source"]).toBe("test");
     });
@@ -37,7 +37,7 @@ describe("Provider Adapters", () => {
         },
       });
 
-      const [transformed] = await adapter.transform([doc]) as Document[];
+      const [transformed] = (await adapter.transform([doc])) as Document[];
       expect(transformed?.metadata["author"]).toBe("[EMAIL]");
       expect(transformed?.metadata["contact"]).toBe("[EMAIL]");
       expect(transformed?.metadata["other"]).toBe("not-redacted@example.com");
@@ -55,12 +55,26 @@ describe("Provider Adapters", () => {
 
   describe("LlamaIndex Adapter", () => {
     class MockNode {
-      constructor(private text: string, private metadata: Record<string, unknown> = {}) {}
-      getText(): string { return this.text; }
-      getMetadata(): Record<string, unknown> { return this.metadata; }
-      getNodeId(): string { return "test-node"; }
-      setContent(content: string): void { this.text = content; }
-      clone(options?: { text?: string; metadata?: Record<string, unknown> }): MockNode {
+      constructor(
+        private text: string,
+        private metadata: Record<string, unknown> = {}
+      ) {}
+      getText(): string {
+        return this.text;
+      }
+      getMetadata(): Record<string, unknown> {
+        return this.metadata;
+      }
+      getNodeId(): string {
+        return "test-node";
+      }
+      setContent(content: string): void {
+        this.text = content;
+      }
+      clone(options?: {
+        text?: string;
+        metadata?: Record<string, unknown>;
+      }): MockNode {
         return new MockNode(
           options?.text ?? this.text,
           options?.metadata ?? this.metadata
@@ -73,8 +87,12 @@ describe("Provider Adapters", () => {
         policies: ["EMAIL_ADDRESS"],
       });
 
-      const node = new MockNode("Contact me at test@example.com", { source: "test" });
-      const transformed = await adapter.transform([node]) as unknown as MockNode[];
+      const node = new MockNode("Contact me at test@example.com", {
+        source: "test",
+      });
+      const transformed = (await adapter.transform([
+        node,
+      ])) as unknown as MockNode[];
 
       expect(transformed[0]?.getText()).toBe("Contact me at [EMAIL]");
       expect(transformed[0]?.getMetadata()["source"]).toBe("test");

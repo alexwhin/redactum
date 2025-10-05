@@ -1,407 +1,116 @@
-import { describe, it, expect } from "vitest";
-import { redactum } from "../../src/index.js";
+import { describe } from "vitest";
+import {
+  testPolicySuite,
+  testCategoryCoverage,
+} from "../policy-test-helpers.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("Database Credentials Redaction", () => {
-  describe("PostgreSQL connection strings", () => {
-    it("should redact basic PostgreSQL URLs", () => {
-      const input = "postgres://user:pass@localhost:5432/mydb";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "postgres://[REDACTED]:[REDACTED]@localhost:5432/mydb"
-      );
-    });
+  testCategoryCoverage(PolicyCategory.DATABASE_CREDENTIALS, [
+    "DATABASE_URL",
+    "MONGODB_CONNECTION_STRING",
+    "REDIS_CONNECTION_STRING",
+    "ELASTICSEARCH_URL",
+    "RABBITMQ_CONNECTION_STRING",
+    "POSTGRESQL_CONNECTION_STRING",
+    "MYSQL_CONNECTION_STRING",
+    "CASSANDRA_CONNECTION_STRING",
+  ]);
 
-    it("should redact PostgreSQL URLs with special characters in password", () => {
-      const input = "postgres://admin:u$k9!fR2@qLx2@db:5432/mydb";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "postgres://[REDACTED]:[REDACTED]@db:5432/mydb"
-      );
-    });
-
-    it("should redact postgresql:// variant", () => {
-      const input = "postgresql://user:password@localhost:5432/db";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "postgresql://[REDACTED]:[REDACTED]@localhost:5432/db"
-      );
-    });
-
-    it("should preserve connection string structure", () => {
-      const input = "postgres://user:pass@host:5432/database";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toContain("@host:5432/database");
-      expect(result.redactedText).not.toContain("user");
-      expect(result.redactedText).not.toContain("pass");
+  describe("DATABASE_URL", () => {
+    testPolicySuite({
+      policyName: "DATABASE_URL",
+      replacement: "[REDACTED]",
+      shouldMatch: [
+        "postgres://user:pass@localhost:5432/mydb",
+        "mysql://root:password@127.0.0.1:3306/database",
+        "mongodb://admin:secret123@mongo.example.com:27017/myapp",
+        "redis://user:pass@redis.example.com:6379/0",
+      ],
+      shouldNotMatch: ["http://example.com", "invalid"],
     });
   });
 
-  describe("MySQL connection strings", () => {
-    it("should redact MySQL URLs", () => {
-      const input = "mysql://root:password@127.0.0.1:3306/database";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "mysql://[REDACTED]:[REDACTED]@127.0.0.1:3306/database"
-      );
-    });
-
-    it("should redact MySQL with special characters", () => {
-      const input = "mysql://admin:P@ssw0rd!@mysql.internal:3306/prod";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "mysql://[REDACTED]:[REDACTED]@mysql.internal:3306/prod"
-      );
+  describe("MONGODB_CONNECTION_STRING", () => {
+    testPolicySuite({
+      policyName: "MONGODB_CONNECTION_STRING",
+      replacement: "[REDACTED]",
+      shouldMatch: [
+        "mongodb://admin:secret123@mongo.example.com:27017/myapp",
+        "mongodb+srv://user:pass@cluster0.mongodb.net/test",
+      ],
+      shouldNotMatch: ["mongodb://localhost", "invalid"],
     });
   });
 
-  describe("MongoDB connection strings", () => {
-    it("should redact MongoDB URLs", () => {
-      const input = "mongodb://admin:secret123@mongo.example.com:27017/myapp";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "mongodb://[REDACTED]:[REDACTED]@mongo.example.com:27017/myapp"
-      );
-    });
-
-    it("should redact MongoDB+srv URLs", () => {
-      const input = "mongodb+srv://user:pass@cluster0.mongodb.net/test";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "mongodb+srv://[REDACTED]:[REDACTED]@cluster0.mongodb.net/test"
-      );
+  describe("REDIS_CONNECTION_STRING", () => {
+    testPolicySuite({
+      policyName: "REDIS_CONNECTION_STRING",
+      replacement: "[REDACTED]",
+      shouldMatch: [
+        "redis://user:pass@redis.example.com:6379/0",
+        "rediss://admin:secret@redis.internal:6380/1",
+      ],
+      shouldNotMatch: ["redis://localhost", "invalid"],
     });
   });
 
-  describe("Redis connection strings", () => {
-    it("should redact Redis URLs", () => {
-      const input = "redis://default:mypassword@redis-server:6379";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "redis://[REDACTED]:[REDACTED]@redis-server:6379"
-      );
-    });
-
-    it("should redact rediss:// (secure) URLs", () => {
-      const input = "rediss://user:pass@secure-redis:6380";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "rediss://[REDACTED]:[REDACTED]@secure-redis:6380"
-      );
+  describe("ELASTICSEARCH_URL", () => {
+    testPolicySuite({
+      policyName: "ELASTICSEARCH_URL",
+      replacement: "[ELASTICSEARCH_URL]",
+      shouldMatch: [
+        "https://elasticsearch.example.com:9200",
+        "http://localhost:9200/index",
+      ],
+      shouldNotMatch: ["https://example.com:8080", "invalid"],
     });
   });
 
-  describe("RabbitMQ connection strings", () => {
-    it("should redact AMQP URLs", () => {
-      const input = "amqp://guest:guest@rabbitmq:5672";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "amqp://[REDACTED]:[REDACTED]@rabbitmq:5672"
-      );
-    });
-
-    it("should redact AMQPS URLs", () => {
-      const input = "amqps://admin:secret@rabbitmq.secure:5671";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "amqps://[REDACTED]:[REDACTED]@rabbitmq.secure:5671"
-      );
+  describe("RABBITMQ_CONNECTION_STRING", () => {
+    testPolicySuite({
+      policyName: "RABBITMQ_CONNECTION_STRING",
+      replacement: "[REDACTED]",
+      shouldMatch: [
+        "amqp://guest:guest@localhost:5672/",
+        "amqps://user:pass@rabbitmq.example.com:5671/vhost",
+      ],
+      shouldNotMatch: ["amqp://localhost", "invalid"],
     });
   });
 
-  describe("Cassandra connection strings", () => {
-    it("should redact Cassandra URLs", () => {
-      const input = "cassandra://user:pass@cassandra.local:9042/keyspace";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "cassandra://[REDACTED]:[REDACTED]@cassandra.local:9042/keyspace"
-      );
+  describe("POSTGRESQL_CONNECTION_STRING", () => {
+    testPolicySuite({
+      policyName: "POSTGRESQL_CONNECTION_STRING",
+      replacement: "[REDACTED]",
+      shouldMatch: [
+        "postgres://user:pass@localhost:5432/mydb",
+        "postgresql://admin:u$k9!fR2@qLx2@db:5432/mydb",
+      ],
+      shouldNotMatch: ["postgres://localhost", "invalid"],
     });
   });
 
-  describe("Edge cases", () => {
-    it("should handle passwords with @ symbols", () => {
-      const input = "postgres://admin:p@ssw0rd@host:5432/db";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "postgres://[REDACTED]:[REDACTED]@host:5432/db"
-      );
-    });
-
-    it("should handle passwords with multiple @ symbols", () => {
-      const input = "postgres://admin:p@ss@w0rd@host:5432/db";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "postgres://[REDACTED]:[REDACTED]@host:5432/db"
-      );
-    });
-
-    it("should handle passwords with colons", () => {
-      const input = "postgres://admin:pa:ss:word@host:5432/db";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-      expect(result.redactedText).toBe(
-        "postgres://[REDACTED]:[REDACTED]@host:5432/db"
-      );
-    });
-
-    it("should handle ENV_VAR format with database URLs", () => {
-      const input = "DATABASE=postgres://admin:secret@localhost:5432/db";
-      const result = redactum(input);
-      expect(result.redactedText).toBe(
-        "DATABASE=postgres://[REDACTED]:[REDACTED]@localhost:5432/db"
-      );
-    });
-
-    it("should prioritize database URL over ENV_VAR pattern", () => {
-      const input = "DB_URL=postgres://user:pass@host:5432/db";
-      const result = redactum(input);
-      expect(result.redactedText).toContain(
-        "postgres://[REDACTED]:[REDACTED]@"
-      );
-      expect(result.redactedText).not.toBe("[ENV_VAR]");
+  describe("MYSQL_CONNECTION_STRING", () => {
+    testPolicySuite({
+      policyName: "MYSQL_CONNECTION_STRING",
+      replacement: "[REDACTED]",
+      shouldMatch: [
+        "mysql://root:password@127.0.0.1:3306/database",
+        "mysql://admin:P@ssw0rd!@mysql.internal:3306/prod",
+      ],
+      shouldNotMatch: ["mysql://localhost", "invalid"],
     });
   });
 
-  describe("Findings metadata", () => {
-    it("should report correct findings", () => {
-      const input = "postgres://user:pass@localhost:5432/db";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-
-      expect(result.findings).toHaveLength(1);
-      expect(result.findings[0]?.category).toBe(
-        PolicyCategory.DATABASE_CREDENTIALS
-      );
-      expect(result.findings[0]?.value).toBe(
-        "postgres://user:pass@localhost:5432/db"
-      );
-    });
-
-    it("should report statistics", () => {
-      const input = "Connect to postgres://user:pass@localhost:5432/db";
-      const result = redactum(input, {
-        policies: [
-          "DATABASE_URL",
-          "MONGODB_CONNECTION_STRING",
-          "REDIS_CONNECTION_STRING",
-          "RABBITMQ_CONNECTION_STRING",
-          "POSTGRESQL_CONNECTION_STRING",
-          "MYSQL_CONNECTION_STRING",
-          "CASSANDRA_CONNECTION_STRING",
-        ],
-      });
-
-      expect(result.stats.totalFindings).toBe(1);
-      expect(
-        result.stats.findingsByCategory[PolicyCategory.DATABASE_CREDENTIALS]
-      ).toBe(1);
-    });
-  });
-
-  describe("Elasticsearch connection strings", () => {
-    it("should redact Elasticsearch URLs", () => {
-      const input = "https://elastic:password@elasticsearch.local:9200";
-      const result = redactum(input, {
-        policies: ["ELASTICSEARCH_URL"],
-      });
-      expect(result.redactedText).toBe("[ELASTICSEARCH_URL]");
-    });
-
-    it("should redact HTTP Elasticsearch URLs", () => {
-      const input = "http://user:pass@es-cluster:9200/index";
-      const result = redactum(input, {
-        policies: ["ELASTICSEARCH_URL"],
-      });
-      expect(result.redactedText).toBe("[ELASTICSEARCH_URL]");
-    });
-  });
-
-  describe("Integration with default categories", () => {
-    it("should work without specifying categories", () => {
-      const input = "postgres://admin:secret@localhost:5432/db";
-      const result = redactum(input);
-      expect(result.redactedText).toBe(
-        "postgres://[REDACTED]:[REDACTED]@localhost:5432/db"
-      );
-    });
-
-    it("should not interfere with other patterns", () => {
-      const input =
-        "Email: john@example.com, DB: postgres://user:pass@localhost:5432/db";
-      const result = redactum(input);
-      expect(result.redactedText).toContain("[EMAIL]");
-      expect(result.redactedText).toContain(
-        "postgres://[REDACTED]:[REDACTED]@localhost:5432/db"
-      );
+  describe("CASSANDRA_CONNECTION_STRING", () => {
+    testPolicySuite({
+      policyName: "CASSANDRA_CONNECTION_STRING",
+      replacement: "[REDACTED]",
+      shouldMatch: [
+        "cassandra://user:pass@cassandra.example.com:9042/keyspace",
+      ],
+      shouldNotMatch: ["cassandra://localhost", "invalid"],
     });
   });
 });

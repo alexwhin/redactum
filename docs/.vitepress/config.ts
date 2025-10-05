@@ -44,7 +44,8 @@ export default defineConfig({
         text: "Reference",
         items: [
           { text: "Options", link: "/api/" },
-          { text: "Policies", link: "/api/policies" }
+          { text: "Policies", link: "/api/policies" },
+          { text: "Test Cases", link: "/api/test-cases" }
         ]
       }
     ],
@@ -59,7 +60,18 @@ export default defineConfig({
     },
 
     search: {
-      provider: "local"
+      provider: "local",
+      options: {
+        detailedView: true,
+        _render(src, env, md) {
+          const html = md.render(src, env);
+          if (env.frontmatter?.search === false) {
+            return "";
+          }
+
+          return html;
+        }
+      }
     }
   },
 

@@ -137,7 +137,7 @@ From API keys and database credentials to personal information and financial dat
 | `OAUTH_CLIENT_SECRET` | `client_secret: GOCSPX-1234567890abcdefghijklmnop` |
 | `OAUTH_REFRESH_TOKEN` | `refresh_token: 1//0gFU7abcdefghijklmnopqrstuvw` |
 | `OAUTH_ACCESS_TOKEN` | `access_token: ya29.a0ARrdaMabcdefghijklmnopqr` |
-| `OKTA_API_TOKEN` | `okta-token: 001234567890aBcDeFgHiJkLmNoPqRsTuVwXy` |
+| `OKTA_API_TOKEN` | `okta-token: 001234567890aBcDeFgHiJkLmNoPqRsTuVwXyZ12` |
 | `AUTH0_API_TOKEN` | `auth0-token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik` |
 | `KEYCLOAK_CLIENT_SECRET` | `keycloak-client-secret: 12345678-1234-1234-1234-123456789012` |
 
@@ -291,21 +291,6 @@ From API keys and database credentials to personal information and financial dat
 | `PHONE_NUMBER_CANADIAN` | `+1-416-555-0123` |
 | `PHONE_NUMBER_INTERNATIONAL` | `Call +14155551234` |
 | `PHONE_NUMBER_US` | `555-123-4567` |
-
-## Dates of Birth
-
-| Policy | Example Match |
-|--------|---------------|
-| `DATE_OF_BIRTH` | `01/15/1990` |
-
-## Addresses
-
-| Policy | Example Match |
-|--------|---------------|
-| `US_STREET_ADDRESS` | `123 Main Street, Anytown, ST 12345` |
-| `PO_BOX` | `PO Box 1234` |
-| `APARTMENT_NUMBER` | `Apt 4B` |
-| `INTERNATIONAL_ADDRESS` | `10 Downing Street, London SW1A 2AA, UK` |
 
 ## Geographic
 

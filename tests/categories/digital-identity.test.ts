@@ -1,129 +1,142 @@
-import { describe, it, expect } from "vitest";
-import { POLICIES } from "../../src/constants.js";
+import { describe } from "vitest";
+import {
+  testPolicySuite,
+  testCategoryCoverage,
+} from "../policy-test-helpers.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("digital identity patterns", () => {
-  const digitalIdentityPatterns = POLICIES.filter(
-    (p) => p.category === PolicyCategory.DIGITAL_IDENTITY,
-  );
-
-  it("should have digital identity patterns", () => {
-    expect(digitalIdentityPatterns.length).toBeGreaterThan(0);
-  });
+  testCategoryCoverage(PolicyCategory.DIGITAL_IDENTITY, [
+    "UUID",
+    "BITCOIN_ADDRESS",
+    "ETHEREUM_ADDRESS",
+    "MAC_ADDRESS",
+    "SHA_HASH",
+  ]);
 
   describe("UUID", () => {
-    const pattern = digitalIdentityPatterns.find((p) => p.name === "UUID");
-
-    it("should detect UUIDs", () => {
-      expect(pattern).toBeTruthy();
-      expect("550e8400-e29b-41d4-a716-446655440000".match(pattern!.pattern)).toBeTruthy();
-      expect("123e4567-e89b-12d3-a456-426614174000".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should not match invalid UUIDs", () => {
-      expect("not-a-uuid".match(pattern!.pattern)).toBeFalsy();
-      expect("123e4567-e89b-12d3-a456".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "UUID",
+      replacement: "[UUID]",
+      shouldMatch: [
+        "550e8400-e29b-41d4-a716-446655440000",
+        "123e4567-e89b-12d3-a456-426614174000",
+      ],
+      shouldNotMatch: ["not-a-uuid", "123e4567-e89b-12d3-a456"],
     });
   });
 
   describe("BITCOIN_ADDRESS", () => {
-    const pattern = digitalIdentityPatterns.find(
-      (p) => p.name === "BITCOIN_ADDRESS",
-    );
-
-    it("should detect Bitcoin addresses", () => {
-      expect(pattern).toBeTruthy();
-      expect("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa".match(pattern!.pattern)).toBeTruthy();
-      expect("3J98t1WpEZ73CNmYviecrnyiWrnqRhWNLy".match(pattern!.pattern)).toBeTruthy();
-      expect("bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should not match invalid Bitcoin addresses", () => {
-      expect("0A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa".match(pattern!.pattern)).toBeFalsy();
-      expect("bitcoin-address".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "BITCOIN_ADDRESS",
+      replacement: "[BITCOIN_ADDRESS]",
+      shouldMatch: [
+        "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", // valid P2PKH (Base58Check)
+        "3J98t1WpEZ73CNmYviecrnyiWrnqRhWNLy", // valid P2SH (Base58Check)
+        "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq", // valid Bech32 (SegWit)
+        "BC1QW508D6QEJXTDG4Y5R3ZARVARY0C5XW7KQ9E2A", // valid upper-case Bech32
+        "bc1p5cyxnuxmeuwuvkwfem96lxxss6ly3x7p4hqf6h", // valid Bech32m (Taproot)
+        "(bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq),", // punctuation wrapped
+        "Pay to: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa.", // trailing period
+        "bitcoin:bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq?amount=0.01", // URI format
+        "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzw\u200bf5mdq", // contains zero-width space
+        "tb1qfmv0k0s5l4m8y6n7p8q9r0stuvwx2yz3abcd0e", // testnet Bech32 (included by policy)
+        "bcrt1qy352eufvywh6r5z2m0m4tl0s4l7t9v5x3n0svk", // regtest Bech32 (included by policy)
+      ],
+      shouldNotMatch: [
+        "0A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", // invalid prefix (Base58 never starts with 0)
+        "bitcoin-address", // plain text, not an address
+        "bc1QmixedCaseINVALID", // invalid mixed-case Bech32
+        "1111111111111111111114oLvT2", // Base58Check checksum fail
+        "bc1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", // invalid Bech32 length/checksum
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", // SHA-256 hex digest
+        "z3J98t1WpEZ73CNmYviecrnyiWrnqRhWNLy", // invalid starting char
+        "bc1zw508d6qejxtdg4y5r3zarvaryvg6kdaj", // invalid Bech32 structure
+      ],
     });
   });
 
   describe("ETHEREUM_ADDRESS", () => {
-    const pattern = digitalIdentityPatterns.find(
-      (p) => p.name === "ETHEREUM_ADDRESS",
-    );
-
-    it("should detect Ethereum addresses", () => {
-      expect(pattern).toBeTruthy();
-      expect("0x742d35Cc6634C0532925a3b844Bc9e7595f5a123".match(pattern!.pattern)).toBeTruthy();
-      expect("0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should not match invalid Ethereum addresses", () => {
-      expect("0x742d35Cc6634C0532925a3b844Bc9e7595f5a12".match(pattern!.pattern)).toBeFalsy();
-      expect("ethereum-address".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "ETHEREUM_ADDRESS",
+      replacement: "[ETH_ADDRESS]",
+      shouldMatch: [
+        "0x742d35Cc6634C0532925a3b844Bc9e7595f5a123", // standard mixed-case address
+        "0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B", // EIP-55 checksummed address
+        "0xde0b295669a9fd93d5f28d9ec85e40f4cb697bae", // all lowercase (common format)
+        "0xDE0B295669A9FD93D5F28D9EC85E40F4CB697BAE", // all uppercase (less common)
+        "0x5aAeb6053f3E94C9b9A09f33669435E7Ef1BeAed", // another checksummed address
+        "Send to: 0x742d35Cc6634C0532925a3b844Bc9e7595f5a123.", // in sentence with punctuation
+        "(0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B)", // parentheses wrapped
+        "ethereum:0x742d35Cc6634C0532925a3b844Bc9e7595f5a123", // ENS URI format
+        "0x0000000000000000000000000000000000000000", // null address (burn address)
+        "0xdAC17F958D2ee523a2206206994597C13D831ec7", // USDT token contract
+        "Contract: 0x742d35Cc6634C0532925a3b844Bc9e7595f5a123,", // trailing comma
+        "0x742d35Cc6634C0532925a3b844Bc9e7595f5\u200ba123", // contains zero-width space
+      ],
+      shouldNotMatch: [
+        "0x742d35Cc6634C0532925a3b844Bc9e7595f5a12", // too short (39 chars)
+        "0x742d35Cc6634C0532925a3b844Bc9e7595f5a1234", // too long (41 chars)
+        "0xGHIJKL6634C0532925a3b844Bc9e7595f5a123", // invalid hex chars
+        "0x742d35Cc6634C0532925a3b844Bc9e7595f5a12g", // invalid char at end
+        "ethereum-address", // plain text
+        "1x742d35Cc6634C0532925a3b844Bc9e7595f5a123", // wrong prefix
+        "0X742d35Cc6634C0532925a3b844Bc9e7595f5a123", // uppercase X (not standard)
+        "742d35Cc6634C0532925a3b844Bc9e7595f5a123", // missing 0x prefix
+        "0x", // just prefix
+      ],
     });
   });
 
   describe("MAC_ADDRESS", () => {
-    const pattern = digitalIdentityPatterns.find((p) => p.name === "MAC_ADDRESS");
-
-    it("should detect MAC addresses with colons", () => {
-      expect(pattern).toBeTruthy();
-      expect("00:1B:44:11:3A:B7".match(pattern!.pattern)).toBeTruthy();
-      expect("AA:BB:CC:DD:EE:FF".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should detect MAC addresses with hyphens", () => {
-      expect("00-1B-44-11-3A-B7".match(pattern!.pattern)).toBeTruthy();
-      expect("AA-BB-CC-DD-EE-FF".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should not match invalid MAC addresses", () => {
-      expect("00:1B:44:11:3A".match(pattern!.pattern)).toBeFalsy();
-      expect("GG:HH:II:JJ:KK:LL".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "MAC_ADDRESS",
+      replacement: "[MAC_ADDRESS]",
+      shouldMatch: [
+        "00:1B:44:11:3A:B7", // colon separator (IEEE 802 standard)
+        "AA:BB:CC:DD:EE:FF", // all uppercase with colons
+        "aa:bb:cc:dd:ee:ff", // all lowercase with colons
+        "00-1B-44-11-3A-B7", // hyphen separator (Windows style)
+        "AA-BB-CC-DD-EE-FF", // all uppercase with hyphens
+        "aa-bb-cc-dd-ee-ff", // all lowercase with hyphens
+        "01:23:45:67:89:AB", // mixed case with colons
+        "Device MAC: 00:1B:44:11:3A:B7", // in sentence with label
+        "MAC 00:1B:44:11:3A:B7 detected", // embedded in text
+        "(00:1B:44:11:3A:B7)", // parentheses wrapped
+        "00:1B:44:11:3A:B7,", // trailing comma
+        "ff:ff:ff:ff:ff:ff", // broadcast address
+        "00:00:00:00:00:00", // null address
+        "02:00:5e:00:00:00", // multicast address
+      ],
+      shouldNotMatch: [
+        "00:1B:44:11:3A", // too short (5 octets)
+        "00:1B:44:11:3A:B7:C8", // too long (7 octets)
+        "GG:HH:II:JJ:KK:LL", // invalid hex characters
+        "00:1B:44:11:3A:GG", // invalid hex in last octet
+        "00.1B.44.11.3A.B7", // dot separator (Cisco style, not standard)
+        "001B44113AB7", // no separators (EUI-48 bare format)
+        "00:1B:44", // partial MAC address
+        "mac-address", // plain text
+        "00:1B:44:11:3A:B", // odd number of chars in last octet
+      ],
     });
   });
 
   describe("SHA_HASH", () => {
-    const pattern = digitalIdentityPatterns.find((p) => p.name === "SHA_HASH");
-
-    it("should detect SHA-1 hashes", () => {
-      expect(pattern).toBeTruthy();
-      expect("2fd4e1c67a2d28fced849ee1bb76e7391b93eb12".match(pattern!.pattern)).toBeTruthy();
-      expect("da39a3ee5e6b4b0d3255bfef95601890afd80709".match(pattern!.pattern)).toBeTruthy();
+    testPolicySuite({
+      policyName: "SHA_HASH",
+      replacement: "[HASH]",
+      shouldMatch: [
+        "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12",
+        "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
+        "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b",
+      ],
+      shouldNotMatch: [
+        "tooshort",
+        "GHIJKLMNOPQRSTUVWXYZ1234567890123456789012",
+      ],
     });
-
-    it("should detect SHA-256 hashes", () => {
-      expect(
-        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855".match(
-          pattern!.pattern,
-        ),
-      ).toBeTruthy();
-      expect(
-        "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae".match(
-          pattern!.pattern,
-        ),
-      ).toBeTruthy();
-    });
-
-    it("should detect SHA-384 hashes", () => {
-      expect(
-        "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b".match(
-          pattern!.pattern,
-        ),
-      ).toBeTruthy();
-    });
-
-    it("should not match invalid hashes", () => {
-      expect("tooshort".match(pattern!.pattern)).toBeFalsy();
-      expect("GHIJKLMNOPQRSTUVWXYZ1234567890123456789012".match(pattern!.pattern)).toBeFalsy();
-    });
-  });
-
-  it("should not have false positives", () => {
-    const uuidPattern = digitalIdentityPatterns.find((p) => p.name === "UUID");
-    const bitcoinPattern = digitalIdentityPatterns.find(
-      (p) => p.name === "BITCOIN_ADDRESS",
-    );
-
-    expect("regular text".match(uuidPattern!.pattern)).toBeFalsy();
-    expect("regular text".match(bitcoinPattern!.pattern)).toBeFalsy();
   });
 });

@@ -40,9 +40,7 @@ categories:
   
   # Personal information
   ADDRESS: false
-  PERSON_NAME: false
-  DATE_OF_BIRTH: false
-  
+
   # Financial & Medical
   FINANCIAL: true
   MEDICAL: false

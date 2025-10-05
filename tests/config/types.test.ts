@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import type { 
-  RedactionMode, 
+import type {
+  RedactionMode,
   HashAlgorithm,
   CategoryConfig,
   RedactionConfig,
@@ -8,15 +8,21 @@ import type {
   ResolvedConfig,
   ConfigLoaderOptions,
   ConfigValidationError,
-  ConfigSource
+  ConfigSource,
 } from "../../src/config/types.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("RedactionMode type", () => {
   it("should include all expected redaction modes", () => {
-    const validModes: RedactionMode[] = ["mask", "replace", "remove", "hash", "encrypt"];
-    
-    validModes.forEach(mode => {
+    const validModes: RedactionMode[] = [
+      "mask",
+      "replace",
+      "remove",
+      "hash",
+      "encrypt",
+    ];
+
+    validModes.forEach((mode) => {
       const testMode: RedactionMode = mode;
       expect(testMode).toBe(mode);
     });
@@ -25,9 +31,14 @@ describe("RedactionMode type", () => {
 
 describe("HashAlgorithm type", () => {
   it("should include all expected hash algorithms", () => {
-    const validAlgorithms: HashAlgorithm[] = ["sha256", "sha512", "md5", "blake2b"];
-    
-    validAlgorithms.forEach(algorithm => {
+    const validAlgorithms: HashAlgorithm[] = [
+      "sha256",
+      "sha512",
+      "md5",
+      "blake2b",
+    ];
+
+    validAlgorithms.forEach((algorithm) => {
       const testAlgorithm: HashAlgorithm = algorithm;
       expect(testAlgorithm).toBe(algorithm);
     });
@@ -66,13 +77,15 @@ describe("RedactionConfig interface", () => {
       mask: "#",
       replacement: "[HIDDEN]",
       categories: [PolicyCategory.EMAIL, PolicyCategory.PHONE],
-      customPolicies: [{
-        name: "test",
-        pattern: "test.*",
-        flags: "gi",
-        replacement: "[TEST]",
-        mode: "replace",
-      }],
+      customPolicies: [
+        {
+          name: "test",
+          pattern: "test.*",
+          flags: "gi",
+          replacement: "[TEST]",
+          mode: "replace",
+        },
+      ],
       globalMode: "hash",
       preserveLength: true,
       preserveFormat: false,
@@ -103,7 +116,10 @@ describe("RedactionConfig interface", () => {
     };
 
     expect(config.mask).toBe("#");
-    expect(config.categories).toEqual([PolicyCategory.EMAIL, PolicyCategory.PHONE]);
+    expect(config.categories).toEqual([
+      PolicyCategory.EMAIL,
+      PolicyCategory.PHONE,
+    ]);
     expect(config.customPolicies).toHaveLength(1);
     expect(config.globalMode).toBe("hash");
   });
@@ -144,7 +160,11 @@ describe("ConfigFile interface", () => {
       presets: {
         strict: {
           globalMode: "remove",
-          categories: [PolicyCategory.EMAIL, PolicyCategory.PHONE, PolicyCategory.SSN],
+          categories: [
+            PolicyCategory.EMAIL,
+            PolicyCategory.PHONE,
+            PolicyCategory.SSN,
+          ],
         },
       },
       mask: "*",
@@ -160,7 +180,10 @@ describe("ConfigFile interface", () => {
 
 describe("ResolvedConfig interface", () => {
   it("should enforce required properties with proper types", () => {
-    const categoriesMap = new Map<PolicyCategory, CategoryConfig & { enabled: boolean }>();
+    const categoriesMap = new Map<
+      PolicyCategory,
+      CategoryConfig & { enabled: boolean }
+    >();
     categoriesMap.set(PolicyCategory.EMAIL, {
       enabled: true,
       mode: "replace",
@@ -178,12 +201,14 @@ describe("ResolvedConfig interface", () => {
       locale: "en",
       detectLanguage: false,
       categories: categoriesMap,
-      customPolicies: [{
-        name: "test",
-        pattern: /test/gi,
-        replacement: "[TEST]",
-        mode: "replace",
-      }],
+      customPolicies: [
+        {
+          name: "test",
+          pattern: /test/gi,
+          replacement: "[TEST]",
+          mode: "replace",
+        },
+      ],
       hashOptions: {
         algorithm: "sha256",
         salt: "",
@@ -267,7 +292,7 @@ describe("ConfigSource interface", () => {
       { type: "cli", priority: 4 },
     ];
 
-    sources.forEach(source => {
+    sources.forEach((source) => {
       expect(["file", "env", "default", "cli"]).toContain(source.type);
     });
   });

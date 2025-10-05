@@ -3,6 +3,7 @@ import TwoColumnSection from "./components/TwoColumnSection.vue";
 import RedactionDemo from "./components/RedactionDemo.vue";
 import CustomHero from "./components/CustomHero.vue";
 import PatternStats from "./components/PatternStats.vue";
+import TestCaseStats from "./components/TestCaseStats.vue";
 import RedactionOutput from "./components/RedactionOutput.vue";
 import EmojiTitle from "./components/EmojiTitle.vue";
 import type { App } from "vue";
@@ -16,6 +17,7 @@ export default {
     app.component("RedactionDemo", RedactionDemo);
     app.component("CustomHero", CustomHero);
     app.component("PatternStats", PatternStats);
+    app.component("TestCaseStats", TestCaseStats);
     app.component("RedactionOutput", RedactionOutput);
     app.component("EmojiTitle", EmojiTitle);
   },

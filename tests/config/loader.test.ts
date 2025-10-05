@@ -44,7 +44,10 @@ describe("ConfigLoader", () => {
       const config = await loader["loadConfigFile"]("config.json");
 
       expect(config).toEqual(mockConfig);
-      expect(mockFs.readFile).toHaveBeenCalledWith(expect.stringContaining("config.json"), "utf-8");
+      expect(mockFs.readFile).toHaveBeenCalledWith(
+        expect.stringContaining("config.json"),
+        "utf-8"
+      );
     });
 
     it("should load YAML config files", async () => {
@@ -63,17 +66,21 @@ categories:
 
       mockFs.readFile.mockResolvedValue(mockYamlContent);
       const { parse } = await import("yaml");
-      (parse as unknown as ReturnType<typeof vi.fn>).mockReturnValue(mockConfig);
+      (parse as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+        mockConfig
+      );
 
       const loader = new ConfigLoader();
       const config = await loader["loadConfigFile"]("config.yaml");
 
       expect(config).toEqual(mockConfig);
-      expect(mockFs.readFile).toHaveBeenCalledWith(expect.stringContaining("config.yaml"), "utf-8");
+      expect(mockFs.readFile).toHaveBeenCalledWith(
+        expect.stringContaining("config.yaml"),
+        "utf-8"
+      );
     });
 
-    it.skip("should load JavaScript config files", async () => {
-    });
+    it.skip("should load JavaScript config files", async () => {});
 
     it("should cache loaded configurations", async () => {
       const mockConfig: ConfigFile = {
@@ -92,7 +99,7 @@ categories:
 
     it("should throw error for unsupported file formats", async () => {
       const loader = new ConfigLoader();
-      
+
       await expect(loader["loadConfigFile"]("config.txt")).rejects.toThrow(
         "Unsupported config file format: txt"
       );
@@ -127,7 +134,7 @@ categories:
 
     it("should return undefined when environment overrides are disabled", () => {
       process.env["REDACTUM_MASK"] = "X";
-      
+
       const loader = new ConfigLoader({ allowEnvironmentOverrides: false });
       const config = loader["loadEnvironmentConfig"]();
 
@@ -145,7 +152,7 @@ categories:
   describe("findAndLoadConfig", () => {
     it("should find config file in search paths", async () => {
       const mockConfig: ConfigFile = { mask: "#" };
-      
+
       mockFs.access.mockImplementation((path) => {
         if ((path as string).includes("/path1/")) {
           return Promise.reject(new Error("Not found"));
@@ -161,7 +168,7 @@ categories:
       });
 
       const config = await loader["findAndLoadConfig"]();
-      
+
       expect(config).toEqual(mockConfig);
     });
 
@@ -174,7 +181,7 @@ categories:
       });
 
       const config = await loader["findAndLoadConfig"]();
-      
+
       expect(config).toEqual(mockConfig);
       expect(mockFs.readFile).toHaveBeenCalledWith(
         expect.stringContaining("/custom/config.json"),
@@ -184,7 +191,7 @@ categories:
 
     it("should stop on first found config when stopOnFirstFound is true", async () => {
       const mockConfig: ConfigFile = { mask: "#" };
-      
+
       mockFs.access.mockResolvedValue(undefined);
       mockFs.readFile.mockResolvedValue(JSON.stringify(mockConfig));
 
@@ -194,7 +201,7 @@ categories:
       });
 
       await loader["findAndLoadConfig"]();
-      
+
       expect(mockFs.access).toHaveBeenCalledTimes(1);
     });
 
@@ -206,7 +213,7 @@ categories:
       });
 
       const config = await loader["findAndLoadConfig"]();
-      
+
       expect(config).toBeUndefined();
     });
   });
@@ -228,15 +235,14 @@ categories:
         .mockResolvedValueOnce(JSON.stringify(childConfig));
 
       const loader = new ConfigLoader({ mergeExtends: true });
-      
-      vi.spyOn(loader as any, "loadConfigFile")
-        .mockImplementation((path) => {
-          if ((path as string).includes("base.json")) {
-            return Promise.resolve(baseConfig);
-          }
 
-          return Promise.resolve(childConfig);
-        });
+      vi.spyOn(loader as any, "loadConfigFile").mockImplementation((path) => {
+        if ((path as string).includes("base.json")) {
+          return Promise.resolve(baseConfig);
+        }
+
+        return Promise.resolve(childConfig);
+      });
 
       const resolved = await loader["resolveExtends"](childConfig);
 
@@ -264,18 +270,17 @@ categories:
       };
 
       const loader = new ConfigLoader({ mergeExtends: true });
-      
-      vi.spyOn(loader as any, "loadConfigFile")
-        .mockImplementation((path) => {
-          if ((path as string).includes("base1.json")) {
-            return Promise.resolve(base1);
-          }
-          if ((path as string).includes("base2.json")) {
-            return Promise.resolve(base2);
-          }
 
-          return Promise.resolve(childConfig);
-        });
+      vi.spyOn(loader as any, "loadConfigFile").mockImplementation((path) => {
+        if ((path as string).includes("base1.json")) {
+          return Promise.resolve(base1);
+        }
+        if ((path as string).includes("base2.json")) {
+          return Promise.resolve(base2);
+        }
+
+        return Promise.resolve(childConfig);
+      });
 
       const resolved = await loader["resolveExtends"](childConfig);
 
@@ -298,15 +303,14 @@ categories:
       };
 
       const loader = new ConfigLoader({ mergeExtends: true });
-      
-      vi.spyOn(loader as any, "loadConfigFile")
-        .mockImplementation((path) => {
-          if ((path as string).includes("presets/strict.json")) {
-            return Promise.resolve(presetConfig);
-          }
 
-          return Promise.resolve(childConfig);
-        });
+      vi.spyOn(loader as any, "loadConfigFile").mockImplementation((path) => {
+        if ((path as string).includes("presets/strict.json")) {
+          return Promise.resolve(presetConfig);
+        }
+
+        return Promise.resolve(childConfig);
+      });
 
       const resolved = await loader["resolveExtends"](childConfig);
 
@@ -390,7 +394,7 @@ categories:
 
     it("should apply environment variables last", () => {
       process.env["REDACTUM_MASK"] = "ENV";
-      
+
       const config: ConfigFile = {
         mask: "CONFIG",
         presets: {
@@ -400,7 +404,7 @@ categories:
         },
       };
 
-      const loader = new ConfigLoader({ 
+      const loader = new ConfigLoader({
         preset: "test",
         allowEnvironmentOverrides: true,
       });
@@ -441,7 +445,7 @@ categories:
       mockFs.access.mockRejectedValue(new Error("Not found"));
 
       const config = await loadConfig();
-      
+
       expect(config).toMatchObject({
         mask: "*",
         replacement: "[REDACTED]",

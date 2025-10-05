@@ -1,7 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  redactum
-} from "../../src/index.js";
+import { redactum } from "../../src/index.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("Redactum and Functional API", () => {
@@ -12,8 +10,6 @@ describe("Redactum and Functional API", () => {
         Phone: (555) 123-4567
         SSN: 123-45-6789
         IP: 192.168.1.1
-        DOB: 01/15/1990
-        Address: 123 Main Street
         API Key: sk-abcd1234567890abcdef1234567890abcdef123456
       `;
       const result = redactum(text);
@@ -22,10 +18,8 @@ describe("Redactum and Functional API", () => {
       expect(result.redactedText).toContain("[PHONE]");
       expect(result.redactedText).toContain("[SSN]");
       expect(result.redactedText).toContain("[IP]");
-      expect(result.redactedText).toContain("[DOB]");
-      expect(result.redactedText).toContain("[ADDRESS]");
       expect(result.redactedText).toContain("[OPENAI_KEY]");
-      expect(result.stats.totalFindings).toBeGreaterThanOrEqual(7);
+      expect(result.stats.totalFindings).toBeGreaterThanOrEqual(5);
     });
 
     it("should redact email addresses", () => {
@@ -54,7 +48,9 @@ describe("Redactum and Functional API", () => {
 
   describe("functional API - custom options", () => {
     it("should use custom replacement", () => {
-      const result = redactum("My email is test@example.com", { replacement: "***" });
+      const result = redactum("My email is test@example.com", {
+        replacement: "***",
+      });
 
       expect(result.redactedText).toBe("My email is ***");
     });
@@ -94,7 +90,9 @@ describe("Redactum and Functional API", () => {
       });
 
       it("should handle very long text", () => {
-        const longText = `${"No PII here. ".repeat(1000)  }Contact: test@example.com`;
+        const longText = `${"No PII here. ".repeat(
+          1000
+        )}Contact: test@example.com`;
         const result = redactum(longText);
 
         expect(result.findings).toHaveLength(1);
@@ -114,7 +112,7 @@ describe("Redactum and Functional API", () => {
         const result = redactum("test@example.com 192.168.1.1");
 
         expect(result.findings).toHaveLength(2);
-        const categories = result.findings.map(f => f.category);
+        const categories = result.findings.map((f) => f.category);
         expect(categories).toContain(PolicyCategory.EMAIL);
         expect(categories).toContain(PolicyCategory.IP_ADDRESS);
       });
@@ -132,7 +130,9 @@ describe("Redactum and Functional API", () => {
         const result = redactum("My email is test@example.com");
 
         expect(result.findings).toHaveLength(1);
-        expect(result.findings[0]?.end).toBe("My email is test@example.com".length);
+        expect(result.findings[0]?.end).toBe(
+          "My email is test@example.com".length
+        );
       });
     });
 
@@ -166,75 +166,92 @@ describe("Redactum and Functional API", () => {
       });
 
       it("should exclude patterns for specific policies only", () => {
-        const result = redactum("Contact: admin@company.com and SSN: 123-45-6789", {
-          excludePatterns: [
-            {
-              pattern: /admin@company\.com/,
-              policies: ["EMAIL_ADDRESS"],
-            },
-          ],
-        });
+        const result = redactum(
+          "Contact: admin@company.com and SSN: 123-45-6789",
+          {
+            excludePatterns: [
+              {
+                pattern: /admin@company\.com/,
+                policies: ["EMAIL_ADDRESS"],
+              },
+            ],
+          }
+        );
 
         expect(result.findings).toHaveLength(1);
         expect(result.findings[0]?.policyName).toBe("SSN");
       });
 
       it("should support multiple policy-specific exclusions", () => {
-        const result = redactum("Email: noreply@company.com, Phone: 555-000-0000, Other: test@example.com, Phone: 555-123-4567", {
-          excludePatterns: [
-            {
-              pattern: /noreply@/,
-              policies: ["EMAIL_ADDRESS"],
-            },
-            {
-              pattern: /555-000-0000/,
-              policies: ["PHONE_NUMBER_US"],
-            },
-          ],
-        });
+        const result = redactum(
+          "Email: noreply@company.com, Phone: 555-000-0000, Other: test@example.com, Phone: 555-123-4567",
+          {
+            excludePatterns: [
+              {
+                pattern: /noreply@/,
+                policies: ["EMAIL_ADDRESS"],
+              },
+              {
+                pattern: /555-000-0000/,
+                policies: ["PHONE_NUMBER_US"],
+              },
+            ],
+          }
+        );
 
         expect(result.findings).toHaveLength(2);
-        expect(result.findings.map(f => f.value)).toContain("test@example.com");
-        expect(result.findings.map(f => f.value)).toContain("555-123-4567");
+        expect(result.findings.map((f) => f.value)).toContain(
+          "test@example.com"
+        );
+        expect(result.findings.map((f) => f.value)).toContain("555-123-4567");
       });
 
       it("should apply global exclusions when policies array is empty", () => {
-        const result = redactum("Email: public@example.com and private@example.com", {
-          excludePatterns: [
-            {
-              pattern: /public@/,
-              policies: [],
-            },
-          ],
-        });
+        const result = redactum(
+          "Email: public@example.com and private@example.com",
+          {
+            excludePatterns: [
+              {
+                pattern: /public@/,
+                policies: [],
+              },
+            ],
+          }
+        );
 
         expect(result.findings).toHaveLength(1);
         expect(result.findings[0]?.value).toBe("private@example.com");
       });
 
       it("should apply global exclusions when policies is undefined", () => {
-        const result = redactum("Email: test@example.com and user@example.com", {
-          excludePatterns: [
-            {
-              pattern: /test@/,
-            },
-          ],
-        });
+        const result = redactum(
+          "Email: test@example.com and user@example.com",
+          {
+            excludePatterns: [
+              {
+                pattern: /test@/,
+              },
+            ],
+          }
+        );
 
         expect(result.findings).toHaveLength(1);
         expect(result.findings[0]?.value).toBe("user@example.com");
       });
 
       it("should support mixing global and policy-specific exclusions", () => {
-        const result = redactum("Email: global-exclude@example.com, Phone: 555-000-1234, Email: test@example.com", {
-          excludePatterns: [
-            { pattern: /global-exclude@/ },
-            {
-              pattern: /555-000-/,
-              policies: ["PHONE_NUMBER_US"],
-            },
-          ],
-        });
+        const result = redactum(
+          "Email: global-exclude@example.com, Phone: 555-000-1234, Email: test@example.com",
+          {
+            excludePatterns: [
+              { pattern: /global-exclude@/ },
+              {
+                pattern: /555-000-/,
+                policies: ["PHONE_NUMBER_US"],
+              },
+            ],
+          }
+        );
 
         expect(result.findings).toHaveLength(1);
         expect(result.findings[0]?.value).toBe("test@example.com");
@@ -295,7 +312,6 @@ describe("Redactum and Functional API", () => {
         expect(endTime - startTime).toBeLessThan(100);
       });
     });
-
   });
 
   describe("functional API - advanced features", () => {
@@ -306,12 +322,14 @@ describe("Redactum and Functional API", () => {
 
     it("should handle custom patterns via options", () => {
       const result = redactum("Employee EMP-123456 started today", {
-        customPolicies: [{
-          name: "Employee ID",
-          pattern: /EMP-\d{6}/g,
-          category: PolicyCategory.CUSTOM,
-          replacement: "[EMP_ID]",
-        }]
+        customPolicies: [
+          {
+            name: "Employee ID",
+            pattern: /EMP-\d{6}/g,
+            category: PolicyCategory.CUSTOM,
+            replacement: "[EMP_ID]",
+          },
+        ],
       });
 
       expect(result.findings).toHaveLength(1);
@@ -328,21 +346,25 @@ describe("Redactum and Functional API", () => {
 
     it("should support multiple custom patterns independently", () => {
       const result1 = redactum("CUSTOM1-123 CUSTOM2-456", {
-        customPolicies: [{
-          name: "Pattern1",
-          pattern: /CUSTOM1-\d+/g,
-          category: PolicyCategory.CUSTOM,
-          replacement: "[P1]",
-        }]
+        customPolicies: [
+          {
+            name: "Pattern1",
+            pattern: /CUSTOM1-\d+/g,
+            category: PolicyCategory.CUSTOM,
+            replacement: "[P1]",
+          },
+        ],
       });
 
       const result2 = redactum("CUSTOM1-123 CUSTOM2-456", {
-        customPolicies: [{
-          name: "Pattern2",
-          pattern: /CUSTOM2-\d+/g,
-          category: PolicyCategory.CUSTOM,
-          replacement: "[P2]",
-        }]
+        customPolicies: [
+          {
+            name: "Pattern2",
+            pattern: /CUSTOM2-\d+/g,
+            category: PolicyCategory.CUSTOM,
+            replacement: "[P2]",
+          },
+        ],
       });
 
       expect(result1.redactedText).toBe("[P1] CUSTOM2-456");
@@ -354,7 +376,7 @@ describe("Redactum and Functional API", () => {
     it("should create a stateful redactor instance", async () => {
       const { createRedactum } = await import("../../src/core/redactum.js");
       const redactor = createRedactum({
-        policies: ["EMAIL_ADDRESS"]
+        policies: ["EMAIL_ADDRESS"],
       });
 
       const result = redactor.redactum("Email: john@example.com");
@@ -369,7 +391,7 @@ describe("Redactum and Functional API", () => {
         name: "CustomID",
         pattern: /ID-\d{6}/g,
         category: PolicyCategory.CUSTOM,
-        replacement: "[ID]"
+        replacement: "[ID]",
       });
 
       const result = redactor.redactum("User ID-123456");
@@ -384,7 +406,7 @@ describe("Redactum and Functional API", () => {
         name: "CustomID",
         pattern: /ID-\d{6}/g,
         category: PolicyCategory.CUSTOM,
-        replacement: "[ID]"
+        replacement: "[ID]",
       });
 
       const removed = redactor.removeCustomPattern("CustomID");
@@ -394,15 +416,16 @@ describe("Redactum and Functional API", () => {
     it("should support updating options", async () => {
       const { createRedactum } = await import("../../src/core/redactum.js");
       const redactor = createRedactum({
-        policies: ["EMAIL_ADDRESS"]
+        policies: ["EMAIL_ADDRESS"],
       });
 
       redactor.updateOptions({ policies: ["PHONE_NUMBER_US"] });
 
-      const result = redactor.redactum("Email: john@example.com Phone: 555-123-4567");
+      const result = redactor.redactum(
+        "Email: john@example.com Phone: 555-123-4567"
+      );
       expect(result.redactedText).toContain("[PHONE]");
       expect(result.redactedText).toContain("john@example.com");
     });
   });
-
 });

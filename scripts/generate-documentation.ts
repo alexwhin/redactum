@@ -1,7 +1,7 @@
 #!/usr/bin/env tsx
 import { POLICIES } from "../src/constants.js";
 import type { PolicyCategory } from "../src/types/index.js";
-import { writeFileSync } from "fs";
+import { writeFileSync, readFileSync, readdirSync, mkdirSync } from "fs";
 import { join } from "path";
 
 function toHumanReadable(snakeCase: string): string {
@@ -22,7 +22,6 @@ function getCategoryDisplayName(category: PolicyCategory): string {
     AWS_KEY: "AWS Credentials",
     PRIVATE_KEY: "Private Keys",
     ADDRESS: "Addresses",
-    DATE_OF_BIRTH: "Dates of Birth",
     GOVERNMENT_ID: "Government IDs",
     TAX_IDENTIFIER: "Tax Identifiers",
     INSURANCE: "Insurance",
@@ -63,8 +62,6 @@ export const exampleMap: Record<string, string> = {
   IPV6_ADDRESS: "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
   MAC_ADDRESS: "00:1B:44:11:3A:B7",
   UUID: "550e8400-e29b-41d4-a716-446655440000",
-  DATE_OF_BIRTH: "01/15/1990",
-  DATE_OF_BIRTH_ISO: "1990-01-15",
   PASSPORT_NUMBER: "M12345678",
   DRIVER_LICENSE: "D123-4567-8901",
   VIN: "1HGBH41JXMN109186",
@@ -214,10 +211,6 @@ export const exampleMap: Record<string, string> = {
   CANADIAN_POSTAL_CODE: "K1A 0B1",
   UK_POSTCODE: "SW1A 1AA",
   GPS_COORDINATES: "40.7128,-74.0060",
-  US_STREET_ADDRESS: "123 Main Street, Anytown, ST 12345",
-  PO_BOX: "PO Box 1234",
-  APARTMENT_NUMBER: "Apt 4B",
-  INTERNATIONAL_ADDRESS: "10 Downing Street, London SW1A 2AA, UK",
   UK_VAT_NUMBER: "GB123456789",
   EU_VAT_NUMBER: "DE123456789",
   CANADIAN_BUSINESS_NUMBER: "123456789RC0001",
@@ -249,7 +242,7 @@ export const exampleMap: Record<string, string> = {
   OAUTH_CLIENT_SECRET: "client_secret: GOCSPX-1234567890abcdefghijklmnop",
   OAUTH_REFRESH_TOKEN: "refresh_token: 1//0gFU7abcdefghijklmnopqrstuvw",
   OAUTH_ACCESS_TOKEN: "access_token: ya29.a0ARrdaMabcdefghijklmnopqr",
-  OKTA_API_TOKEN: "okta-token: 001234567890aBcDeFgHiJkLmNoPqRsTuVwXy",
+  OKTA_API_TOKEN: "okta-token: 001234567890aBcDeFgHiJkLmNoPqRsTuVwXyZ12",
   KEYCLOAK_CLIENT_SECRET:
     "keycloak-client-secret: 12345678-1234-1234-1234-123456789012",
   SHA_HASH: "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12",
@@ -295,12 +288,18 @@ export const exampleMap: Record<string, string> = {
   CLOUDFLARE_API_TOKEN: "1234567890abcdefghijklmnopqrstuvwxyz1234",
   SSH_KEY_FINGERPRINT: "SHA256:1234567890abcdefghijklmnopqrstuvwxyz1234567",
   PGP_KEY_ID: "0x1234567890ABCDEF",
-  AGE_SECRET_KEY: "AGE-SECRET-KEY-1QYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQY",
-  AGE_PUBLIC_KEY: "age1abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuv",
-  AWS_KMS_KEY_ID: "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012",
-  GCP_KMS_KEY: "projects/my-project/locations/us-central1/keyRings/my-keyring/cryptoKeys/my-key",
-  AZURE_KEY_IDENTIFIER: "https://myvault.vault.azure.net/keys/mykey/1234567890abcdef1234567890abcdef",
-  MASTER_KEY: "master_key: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY3ODkwYWJjZGVmZ2g=",
+  AGE_SECRET_KEY:
+    "AGE-SECRET-KEY-1QYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQY",
+  AGE_PUBLIC_KEY:
+    "age1abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuv",
+  AWS_KMS_KEY_ID:
+    "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012",
+  GCP_KMS_KEY:
+    "projects/my-project/locations/us-central1/keyRings/my-keyring/cryptoKeys/my-key",
+  AZURE_KEY_IDENTIFIER:
+    "https://myvault.vault.azure.net/keys/mykey/1234567890abcdef1234567890abcdef",
+  MASTER_KEY:
+    "master_key: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY3ODkwYWJjZGVmZ2g=",
   SONARQUBE_TOKEN: "sqp_1234567890abcdef1234567890abcdef12345678",
   LAUNCHDARKLY_SDK_KEY: "sdk-12345678-1234-1234-1234-123456789012",
   SEGMENT_WRITE_KEY: "segment-writekey: 1234567890abcdefghijklmnop123456",
@@ -309,15 +308,6 @@ export const exampleMap: Record<string, string> = {
   ELASTIC_CLOUD_ID:
     "elastic-cloud-id: dXMtZWFzdC0xLmF3cy5mb3VuZC5pbyRjZWM2ZjI2MWE3NGJmMjRjZTMzYmI4ODExYjg0Mjk0ZiRjNmMyY2E2ZDA0MjI0OWFmMGNjN2Q3YTllOTYyNTc0Mw==",
 };
-
-const policiesByCategory = POLICIES.reduce((acc, policy) => {
-  if (!acc[policy.category]) {
-    acc[policy.category] = [];
-  }
-  acc[policy.category]!.push(policy);
-
-  return acc;
-}, {} as Record<string, typeof POLICIES>);
 
 const categoryOrder: PolicyCategory[] = [
   "DEV_IDENTIFIER" as PolicyCategory,
@@ -345,8 +335,6 @@ const categoryOrder: PolicyCategory[] = [
   "CREDIT_CARD" as PolicyCategory,
   "EMAIL" as PolicyCategory,
   "PHONE" as PolicyCategory,
-  "PERSON_NAME" as PolicyCategory,
-  "DATE_OF_BIRTH" as PolicyCategory,
   "ADDRESS" as PolicyCategory,
   "GEOGRAPHIC" as PolicyCategory,
   "EMPLOYEE_ID" as PolicyCategory,
@@ -356,11 +344,21 @@ const categoryOrder: PolicyCategory[] = [
   "CUSTOM" as PolicyCategory,
 ];
 
-const sortedCategories = categoryOrder
-  .filter((cat) => policiesByCategory[cat])
-  .map((cat) => [cat, policiesByCategory[cat]!] as const);
+function generatePoliciesDocumentation(): void {
+  const policiesByCategory = POLICIES.reduce((acc, policy) => {
+    if (!acc[policy.category]) {
+      acc[policy.category] = [];
+    }
+    acc[policy.category]!.push(policy);
 
-let markdown = `# Policies
+    return acc;
+  }, {} as Record<string, typeof POLICIES>);
+
+  const sortedCategories = categoryOrder
+    .filter((cat) => policiesByCategory[cat])
+    .map((cat) => [cat, policiesByCategory[cat]!] as const);
+
+  let markdown = `# Policies
 
 <PatternStats />
 
@@ -368,24 +366,172 @@ From API keys and database credentials to personal information and financial dat
 
 `;
 
-for (const [category, policies] of sortedCategories) {
-  const displayName = getCategoryDisplayName(category as PolicyCategory);
+  for (const [category, policies] of sortedCategories) {
+    const displayName = getCategoryDisplayName(category as PolicyCategory);
 
-  markdown += `## ${displayName}\n\n`;
-  markdown += `| Policy | Example Match |\n`;
-  markdown += `|--------|---------------|\n`;
+    markdown += `## ${displayName}\n\n`;
+    markdown += `| Policy | Example Match |\n`;
+    markdown += `|--------|---------------|\n`;
 
-  for (const policy of policies) {
-    const example = exampleMap[policy.name] || "[REDACTED]";
-    const displayExample = example.replace(/\n/g, " ");
-    markdown += `| \`${policy.name}\` | \`${displayExample}\` |\n`;
+    for (const policy of policies) {
+      const example = exampleMap[policy.name] || "[REDACTED]";
+      const displayExample = example.replace(/\n/g, " ");
+      markdown += `| \`${policy.name}\` | \`${displayExample}\` |\n`;
+    }
+    markdown += `\n`;
   }
-  markdown += `\n`;
+
+  const outputPath = join(process.cwd(), "docs", "api", "policies.md");
+  writeFileSync(outputPath, markdown);
+
+  console.log(`Generated policies documentation at ${outputPath}`);
+  console.log(`Total policies: ${POLICIES.length}`);
+  console.log(`Categories: ${sortedCategories.length}`);
 }
 
-const outputPath = join(process.cwd(), "docs", "api", "policies.md");
-writeFileSync(outputPath, markdown);
+interface TestCase {
+  policyName: string;
+  category: PolicyCategory;
+  replacement: string;
+  testCases: string[];
+}
 
-console.log(`Generated policies documentation at ${outputPath}`);
-console.log(`Total policies: ${POLICIES.length}`);
-console.log(`Categories: ${sortedCategories.length}`);
+function extractTestCases(): TestCase[] {
+  const testCases: TestCase[] = [];
+  const testsDir = join(process.cwd(), "tests", "categories");
+  const testFiles = readdirSync(testsDir).filter((f) => f.endsWith(".test.ts"));
+
+  for (const file of testFiles) {
+    const filePath = join(testsDir, file);
+    const content = readFileSync(filePath, "utf-8");
+    const policyMatches = content.matchAll(
+      /describe\("([A-Z_]+)",\s*\(\)\s*=>\s*\{[\s\S]*?testPolicySuite\(\{[\s\S]*?policyName:\s*"([A-Z_]+)",[\s\S]*?replacement:\s*"([^"]+)",[\s\S]*?shouldMatch:\s*\[([\s\S]*?)\]/g
+    );
+
+    for (const match of policyMatches) {
+      const policyName = match[2];
+      const replacement = match[3];
+      const shouldMatchStr = match[4];
+
+      if (!policyName || !replacement || !shouldMatchStr) {
+        continue;
+      }
+
+      const policy = POLICIES.find((p) => p.name === policyName);
+
+      if (!policy) {
+        continue;
+      }
+
+      const testCaseMatches = shouldMatchStr.matchAll(
+        /"([^"\\]*(\\.[^"\\]*)*)"/g
+      );
+      const cases = Array.from(testCaseMatches).map((m) => {
+        const captured = m[1];
+
+        return captured ? captured.replace(/\\"/g, '"') : "";
+      });
+
+      testCases.push({
+        policyName,
+        category: policy.category,
+        replacement,
+        testCases: cases,
+      });
+    }
+  }
+
+  return testCases;
+}
+
+function generateTestCasesDocumentation(): void {
+  const testCases = extractTestCases();
+  const testCasesByCategory = testCases.reduce((acc, tc) => {
+    if (!acc[tc.category]) {
+      acc[tc.category] = [];
+    }
+    acc[tc.category]!.push(tc);
+
+    return acc;
+  }, {} as Record<string, TestCase[]>);
+
+  const sortedTestCategories = categoryOrder
+    .filter((cat) => testCasesByCategory[cat])
+    .map((cat) => [cat, testCasesByCategory[cat]!] as const);
+
+  let testMarkdown = `---
+search: false
+---
+
+# Test Cases
+
+<TestCaseStats />
+
+Auto-generated from the test suites. All tests pass, ensuring pattern accuracy and comprehensive coverage.
+
+`;
+
+  let totalTestCases = 0;
+
+  for (const [category, tests] of sortedTestCategories) {
+    const displayName = getCategoryDisplayName(category as PolicyCategory);
+    const kebabCategory = category.toLowerCase().replace(/_/g, "-");
+    const categoryLink = `/api/test-cases/${kebabCategory}`;
+
+    let categoryTestCount = 0;
+    for (const test of tests) {
+      categoryTestCount += test.testCases.length;
+    }
+    totalTestCases += categoryTestCount;
+
+    testMarkdown += `- [${displayName}](${categoryLink}) (${categoryTestCount} test cases)\n`;
+
+    let categoryMarkdown = `---
+prev: false
+next: false
+search: false
+---
+
+# ${displayName} Test Cases
+
+[← Back to Test Cases](/api/test-cases)
+
+This page shows ${categoryTestCount} test cases that validate ${displayName} patterns.
+
+| Policy | Test Case |
+|--------|-----------|
+`;
+
+    for (const test of tests) {
+      for (const testCase of test.testCases) {
+        const displayTestCase = testCase.replace(/\n/g, " ");
+        categoryMarkdown += `| \`${test.policyName}\` | \`${displayTestCase}\` |\n`;
+      }
+    }
+
+    const categoryDir = join(process.cwd(), "docs", "api", "test-cases");
+    mkdirSync(categoryDir, { recursive: true });
+    const categoryOutputPath = join(categoryDir, `${kebabCategory}.md`);
+    writeFileSync(categoryOutputPath, categoryMarkdown);
+  }
+
+  const testOutputPath = join(process.cwd(), "docs", "api", "test-cases.md");
+  writeFileSync(testOutputPath, testMarkdown);
+
+  const testStatsPath = join(process.cwd(), "test-case-statistics.json");
+  const testStats = {
+    totalTestCases,
+    totalCategories: sortedTestCategories.length,
+    lastUpdated: new Date().toISOString(),
+  };
+  writeFileSync(testStatsPath, `${JSON.stringify(testStats, null, 2)}\n`);
+
+  console.log(`Generated test cases documentation at ${testOutputPath}`);
+  console.log(`Total test cases: ${totalTestCases}`);
+  console.log(`Test categories: ${sortedTestCategories.length}`);
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  generatePoliciesDocumentation();
+  generateTestCasesDocumentation();
+}

@@ -1,42 +1,43 @@
-import { describe, it, expect } from "vitest";
-import { POLICIES } from "../../src/constants.js";
+import { describe } from "vitest";
+import {
+  testPolicySuite,
+  testCategoryCoverage,
+} from "../policy-test-helpers.js";
 import { PolicyCategory } from "../../src/types/index.js";
 
 describe("email patterns", () => {
-  const emailPatterns = POLICIES.filter(
-    (p) => p.category === PolicyCategory.EMAIL,
-  );
-
-  it("should have email patterns", () => {
-    expect(emailPatterns.length).toBeGreaterThan(0);
-  });
+  testCategoryCoverage(PolicyCategory.EMAIL, ["EMAIL_ADDRESS"]);
 
   describe("EMAIL_ADDRESS", () => {
-    const pattern = emailPatterns.find((p) => p.name === "EMAIL_ADDRESS");
-
-    it("should detect standard email addresses", () => {
-      expect(pattern).toBeTruthy();
-      expect("john@example.com".match(pattern!.pattern)).toBeTruthy();
-      expect("user.name@domain.co.uk".match(pattern!.pattern)).toBeTruthy();
-      expect("test+tag@example.org".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should detect emails with numbers", () => {
-      expect(pattern).toBeTruthy();
-      expect("user123@test456.com".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should detect emails with special characters", () => {
-      expect(pattern).toBeTruthy();
-      expect("user.name+tag@example.com".match(pattern!.pattern)).toBeTruthy();
-      expect("first_last@company.co".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should not match invalid emails", () => {
-      expect(pattern).toBeTruthy();
-      expect("not-an-email".match(pattern!.pattern)).toBeFalsy();
-      expect("@example.com".match(pattern!.pattern)).toBeFalsy();
-      expect("user@".match(pattern!.pattern)).toBeFalsy();
+    testPolicySuite({
+      policyName: "EMAIL_ADDRESS",
+      replacement: "[EMAIL]",
+      shouldMatch: [
+        "john@example.com",
+        "user.name@domain.co.uk",
+        "test+tag@example.org",
+        "user123@test456.com",
+        "user.name+tag@example.com",
+        "first_last@company.co",
+        "user+filter@subdomain.example.com",
+        "123@example.co.jp",
+        "test.user_name@my-domain.org",
+        "info@company.museum",
+        "admin@localhost.local",
+      ],
+      shouldNotMatch: [
+        "not-an-email",
+        "@example.com",
+        "user@",
+        "regular text",
+        "user example.com",
+        "user@.com",
+        "user@domain",
+        "user@@example.com",
+        "@",
+        "user@domain.",
+        "a@b.c",
+      ],
     });
   });
 });

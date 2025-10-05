@@ -1,13 +1,22 @@
 import { describe, it, expect } from "vitest";
 import type { Policy, RedactumOptions } from "../../src/types/index.js";
 import { PolicyCategory } from "../../src/types/index.js";
-import { redactumValidateOptions, redactumValidatePolicy } from "../../src/utils/validation.js";
+import {
+  redactumValidateOptions,
+  redactumValidatePolicy,
+} from "../../src/utils/validation.js";
 
 describe("validation utilities", () => {
   describe("redactumValidateOptions", () => {
     it("should validate correct options", () => {
       const options: RedactumOptions = {
-        policies: ["EMAIL_ADDRESS", "PHONE_NUMBER_US", "PHONE_NUMBER_UK", "PHONE_NUMBER_CANADIAN", "PHONE_NUMBER_INTERNATIONAL"],
+        policies: [
+          "EMAIL_ADDRESS",
+          "PHONE_NUMBER_US",
+          "PHONE_NUMBER_UK",
+          "PHONE_NUMBER_CANADIAN",
+          "PHONE_NUMBER_INTERNATIONAL",
+        ],
         replacement: "[REDACTED]",
         preserveLength: true,
         excludePatterns: [{ pattern: /test/ }],
@@ -21,7 +30,9 @@ describe("validation utilities", () => {
         policies: ["INVALID" as any],
       };
 
-      expect(() => redactumValidateOptions(options)).toThrow("Invalid policy name: INVALID");
+      expect(() => redactumValidateOptions(options)).toThrow(
+        "Invalid policy name: INVALID"
+      );
     });
 
     it("should throw for invalid replacement type", () => {
@@ -29,7 +40,9 @@ describe("validation utilities", () => {
         replacement: 123 as any,
       };
 
-      expect(() => redactumValidateOptions(options)).toThrow("Replacement must be a string or function");
+      expect(() => redactumValidateOptions(options)).toThrow(
+        "Replacement must be a string or function"
+      );
     });
 
     it("should throw for invalid exclude pattern object", () => {
@@ -37,7 +50,9 @@ describe("validation utilities", () => {
         excludePatterns: ["not-a-regex" as any],
       };
 
-      expect(() => redactumValidateOptions(options)).toThrow("Exclude pattern must have a valid RegExp pattern");
+      expect(() => redactumValidateOptions(options)).toThrow(
+        "Exclude pattern must have a valid RegExp pattern"
+      );
     });
 
     it("should accept object-based exclude patterns with policies", () => {
@@ -75,7 +90,9 @@ describe("validation utilities", () => {
         ],
       };
 
-      expect(() => redactumValidateOptions(options)).toThrow("Exclude pattern must have a valid RegExp pattern");
+      expect(() => redactumValidateOptions(options)).toThrow(
+        "Exclude pattern must have a valid RegExp pattern"
+      );
     });
 
     it("should throw for exclude pattern with invalid policy name", () => {
@@ -88,7 +105,9 @@ describe("validation utilities", () => {
         ],
       };
 
-      expect(() => redactumValidateOptions(options)).toThrow("Invalid policy name in exclude pattern: INVALID_POLICY");
+      expect(() => redactumValidateOptions(options)).toThrow(
+        "Invalid policy name in exclude pattern: INVALID_POLICY"
+      );
     });
 
     it("should throw for exclude pattern with non-array policies", () => {
@@ -101,7 +120,9 @@ describe("validation utilities", () => {
         ],
       };
 
-      expect(() => redactumValidateOptions(options)).toThrow("Exclude pattern policies must be an array");
+      expect(() => redactumValidateOptions(options)).toThrow(
+        "Exclude pattern policies must be an array"
+      );
     });
 
     it("should accept mixed global and specific exclude patterns", () => {
@@ -146,7 +167,9 @@ describe("validation utilities", () => {
         category: PolicyCategory.CUSTOM,
       };
 
-      expect(() => redactumValidatePolicy(pattern)).toThrow("Pattern must have a valid name");
+      expect(() => redactumValidatePolicy(pattern)).toThrow(
+        "Pattern must have a valid name"
+      );
     });
 
     it("should throw for invalid pattern", () => {
@@ -156,7 +179,9 @@ describe("validation utilities", () => {
         category: PolicyCategory.CUSTOM,
       };
 
-      expect(() => redactumValidatePolicy(pattern)).toThrow('Pattern "Test" must have a valid RegExp pattern');
+      expect(() => redactumValidatePolicy(pattern)).toThrow(
+        'Pattern "Test" must have a valid RegExp pattern'
+      );
     });
 
     it("should throw for invalid category", () => {
@@ -166,7 +191,9 @@ describe("validation utilities", () => {
         category: "INVALID" as any,
       };
 
-      expect(() => redactumValidatePolicy(pattern)).toThrow('Pattern "Test" has invalid category: INVALID');
+      expect(() => redactumValidatePolicy(pattern)).toThrow(
+        'Pattern "Test" has invalid category: INVALID'
+      );
     });
 
     it("should throw for invalid replacement type", () => {
@@ -177,7 +204,9 @@ describe("validation utilities", () => {
         replacement: 123 as any,
       };
 
-      expect(() => redactumValidatePolicy(pattern)).toThrow('Pattern "Test" replacement must be a string');
+      expect(() => redactumValidatePolicy(pattern)).toThrow(
+        'Pattern "Test" replacement must be a string'
+      );
     });
   });
 });
