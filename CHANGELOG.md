@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [1.0.7](https://github.com/alexwhin/redactum/compare/v1.0.6...v1.0.7) (2025-10-05)
+
+### Tests
+
+* improve test clarity with inline comments across patterns ([d09e8db](https://github.com/alexwhin/redactum/commit/d09e8db0155f7bc613a5f4512633f08b654149d4))
+
 ## [1.0.6](https://github.com/alexwhin/redactum/compare/v1.0.5...v1.0.6) (2025-10-05)
 
 ### Code Refactoring
