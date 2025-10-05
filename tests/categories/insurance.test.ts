@@ -36,11 +36,14 @@ describe("INSURANCE category", () => {
       policyName: "AUTO_INSURANCE_POLICY",
       replacement: "[AUTO_POLICY]",
       shouldMatch: [
-        "Auto policy: AUTO123456",
-        "Car policy: CAR987654321",
-        "vehicle pol: VEH123456",
+        "Auto policy: AUTO123456", // Auto insurance policy number
+        "Car policy: CAR987654321", // Car insurance policy
+        "vehicle pol: VEH123456", // Vehicle policy abbreviation
       ],
-      shouldNotMatch: ["auto insurance", "invalid"],
+      shouldNotMatch: [
+        "auto insurance", // Missing policy number
+        "invalid", // No auto policy pattern
+      ],
     });
   });
 
@@ -49,11 +52,14 @@ describe("INSURANCE category", () => {
       policyName: "HOME_INSURANCE_POLICY",
       replacement: "[HOME_POLICY]",
       shouldMatch: [
-        "Home policy #: HOME123456",
-        "Property policy: PROP987654",
-        "house pol: HOU123456",
+        "Home policy #: HOME123456", // Home insurance with hash
+        "Property policy: PROP987654", // Property insurance
+        "house pol: HOU123456", // House policy abbreviation
       ],
-      shouldNotMatch: ["home insurance", "invalid"],
+      shouldNotMatch: [
+        "home insurance", // Missing policy number
+        "invalid", // No home policy pattern
+      ],
     });
   });
 
@@ -61,8 +67,13 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "LIFE_INSURANCE_POLICY",
       replacement: "[LIFE_POLICY]",
-      shouldMatch: ["Life policy: LIFE123456"],
-      shouldNotMatch: ["life insurance", "invalid"],
+      shouldMatch: [
+        "Life policy: LIFE123456", // Life insurance policy number
+      ],
+      shouldNotMatch: [
+        "life insurance", // Missing policy number
+        "invalid", // No life policy pattern
+      ],
     });
   });
 
@@ -70,8 +81,13 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "TRAVEL_INSURANCE_POLICY",
       replacement: "[TRAVEL_POLICY]",
-      shouldMatch: ["Travel policy: TRAV123456"],
-      shouldNotMatch: ["travel insurance", "invalid"],
+      shouldMatch: [
+        "Travel policy: TRAV123456", // Travel insurance policy number
+      ],
+      shouldNotMatch: [
+        "travel insurance", // Missing policy number
+        "invalid", // No travel policy pattern
+      ],
     });
   });
 
@@ -79,8 +95,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "WORKERS_COMPENSATION_CLAIM",
       replacement: "[WC_CLAIM]",
-      shouldMatch: ["Workers comp claim: WC123456", "wc clm: WC987654"],
-      shouldNotMatch: ["workers compensation", "invalid"],
+      shouldMatch: [
+        "Workers comp claim: WC123456", // Workers comp claim number
+        "wc clm: WC987654", // WC claim abbreviation
+      ],
+      shouldNotMatch: [
+        "workers compensation", // Missing claim number
+        "invalid", // No WC claim pattern
+      ],
     });
   });
 
@@ -88,8 +110,13 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "DISABILITY_INSURANCE_POLICY",
       replacement: "[DISABILITY_POLICY]",
-      shouldMatch: ["Disability policy: DIS123456"],
-      shouldNotMatch: ["disability insurance", "invalid"],
+      shouldMatch: [
+        "Disability policy: DIS123456", // Disability insurance policy
+      ],
+      shouldNotMatch: [
+        "disability insurance", // Missing policy number
+        "invalid", // No disability policy pattern
+      ],
     });
   });
 
@@ -97,8 +124,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "DENTAL_INSURANCE_POLICY",
       replacement: "[DENTAL_POLICY]",
-      shouldMatch: ["Dental policy: DENT123456", "dent pol: DEN987654"],
-      shouldNotMatch: ["dental insurance", "invalid"],
+      shouldMatch: [
+        "Dental policy: DENT123456", // Dental insurance policy
+        "dent pol: DEN987654", // Dental policy abbreviation
+      ],
+      shouldNotMatch: [
+        "dental insurance", // Missing policy number
+        "invalid", // No dental policy pattern
+      ],
     });
   });
 
@@ -106,8 +139,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "VISION_INSURANCE_POLICY",
       replacement: "[VISION_POLICY]",
-      shouldMatch: ["Vision policy: VIS123456", "vis pol: VIS987654"],
-      shouldNotMatch: ["vision insurance", "invalid"],
+      shouldMatch: [
+        "Vision policy: VIS123456", // Vision insurance policy
+        "vis pol: VIS987654", // Vision policy abbreviation
+      ],
+      shouldNotMatch: [
+        "vision insurance", // Missing policy number
+        "invalid", // No vision policy pattern
+      ],
     });
   });
 
@@ -115,8 +154,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "US_HEALTH_INSURANCE_POLICY",
       replacement: "[INSURANCE_POLICY]",
-      shouldMatch: ["policy: ABC123456789", "member: XYZ987654321"],
-      shouldNotMatch: ["policy: 123", "invalid"],
+      shouldMatch: [
+        "policy: ABC123456789", // US health insurance policy
+        "member: XYZ987654321", // US health member ID
+      ],
+      shouldNotMatch: [
+        "policy: 123", // Too short to be valid
+        "invalid", // No health policy pattern
+      ],
     });
   });
 
@@ -124,8 +169,13 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "US_INSURANCE_GROUP_NUMBER",
       replacement: "[INSURANCE_GROUP]",
-      shouldMatch: ["Group: GRP123456", "grp: GRP9876"],
-      shouldNotMatch: ["invalid"],
+      shouldMatch: [
+        "Group: GRP123456", // Insurance group number
+        "grp: GRP9876", // Group abbreviation
+      ],
+      shouldNotMatch: [
+        "invalid", // No group number pattern
+      ],
     });
   });
 
@@ -133,8 +183,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "US_INSURANCE_CLAIM_NUMBER",
       replacement: "[INSURANCE_CLAIM]",
-      shouldMatch: ["Claim #: CLM123456789", "clm: CLM987654321AB"],
-      shouldNotMatch: ["claim: 123", "invalid"],
+      shouldMatch: [
+        "Claim #: CLM123456789", // Insurance claim with hash
+        "clm: CLM987654321AB", // Claim abbreviation with alphanumeric
+      ],
+      shouldNotMatch: [
+        "claim: 123", // Too short to be valid
+        "invalid", // No claim number pattern
+      ],
     });
   });
 
@@ -142,8 +198,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "MEDICARE_NUMBER_US",
       replacement: "[MEDICARE_NUMBER]",
-      shouldMatch: ["123-45-6789-A1", "987-65-4321-B"],
-      shouldNotMatch: ["123-45-67890-A1", "invalid"],
+      shouldMatch: [
+        "123-45-6789-A1", // Medicare number with suffix
+        "987-65-4321-B", // Medicare with single letter suffix
+      ],
+      shouldNotMatch: [
+        "123-45-67890-A1", // Too many digits in third group
+        "invalid", // No Medicare pattern
+      ],
     });
   });
 
@@ -151,8 +213,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "MEDICAID_NUMBER_US",
       replacement: "[MEDICAID_NUMBER]",
-      shouldMatch: ["Medicaid: MCD123456789", "mcd: MCD987654321"],
-      shouldNotMatch: ["medicaid: 123", "invalid"],
+      shouldMatch: [
+        "Medicaid: MCD123456789", // Medicaid number
+        "mcd: MCD987654321", // Medicaid abbreviation
+      ],
+      shouldNotMatch: [
+        "medicaid: 123", // Too short to be valid
+        "invalid", // No Medicaid pattern
+      ],
     });
   });
 
@@ -160,8 +228,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "BCBS_MEMBER_ID",
       replacement: "[BCBS_MEMBER_ID]",
-      shouldMatch: ["BCBS: ABC123456789", "blue cross: XYZ987654321"],
-      shouldNotMatch: ["bcbs: 123", "invalid"],
+      shouldMatch: [
+        "BCBS: ABC123456789", // Blue Cross Blue Shield ID
+        "blue cross: XYZ987654321", // Full name member ID
+      ],
+      shouldNotMatch: [
+        "bcbs: 123", // Too short to be valid
+        "invalid", // No BCBS pattern
+      ],
     });
   });
 
@@ -169,8 +243,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "AETNA_MEMBER_ID",
       replacement: "[AETNA_MEMBER_ID]",
-      shouldMatch: ["Aetna: A123456789", "aetna: AB12345678"],
-      shouldNotMatch: ["aetna: 123", "invalid"],
+      shouldMatch: [
+        "Aetna: A123456789", // Aetna member ID
+        "aetna: AB12345678", // Aetna with alphanumeric
+      ],
+      shouldNotMatch: [
+        "aetna: 123", // Too short to be valid
+        "invalid", // No Aetna pattern
+      ],
     });
   });
 
@@ -178,8 +258,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "UNITEDHEALTH_MEMBER_ID",
       replacement: "[UHC_MEMBER_ID]",
-      shouldMatch: ["UHC: 123456789", "united: 987654321"],
-      shouldNotMatch: ["uhc: 12345678", "invalid"],
+      shouldMatch: [
+        "UHC: 123456789", // UnitedHealthcare 9 digit ID
+        "united: 987654321", // UHC with united label
+      ],
+      shouldNotMatch: [
+        "uhc: 12345678", // Too short 8 digits
+        "invalid", // No UHC pattern
+      ],
     });
   });
 
@@ -187,8 +273,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "UK_NHS_NUMBER",
       replacement: "[NHS_NUMBER]",
-      shouldMatch: ["123 456 7890", "9876543210"],
-      shouldNotMatch: ["123-456-7890", "invalid"],
+      shouldMatch: [
+        "123 456 7890", // UK NHS number with spaces
+        "9876543210", // UK NHS number no spaces
+      ],
+      shouldNotMatch: [
+        "123-456-7890", // Wrong separator dashes not spaces
+        "invalid", // No NHS pattern
+      ],
     });
   });
 
@@ -196,8 +288,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "CANADIAN_HEALTH_CARD",
       replacement: "[CA_HEALTH_CARD]",
-      shouldMatch: ["1234 567 890", "9876543210"],
-      shouldNotMatch: ["123 456 789", "invalid"],
+      shouldMatch: [
+        "1234 567 890", // Canadian health card with spaces
+        "9876543210", // Canadian health card no spaces
+      ],
+      shouldNotMatch: [
+        "123 456 789", // Too short 9 digits
+        "invalid", // No Canadian health card pattern
+      ],
     });
   });
 
@@ -205,8 +303,13 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "AUSTRALIAN_MEDICARE_NUMBER",
       replacement: "[AU_MEDICARE]",
-      shouldMatch: ["1234 56789 0"],
-      shouldNotMatch: ["1234 5678 9", "invalid"],
+      shouldMatch: [
+        "1234 56789 0", // Australian Medicare number
+      ],
+      shouldNotMatch: [
+        "1234 5678 9", // Wrong format missing digit
+        "invalid", // No Australian Medicare pattern
+      ],
     });
   });
 
@@ -214,8 +317,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "GERMAN_HEALTH_INSURANCE_NUMBER",
       replacement: "[DE_HEALTH_INSURANCE]",
-      shouldMatch: ["A123456789", "Z987654321"],
-      shouldNotMatch: ["12345678", "invalid"],
+      shouldMatch: [
+        "A123456789", // German health insurance with letter prefix
+        "Z987654321", // German health insurance Z prefix
+      ],
+      shouldNotMatch: [
+        "12345678", // Missing letter prefix
+        "invalid", // No German health insurance pattern
+      ],
     });
   });
 
@@ -223,8 +332,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "FRENCH_SOCIAL_SECURITY_NUMBER",
       replacement: "[FR_SOCIAL_SECURITY]",
-      shouldMatch: ["123456789012345", "298765432109876"],
-      shouldNotMatch: ["012345678901234", "invalid"],
+      shouldMatch: [
+        "123456789012345", // French social security 15 digits
+        "298765432109876", // French SSN starting with 2
+      ],
+      shouldNotMatch: [
+        "012345678901234", // Cannot start with 0
+        "invalid", // No French SSN pattern
+      ],
     });
   });
 
@@ -232,8 +347,14 @@ describe("INSURANCE category", () => {
     testPolicySuite({
       policyName: "EUROPEAN_HEALTH_INSURANCE_CARD",
       replacement: "[EHIC_NUMBER]",
-      shouldMatch: ["EHIC: 123456789012", "ehic: 9876543210123456"],
-      shouldNotMatch: ["ehic: 123", "invalid"],
+      shouldMatch: [
+        "EHIC: 123456789012", // European health insurance card 12 digits
+        "ehic: 9876543210123456", // EHIC 16 digits
+      ],
+      shouldNotMatch: [
+        "ehic: 123", // Too short to be valid
+        "invalid", // No EHIC pattern
+      ],
     });
   });
 });

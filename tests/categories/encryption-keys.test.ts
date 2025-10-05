@@ -22,16 +22,16 @@ describe("encryption keys patterns", () => {
       policyName: "SSH_KEY_FINGERPRINT",
       replacement: "[SSH_KEY_FINGERPRINT]",
       shouldMatch: [
-        "SHA256:1234567890abcdefghijklmnopqrstuvwxyz1234567",
-        "SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8",
-        "MD5:12:34:56:78:90:ab:cd:ef:12:34:56:78:90:ab:cd:ef",
-        "MD5:aa:bb:cc:dd:ee:ff:00:11:22:33:44:55:66:77:88:99",
+        "SHA256:1234567890abcdefghijklmnopqrstuvwxyz1234567", // SSH SHA256 fingerprint
+        "SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8", // SSH SHA256 base64 format
+        "MD5:12:34:56:78:90:ab:cd:ef:12:34:56:78:90:ab:cd:ef", // SSH MD5 fingerprint
+        "MD5:aa:bb:cc:dd:ee:ff:00:11:22:33:44:55:66:77:88:99", // SSH MD5 hex format
       ],
       shouldNotMatch: [
-        "SHA256:tooshort",
-        "MD5:invalid",
-        "SHA1:notasupportedformat",
-        "regular text",
+        "SHA256:tooshort", // SHA256 too short
+        "MD5:invalid", // Invalid MD5 format
+        "SHA1:notasupportedformat", // SHA1 not supported
+        "regular text", // No fingerprint pattern
       ],
     });
   });
@@ -41,14 +41,18 @@ describe("encryption keys patterns", () => {
       policyName: "PGP_KEY_ID",
       replacement: "[PGP_KEY_ID]",
       shouldMatch: [
-        "0x1234567890ABCDEF",
-        "0xABCDEF1234567890",
-        "1234567890ABCDEF",
-        "0x1234567890ABCDEF1234567890ABCDEF12345678",
-        "0x12345678",
-        "ABCDEF12",
+        "0x1234567890ABCDEF", // PGP key ID with 0x prefix 16 chars
+        "0xABCDEF1234567890", // PGP key ID hex format
+        "1234567890ABCDEF", // PGP key ID without prefix
+        "0x1234567890ABCDEF1234567890ABCDEF12345678", // Long PGP key ID 40 chars
+        "0x12345678", // Short PGP key ID 8 chars
+        "ABCDEF12", // Short PGP key without prefix
       ],
-      shouldNotMatch: ["0xGHIJKL", "0x123", "regular text"],
+      shouldNotMatch: [
+        "0xGHIJKL", // Invalid hex chars G-L
+        "0x123", // Too short less than 8 chars
+        "regular text", // No PGP key pattern
+      ],
     });
   });
 
@@ -57,14 +61,14 @@ describe("encryption keys patterns", () => {
       policyName: "AGE_SECRET_KEY",
       replacement: "[AGE_SECRET_KEY]",
       shouldMatch: [
-        "AGE-SECRET-KEY-1QYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQY",
-        "AGE-SECRET-KEY-1ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUV",
+        "AGE-SECRET-KEY-1QYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQYQSZQGPQY", // Age encryption secret key
+        "AGE-SECRET-KEY-1ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUV", // Age secret key alphanumeric
       ],
       shouldNotMatch: [
-        "AGE-SECRET-KEY-1TOOSHORT",
-        "AGE-SECRET-KEY-2WRONGPREFIX",
-        "age-secret-key-1lowercase",
-        "invalid",
+        "AGE-SECRET-KEY-1TOOSHORT", // Too short for valid age key
+        "AGE-SECRET-KEY-2WRONGPREFIX", // Wrong version prefix must be 1
+        "age-secret-key-1lowercase", // Must be uppercase
+        "invalid", // No age secret key pattern
       ],
     });
   });
@@ -74,14 +78,14 @@ describe("encryption keys patterns", () => {
       policyName: "AGE_PUBLIC_KEY",
       replacement: "[AGE_PUBLIC_KEY]",
       shouldMatch: [
-        "age1abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuv",
-        "age1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqy",
+        "age1abcdefghijklmnopqrstuvwxyz1234567890abcdefghijklmnopqrstuv", // Age encryption public key
+        "age1qyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqyqszqgpqy", // Age public key bech32 format
       ],
       shouldNotMatch: [
-        "age1UPPERCASE",
-        "age1tooshort",
-        "age2wrongprefix",
-        "invalid",
+        "age1UPPERCASE", // Must be lowercase
+        "age1tooshort", // Too short for valid age public key
+        "age2wrongprefix", // Wrong version must be age1
+        "invalid", // No age public key pattern
       ],
     });
   });
@@ -91,15 +95,15 @@ describe("encryption keys patterns", () => {
       policyName: "AWS_KMS_KEY_ID",
       replacement: "[KMS_KEY_ID]",
       shouldMatch: [
-        "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012",
-        "arn:aws:kms:eu-west-1:999999999999:key/abcdef01-2345-6789-abcd-ef0123456789",
-        "12345678-1234-1234-1234-123456789012",
-        "abcdef01-2345-6789-abcd-ef0123456789",
+        "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012", // AWS KMS ARN format
+        "arn:aws:kms:eu-west-1:999999999999:key/abcdef01-2345-6789-abcd-ef0123456789", // AWS KMS ARN EU region
+        "12345678-1234-1234-1234-123456789012", // AWS KMS key ID UUID only
+        "abcdef01-2345-6789-abcd-ef0123456789", // AWS KMS key ID hex format
       ],
       shouldNotMatch: [
-        "12345678-1234-1234-1234",
-        "GHIJKLMN-1234-1234-1234-123456789012",
-        "invalid",
+        "12345678-1234-1234-1234", // Incomplete UUID format
+        "GHIJKLMN-1234-1234-1234-123456789012", // Invalid hex chars in UUID
+        "invalid", // No AWS KMS key pattern
       ],
     });
   });
@@ -109,13 +113,13 @@ describe("encryption keys patterns", () => {
       policyName: "GCP_KMS_KEY",
       replacement: "[GCP_KMS_KEY]",
       shouldMatch: [
-        "projects/my-project/locations/us-central1/keyRings/my-keyring/cryptoKeys/my-key",
-        "projects/test-123/locations/europe-west1/keyRings/prod-ring/cryptoKeys/encryption-key",
+        "projects/my-project/locations/us-central1/keyRings/my-keyring/cryptoKeys/my-key", // GCP KMS full resource path
+        "projects/test-123/locations/europe-west1/keyRings/prod-ring/cryptoKeys/encryption-key", // GCP KMS EU region
       ],
       shouldNotMatch: [
-        "projects/my-project",
-        "projects/my-project/locations/us-central1",
-        "invalid",
+        "projects/my-project", // Missing locations and keys
+        "projects/my-project/locations/us-central1", // Missing keyRings and cryptoKeys
+        "invalid", // No GCP KMS key pattern
       ],
     });
   });
@@ -125,13 +129,13 @@ describe("encryption keys patterns", () => {
       policyName: "AZURE_KEY_IDENTIFIER",
       replacement: "[AZURE_KEY_ID]",
       shouldMatch: [
-        "https://myvault.vault.azure.net/keys/mykey/1234567890abcdef1234567890abcdef",
-        "https://prod-vault.vault.azure.net/keys/encryption-key/abcdef1234567890abcdef1234567890",
+        "https://myvault.vault.azure.net/keys/mykey/1234567890abcdef1234567890abcdef", // Azure Key Vault key identifier
+        "https://prod-vault.vault.azure.net/keys/encryption-key/abcdef1234567890abcdef1234567890", // Azure prod vault key
       ],
       shouldNotMatch: [
-        "https://myvault.vault.azure.net/secrets/mysecret/abc",
-        "https://myvault.vault.azure.net/keys/mykey",
-        "invalid",
+        "https://myvault.vault.azure.net/secrets/mysecret/abc", // Secret not key
+        "https://myvault.vault.azure.net/keys/mykey", // Missing version identifier
+        "invalid", // No Azure key identifier pattern
       ],
     });
   });
@@ -141,18 +145,18 @@ describe("encryption keys patterns", () => {
       policyName: "MASTER_KEY",
       replacement: "[MASTER_KEY]",
       shouldMatch: [
-        "master_key: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY3ODkwYWJjZGVmZ2g=",
-        "master-key: dGhpc2lzYXNlY3JldGtleXRoYXRzaG91bGRiZXJlZGFjdGVk",
-        "master_key=YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY3ODkw",
-        "encryption_key: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY3ODkwYWJjZGVmZ2g=",
-        "encryption-key=dGhpc2lzYXNlY3JldGtleXRoYXRzaG91bGRiZXJlZGFjdGVk",
-        "secret_key: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY3ODkwYWJjZGVmZ2g=",
-        "secret-key=dGhpc2lzYXNlY3JldGtleXRoYXRzaG91bGRiZXJlZGFjdGVk",
+        "master_key: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY3ODkwYWJjZGVmZ2g=", // Master key base64 encoded
+        "master-key: dGhpc2lzYXNlY3JldGtleXRoYXRzaG91bGRiZXJlZGFjdGVk", // Master key hyphen format
+        "master_key=YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY3ODkw", // Master key assignment format
+        "encryption_key: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY3ODkwYWJjZGVmZ2g=", // Encryption key base64
+        "encryption-key=dGhpc2lzYXNlY3JldGtleXRoYXRzaG91bGRiZXJlZGFjdGVk", // Encryption key assignment
+        "secret_key: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY3ODkwYWJjZGVmZ2g=", // Secret key base64
+        "secret-key=dGhpc2lzYXNlY3JldGtleXRoYXRzaG91bGRiZXJlZGFjdGVk", // Secret key hyphen assignment
       ],
       shouldNotMatch: [
-        "master_key: short",
-        "encryption_key: abc123",
-        "invalid",
+        "master_key: short", // Too short not base64
+        "encryption_key: abc123", // Too short to be valid
+        "invalid", // No master key pattern
       ],
     });
   });

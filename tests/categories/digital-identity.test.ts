@@ -19,10 +19,25 @@ describe("digital identity patterns", () => {
       policyName: "UUID",
       replacement: "[UUID]",
       shouldMatch: [
-        "550e8400-e29b-41d4-a716-446655440000",
-        "123e4567-e89b-12d3-a456-426614174000",
+        "550e8400-e29b-41d4-a716-446655440000", // UUID v4 (random)
+        "123e4567-e89b-12d3-a456-426614174000", // UUID v1 (timestamp-based)
+        "6ba7b810-9dad-11d1-80b4-00c04fd430c8", // UUID v1 namespace
+        "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11", // UUID v4 lowercase
+        "A0EEBC99-9C0B-4EF8-BB6D-6BB9BD380A11", // UUID v4 uppercase
+        "Request ID: 550e8400-e29b-41d4-a716-446655440000", // in sentence
+        "user_id=123e4567-e89b-12d3-a456-426614174000", // as parameter
+        "{550e8400-e29b-41d4-a716-446655440000}", // braces wrapped
+        "urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6", // URN format
+        "123e4567-e89b-12d3-a456-426614174000-extra", // UUID with suffix (matches the UUID part)
       ],
-      shouldNotMatch: ["not-a-uuid", "123e4567-e89b-12d3-a456"],
+      shouldNotMatch: [
+        "not-a-uuid", // plain text
+        "123e4567-e89b-12d3-a456", // too short (missing segment)
+        "123e4567-e89b-12d3-a456-42661417400g", // invalid hex char
+        "123e4567e89b12d3a456426614174000", // no hyphens
+        "550e8400-e29b-41d4-a716", // partial UUID
+        "00000000-0000-0000-0000-000000000000", // nil UUID (version 0 and variant 0 don't match pattern)
+      ],
     });
   });
 
@@ -127,15 +142,26 @@ describe("digital identity patterns", () => {
       policyName: "SHA_HASH",
       replacement: "[HASH]",
       shouldMatch: [
-        "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12",
-        "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae",
-        "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b",
+        "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12", // SHA-1 hash (40 chars)
+        "da39a3ee5e6b4b0d3255bfef95601890afd80709", // SHA-1 of empty string
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", // SHA-256 hash (64 chars)
+        "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae", // SHA-256 (foo)
+        "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b", // SHA-384 hash (96 chars)
+        "Commit hash: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12", // in sentence with label
+        "SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", // with prefix
+        "File integrity: 2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae.", // trailing period
+        "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855", // uppercase SHA-256
       ],
       shouldNotMatch: [
-        "tooshort",
-        "GHIJKLMNOPQRSTUVWXYZ1234567890123456789012",
+        "tooshort", // too short to be any SHA hash
+        "GHIJKLMNOPQRSTUVWXYZ1234567890123456789012", // invalid hex characters
+        "2fd4e1c67a2d28fced849ee1bb76e7391b93eb1", // 39 chars (not valid SHA-1)
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b85", // 63 chars (not valid SHA-256)
+        "38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95", // 95 chars (not valid SHA-384)
+        "2fd4e1c67a2d28fced849ee1bb76e7391b93eb1g", // invalid hex char at end
+        "sha-hash-here", // plain text
+        "not-a-hash-value", // plain text
+        "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e", // SHA-512 hash (128 chars, not supported by pattern)
       ],
     });
   });

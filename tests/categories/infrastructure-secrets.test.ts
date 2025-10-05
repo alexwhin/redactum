@@ -24,9 +24,12 @@ describe("infrastructure secrets patterns", () => {
       policyName: "TERRAFORM_CLOUD_TOKEN",
       replacement: "[TERRAFORM_TOKEN]",
       shouldMatch: [
-        "12345678901234.atlasv1.123456789012345678901234567890123456789012345678901234",
+        "12345678901234.atlasv1.123456789012345678901234567890123456789012345678901234", // Terraform Cloud API token
       ],
-      shouldNotMatch: ["terraform-token", "invalid"],
+      shouldNotMatch: [
+        "terraform-token", // Missing atlasv1 format
+        "invalid", // No Terraform token pattern
+      ],
     });
   });
 
@@ -35,10 +38,13 @@ describe("infrastructure secrets patterns", () => {
       policyName: "HASHICORP_VAULT_TOKEN",
       replacement: "[VAULT_TOKEN]",
       shouldMatch: [
-        "vault-token: s.1234567890abcdefghijklmnop",
-        "vault_token: r.abcdefghijklmnop123456789012",
+        "vault-token: s.1234567890abcdefghijklmnop", // Vault service token format
+        "vault_token: r.abcdefghijklmnop123456789012", // Vault batch token format
       ],
-      shouldNotMatch: ["vault-token: short", "regular text"],
+      shouldNotMatch: [
+        "vault-token: short", // Too short to be valid
+        "regular text", // No Vault token pattern
+      ],
     });
   });
 
@@ -47,9 +53,12 @@ describe("infrastructure secrets patterns", () => {
       policyName: "AWS_SECRETS_MANAGER_ARN",
       replacement: "[AWS_SECRET_ARN]",
       shouldMatch: [
-        "arn:aws:secretsmanager:us-east-1:123456789012:secret:MySecret-abcdef",
+        "arn:aws:secretsmanager:us-east-1:123456789012:secret:MySecret-abcdef", // AWS Secrets Manager ARN
       ],
-      shouldNotMatch: ["arn:aws:secretsmanager:us-east-1", "invalid"],
+      shouldNotMatch: [
+        "arn:aws:secretsmanager:us-east-1", // Incomplete ARN missing secret
+        "invalid", // No AWS secret ARN pattern
+      ],
     });
   });
 
@@ -58,11 +67,11 @@ describe("infrastructure secrets patterns", () => {
       policyName: "AZURE_KEY_VAULT_SECRET",
       replacement: "[AZURE_VAULT_SECRET]",
       shouldMatch: [
-        "https://myvault.vault.azure.net/secrets/MySecret/1234567890abcdef1234567890abcdef",
+        "https://myvault.vault.azure.net/secrets/MySecret/1234567890abcdef1234567890abcdef", // Azure Key Vault secret URL
       ],
       shouldNotMatch: [
-        "https://myvault.vault.azure.net/secrets/MySecret",
-        "invalid",
+        "https://myvault.vault.azure.net/secrets/MySecret", // Missing version identifier
+        "invalid", // No Azure vault secret pattern
       ],
     });
   });
@@ -72,10 +81,13 @@ describe("infrastructure secrets patterns", () => {
       policyName: "GCP_SECRET_MANAGER",
       replacement: "[GCP_SECRET]",
       shouldMatch: [
-        "projects/123456/secrets/my-secret/versions/latest",
-        "projects/my-project/secrets/db-password/versions/1",
+        "projects/123456/secrets/my-secret/versions/latest", // GCP Secret Manager latest version
+        "projects/my-project/secrets/db-password/versions/1", // GCP Secret Manager specific version
       ],
-      shouldNotMatch: ["projects/123456/secrets/my-secret", "invalid"],
+      shouldNotMatch: [
+        "projects/123456/secrets/my-secret", // Missing version path
+        "invalid", // No GCP secret pattern
+      ],
     });
   });
 
@@ -83,8 +95,13 @@ describe("infrastructure secrets patterns", () => {
     testPolicySuite({
       policyName: "KUBERNETES_CONFIG",
       replacement: "[KUBECONFIG]",
-      shouldMatch: ["apiVersion: v1\nkind: Config"],
-      shouldNotMatch: ["apiVersion: v1", "invalid"],
+      shouldMatch: [
+        "apiVersion: v1\nkind: Config", // Kubernetes config YAML
+      ],
+      shouldNotMatch: [
+        "apiVersion: v1", // Missing kind Config
+        "invalid", // No Kubernetes config pattern
+      ],
     });
   });
 
@@ -93,10 +110,13 @@ describe("infrastructure secrets patterns", () => {
       policyName: "HELM_REPOSITORY_CREDENTIALS",
       replacement: "[HELM_CREDENTIALS]",
       shouldMatch: [
-        "helm-repo-password: 1234567890abcdef",
-        "helm_repo_username: admin",
+        "helm-repo-password: 1234567890abcdef", // Helm repository password
+        "helm_repo_username: admin", // Helm repository username
       ],
-      shouldNotMatch: ["helm-password", "invalid"],
+      shouldNotMatch: [
+        "helm-password", // No repo prefix
+        "invalid", // No Helm credentials pattern
+      ],
     });
   });
 
@@ -105,10 +125,13 @@ describe("infrastructure secrets patterns", () => {
       policyName: "ANSIBLE_VAULT_PASSWORD",
       replacement: "[ANSIBLE_VAULT_PASSWORD]",
       shouldMatch: [
-        "ansible-vault-password-file: /path/to/vault-pass",
-        "ansible_vault_password: secret123",
+        "ansible-vault-password-file: /path/to/vault-pass", // Ansible vault password file path
+        "ansible_vault_password: secret123", // Ansible vault password value
       ],
-      shouldNotMatch: ["ansible-vault", "invalid"],
+      shouldNotMatch: [
+        "ansible-vault", // Missing password keyword
+        "invalid", // No Ansible vault pattern
+      ],
     });
   });
 
@@ -117,10 +140,13 @@ describe("infrastructure secrets patterns", () => {
       policyName: "CONSUL_TOKEN",
       replacement: "[CONSUL_TOKEN]",
       shouldMatch: [
-        "consul-token: 12345678-1234-1234-1234-123456789012",
-        "X-Consul-Token: abcdef01-2345-6789-abcd-ef0123456789",
+        "consul-token: 12345678-1234-1234-1234-123456789012", // Consul ACL token UUID
+        "X-Consul-Token: abcdef01-2345-6789-abcd-ef0123456789", // Consul HTTP header token
       ],
-      shouldNotMatch: ["consul-token: 12345678-1234", "invalid"],
+      shouldNotMatch: [
+        "consul-token: 12345678-1234", // Incomplete UUID format
+        "invalid", // No Consul token pattern
+      ],
     });
   });
 
@@ -128,8 +154,14 @@ describe("infrastructure secrets patterns", () => {
     testPolicySuite({
       policyName: "RANCHER_TOKEN",
       replacement: "[RANCHER_TOKEN]",
-      shouldMatch: ["token-12abc:12345", "rancher-token: token-xyz12:67890"],
-      shouldNotMatch: ["invalid-token", "test"],
+      shouldMatch: [
+        "token-12abc:12345", // Rancher API token format
+        "rancher-token: token-xyz12:67890", // Rancher labeled token
+      ],
+      shouldNotMatch: [
+        "invalid-token", // Missing colon separator
+        "test", // No Rancher token pattern
+      ],
     });
   });
 });

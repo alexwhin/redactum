@@ -4,7 +4,6 @@
 [![Codecov](https://img.shields.io/codecov/c/github/alexwhin/redactum?logo=codecov&color=f11f7a)](https://codecov.io/gh/alexwhin/redactum)
 [![Install Size](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fpackagephobia.com%2Fv2%2Fapi.json%3Fp%3Dredactum&query=$.install.pretty&label=size&color=2ea44f)](https://packagephobia.com/result?p=redactum)
 ![Build](https://img.shields.io/github/actions/workflow/status/alexwhin/redactum/pipeline.yml?branch=main&color=2ea44f)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## What It Does
 
