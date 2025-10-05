@@ -65,12 +65,6 @@ const DEFAULT_CATEGORIES: Record<
     replacement: "[DOB]",
     preserveFormat: false,
   },
-  [PolicyCategory.PERSON_NAME]: {
-    enabled: false,
-    mode: "replace",
-    replacement: "[NAME]",
-    preserveFormat: false,
-  },
   [PolicyCategory.GOVERNMENT_ID]: {
     enabled: true,
     mode: "replace",

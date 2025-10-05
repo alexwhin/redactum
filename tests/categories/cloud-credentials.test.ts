@@ -31,14 +31,6 @@ describe("cloud credentials patterns", () => {
     expect("dop_v1_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef".match(pattern!.pattern)).toBeTruthy();
   });
 
-  it("should detect Vercel tokens", () => {
-    const pattern = cloudPatterns.find(p => p.name === "VERCEL_TOKEN");
-    expect(pattern).toBeTruthy();
-
-    expect("abcdefghijklmnopqrstuvwx".match(pattern!.pattern)).toBeTruthy();
-    expect("1234567890ABCDEFGHIJKLMN".match(pattern!.pattern)).toBeTruthy();
-  });
-
   it("should detect Railway tokens", () => {
     const pattern = cloudPatterns.find(p => p.name === "RAILWAY_TOKEN");
     expect(pattern).toBeTruthy();
@@ -56,10 +48,8 @@ describe("cloud credentials patterns", () => {
   });
 
   it("should not have false positives", () => {
-    const vercelPattern = cloudPatterns.find(p => p.name === "VERCEL_TOKEN");
     const railwayPattern = cloudPatterns.find(p => p.name === "RAILWAY_TOKEN");
 
-    expect("vercel.com".match(vercelPattern!.pattern)).toBeFalsy();
     expect("railway.app".match(railwayPattern!.pattern)).toBeFalsy();
   });
 });

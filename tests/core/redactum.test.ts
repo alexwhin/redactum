@@ -14,7 +14,6 @@ describe("Redactum and Functional API", () => {
         IP: 192.168.1.1
         DOB: 01/15/1990
         Address: 123 Main Street
-        Name: John Doe
         API Key: sk-abcd1234567890abcdef1234567890abcdef123456
       `;
       const result = redactum(text);
@@ -25,9 +24,8 @@ describe("Redactum and Functional API", () => {
       expect(result.redactedText).toContain("[IP]");
       expect(result.redactedText).toContain("[DOB]");
       expect(result.redactedText).toContain("[ADDRESS]");
-      expect(result.redactedText).toContain("[NAME]");
       expect(result.redactedText).toContain("[OPENAI_KEY]");
-      expect(result.stats.totalFindings).toBeGreaterThanOrEqual(8);
+      expect(result.stats.totalFindings).toBeGreaterThanOrEqual(7);
     });
 
     it("should redact email addresses", () => {

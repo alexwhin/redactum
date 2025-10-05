@@ -61,7 +61,6 @@ describe("getDefaultConfig", () => {
     const lesseSensitiveCategories = [
       PolicyCategory.ADDRESS,
       PolicyCategory.DATE_OF_BIRTH,
-      PolicyCategory.PERSON_NAME,
       PolicyCategory.MEDICAL,
       PolicyCategory.GEOGRAPHIC,
       PolicyCategory.EMPLOYEE_ID,

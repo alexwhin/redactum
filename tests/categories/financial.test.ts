@@ -11,22 +11,6 @@ describe("financial patterns", () => {
     expect(financialPatterns.length).toBeGreaterThan(0);
   });
 
-  describe("BANK_ACCOUNT_US", () => {
-    const pattern = financialPatterns.find((p) => p.name === "BANK_ACCOUNT_US");
-
-    it("should detect US bank account numbers", () => {
-      expect(pattern).toBeTruthy();
-      expect("123456789012".match(pattern!.pattern)).toBeTruthy();
-      expect("12345678".match(pattern!.pattern)).toBeTruthy();
-      expect("1234567890123456".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should not match invalid account numbers", () => {
-      expect("1234567".match(pattern!.pattern)).toBeFalsy();
-      expect("123456789012345678".match(pattern!.pattern)).toBeFalsy();
-    });
-  });
-
   describe("ROUTING_NUMBER_US", () => {
     const pattern = financialPatterns.find(
       (p) => p.name === "ROUTING_NUMBER_US",

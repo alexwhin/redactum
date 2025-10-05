@@ -94,7 +94,6 @@ describe("constants", () => {
         PolicyCategory.PRIVATE_KEY,
         PolicyCategory.ADDRESS,
         PolicyCategory.DATE_OF_BIRTH,
-        PolicyCategory.PERSON_NAME,
         PolicyCategory.TAX_IDENTIFIER,
         PolicyCategory.INSURANCE,
         PolicyCategory.FINANCIAL,
@@ -226,7 +225,6 @@ describe("constants", () => {
     it("should include all categories except CUSTOM by default", () => {
       expect(DEFAULT_ENABLED_CATEGORIES).toContain(PolicyCategory.DATE_OF_BIRTH);
       expect(DEFAULT_ENABLED_CATEGORIES).toContain(PolicyCategory.ADDRESS);
-      expect(DEFAULT_ENABLED_CATEGORIES).toContain(PolicyCategory.PERSON_NAME);
       expect(DEFAULT_ENABLED_CATEGORIES).not.toContain(PolicyCategory.CUSTOM);
       
       const allCategoriesExceptCustom = Object.values(PolicyCategory).filter(c => c !== PolicyCategory.CUSTOM);

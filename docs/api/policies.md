@@ -60,7 +60,6 @@ From API keys and database credentials to personal information and financial dat
 | `AZURE_SUBSCRIPTION_ID` | `12345678-1234-1234-1234-123456789012` |
 | `HEROKU_API_KEY` | `12345678-1234-1234-1234-123456789012` |
 | `DIGITALOCEAN_TOKEN` | `dop_v1_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef` |
-| `VERCEL_TOKEN` | `1234567890abcdef12345678` |
 | `RAILWAY_TOKEN` | `12345678-1234-1234-1234-123456789012` |
 | `GCP_SERVICE_ACCOUNT_KEY` | `my-service-account@my-project.iam.gserviceaccount.com` |
 
@@ -232,13 +231,11 @@ From API keys and database credentials to personal information and financial dat
 |--------|---------------|
 | `MEDICAL_RECORD_NUMBER` | `MRN-123456` |
 | `HEALTH_INSURANCE_ID` | `Insurance HIB123456789` |
-| `NPI_NUMBER` | `1234567890` |
 
 ## Financial
 
 | Policy | Example Match |
 |--------|---------------|
-| `BANK_ACCOUNT_US` | `123456789012` |
 | `ROUTING_NUMBER_US` | `021000021` |
 | `IBAN` | `GB82WEST12345698765432` |
 | `SWIFT_CODE` | `BOFAUS3N` |
@@ -294,12 +291,6 @@ From API keys and database credentials to personal information and financial dat
 | `PHONE_NUMBER_CANADIAN` | `+1-416-555-0123` |
 | `PHONE_NUMBER_INTERNATIONAL` | `Call +14155551234` |
 | `PHONE_NUMBER_US` | `555-123-4567` |
-
-## Person Names
-
-| Policy | Example Match |
-|--------|---------------|
-| `PERSON_NAME` | `John Doe` |
 
 ## Dates of Birth
 

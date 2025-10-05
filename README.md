@@ -22,7 +22,7 @@ Fast, zero-dependency PII redaction library for TypeScript and JavaScript that a
 ## Installation
 
 ```bash
-npm install redactum
+pnpm install redactum
 ```
 
 ## Quick Start

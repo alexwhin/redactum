@@ -210,12 +210,6 @@ export const POLICIES: Policy[] = [
     replacement: "[ADDRESS]",
   },
   {
-    name: "PERSON_NAME",
-    pattern: /\b(?:[A-Z][a-z]+ ){1,3}[A-Z][a-z]+\b/g,
-    category: PolicyCategory.PERSON_NAME,
-    replacement: "[NAME]",
-  },
-  {
     name: "US_DRIVER_LICENSE",
     pattern: /\b[A-Z]{1,2}[0-9]{6,8}\b/g,
     category: PolicyCategory.GOVERNMENT_ID,
@@ -470,12 +464,6 @@ export const POLICIES: Policy[] = [
     replacement: "[VISION_POLICY]",
   },
   {
-    name: "BANK_ACCOUNT_US",
-    pattern: /\b[0-9]{8,17}\b/g,
-    category: PolicyCategory.FINANCIAL,
-    replacement: "[BANK_ACCOUNT]",
-  },
-  {
     name: "ROUTING_NUMBER_US",
     pattern: /\b[0-9]{9}\b/g,
     category: PolicyCategory.FINANCIAL,
@@ -504,12 +492,6 @@ export const POLICIES: Policy[] = [
     pattern: /\b(?:insurance|policy)[\s\-_#:]*([A-Z0-9]{8,15})\b/gi,
     category: PolicyCategory.MEDICAL,
     replacement: "[INSURANCE_ID]",
-  },
-  {
-    name: "NPI_NUMBER",
-    pattern: /\b[0-9]{10}\b/g,
-    category: PolicyCategory.MEDICAL,
-    replacement: "[NPI]",
   },
   {
     name: "BITCOIN_ADDRESS",
@@ -676,12 +658,6 @@ export const POLICIES: Policy[] = [
     pattern: /\bdop_v1_[a-f0-9]{64}\b/g,
     category: PolicyCategory.CLOUD_CREDENTIALS,
     replacement: "[DO_TOKEN]",
-  },
-  {
-    name: "VERCEL_TOKEN",
-    pattern: /\b[a-zA-Z0-9]{24}\b/g,
-    category: PolicyCategory.CLOUD_CREDENTIALS,
-    replacement: "[VERCEL_TOKEN]",
   },
   {
     name: "RAILWAY_TOKEN",

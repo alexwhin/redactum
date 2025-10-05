@@ -46,20 +46,6 @@ describe("medical patterns", () => {
     });
   });
 
-  describe("NPI_NUMBER", () => {
-    const pattern = medicalPatterns.find((p) => p.name === "NPI_NUMBER");
-
-    it("should detect NPI numbers", () => {
-      expect(pattern).toBeTruthy();
-      expect("1234567890".match(pattern!.pattern)).toBeTruthy();
-    });
-
-    it("should not match invalid NPI numbers", () => {
-      expect("123456789".match(pattern!.pattern)).toBeFalsy();
-      expect("12345678901".match(pattern!.pattern)).toBeFalsy();
-    });
-  });
-
   it("should not have false positives", () => {
     const mrnPattern = medicalPatterns.find(
       (p) => p.name === "MEDICAL_RECORD_NUMBER",
