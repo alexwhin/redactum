@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [1.0.6](https://github.com/alexwhin/redactum/compare/v1.0.5...v1.0.6) (2025-10-05)
+
+### Code Refactoring
+
+* remove problematic high-false-positive patterns ([1f67463](https://github.com/alexwhin/redactum/commit/1f67463ee4096cf7cb393ce3c60c5cbfb75e15ae))
+
+### Maintenance
+
+* streamline config examples and refresh documentation stats ([d717a5c](https://github.com/alexwhin/redactum/commit/d717a5c9cb3ea08aaa573083c29108c7aac7881f))
+
 ## [1.0.5](https://github.com/alexwhin/redactum/compare/v1.0.4...v1.0.5) (2025-10-05)
 
 ### Bug Fixes
