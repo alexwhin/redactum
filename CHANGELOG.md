@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [1.0.5](https://github.com/alexwhin/redactum/compare/v1.0.4...v1.0.5) (2025-10-05)
+
+### Bug Fixes
+
+* ensure statistics generation in all documentation workflows ([a4a9d59](https://github.com/alexwhin/redactum/commit/a4a9d59b49cb1d7133fc5c6d021994e416a24978))
+
+### Code Refactoring
+
+* optimize CI workflows and remove duplication ([0f057d1](https://github.com/alexwhin/redactum/commit/0f057d1f51e5aec631fc40085ec8b1ae7f3b19da))
+
+### Maintenance
+
+* add docs build to pre-commit and fix merge conflict ([2a073e2](https://github.com/alexwhin/redactum/commit/2a073e20f6a29ac6a9fc834da0e045df7b954d4d))
+
 ## [1.0.4](https://github.com/alexwhin/redactum/compare/v1.0.3...v1.0.4) (2025-10-04)
 
 ### Maintenance
