@@ -1,6 +1,6 @@
 {
   "name": "redactum",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Comprehensive PII redaction library for AI applications with framework adapters for LangChain, LlamaIndex, Haystack, OpenAI SDK, Anthropic SDK, and Vercel AI SDK",
   "type": "module",
   "main": "./dist/index.js",

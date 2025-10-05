@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [1.0.8](https://github.com/alexwhin/redactum/compare/v1.0.7...v1.0.8) (2025-10-05)
+
+### Maintenance
+
+* organize .gitignore, add .nvmrc, and update peer deps ([f9e3c69](https://github.com/alexwhin/redactum/commit/f9e3c693f2ee7b9500a770abc53c65910a6e852d))
+* update lockfile for peer dependency ranges ([4f8e5e6](https://github.com/alexwhin/redactum/commit/4f8e5e6929540e840f07a0f3a3192b2e7597f97c))
+
 ## [1.0.7](https://github.com/alexwhin/redactum/compare/v1.0.6...v1.0.7) (2025-10-05)
 
 ### Tests
