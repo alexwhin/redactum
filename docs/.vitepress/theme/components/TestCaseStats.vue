@@ -10,7 +10,11 @@ interface TestCaseStats {
 
 const stats = statsData as TestCaseStats;
 
-const totalTestCases = computed(() => stats.totalTestCases);
+function formatNumber(num: number): string {
+  return num.toLocaleString();
+}
+
+const totalTestCases = computed(() => formatNumber(stats.totalTestCases));
 const totalCategories = computed(() => stats.totalCategories);
 </script>
 

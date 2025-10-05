@@ -64,14 +64,14 @@ export const POLICIES: Policy[] = [
     name: "CREDIT_CARD",
     pattern:
       /\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12})\b/g,
-    category: PolicyCategory.CREDIT_CARD,
+    category: PolicyCategory.FINANCIAL,
     replacement: "[CREDIT_CARD]",
   },
   {
     name: "CREDIT_CARD_WITH_SEPARATORS",
     pattern:
       /\b(?:4\d{3}[-\s]\d{4}[-\s]\d{4}[-\s]\d{4}|5[1-5]\d{2}[-\s]\d{4}[-\s]\d{4}[-\s]\d{4}|3[47]\d{2}[-\s]\d{6}[-\s]\d{5}|3(?:0[0-5]|[68]\d)\d[-\s]\d{6}[-\s]\d{4}|6(?:011|5\d{2})[-\s]\d{4}[-\s]\d{4}[-\s]\d{4})\b/g,
-    category: PolicyCategory.CREDIT_CARD,
+    category: PolicyCategory.FINANCIAL,
     replacement: "[CREDIT_CARD]",
   },
   {
@@ -215,6 +215,19 @@ export const POLICIES: Policy[] = [
       /\b(?:national[\s_-]?id|citizen[\s_-]?id)[\s\-_#:]*([A-Z0-9]{8,15})\b/gi,
     category: PolicyCategory.GOVERNMENT_ID,
     replacement: "[NATIONAL_ID]",
+  },
+  {
+    name: "PASSPORT_MRZ",
+    pattern:
+      /P<[A-Z]{3}[A-Z<]{38,}\r?\n[A-Z0-9<]{9,}[0-9][A-Z]{3}[0-9]{6,7}[MF<][0-9]{6,7}[A-Z0-9<]{14,}[0-9]{2}/g,
+    category: PolicyCategory.GOVERNMENT_ID,
+    replacement: "[PASSPORT_MRZ]",
+  },
+  {
+    name: "ITIN",
+    pattern: /\b9[0-9]{2}-[7][0-9]-[0-9]{4}\b/g,
+    category: PolicyCategory.GOVERNMENT_ID,
+    replacement: "[ITIN]",
   },
   {
     name: "US_EIN_WITH_LABEL",
@@ -469,6 +482,26 @@ export const POLICIES: Policy[] = [
     replacement: "[SWIFT]",
   },
   {
+    name: "ACCOUNT_NUMBER_US",
+    pattern:
+      /\b(?:account(?:\s+number)?|acct(?:\s+num)?|acc(?:\s+no)?)[:\s#]+([0-9]{8,17})\b/gi,
+    category: PolicyCategory.FINANCIAL,
+    replacement: "[ACCOUNT_NUMBER]",
+  },
+  {
+    name: "ACH_ROUTING_NUMBER",
+    pattern:
+      /\b(?:routing(?:\s+number)?|aba|rtn)[:\s#]+([0-9]{9})\b|\b0[0-9]{8}\b/gi,
+    category: PolicyCategory.FINANCIAL,
+    replacement: "[ROUTING_NUMBER]",
+  },
+  {
+    name: "CREDIT_CARD_CVV",
+    pattern: /\b(?:cvv|cvc|cid|cvv2)[:\s#]*([0-9]{3,4})\b/gi,
+    category: PolicyCategory.FINANCIAL,
+    replacement: "[CVV]",
+  },
+  {
     name: "MEDICAL_RECORD_NUMBER",
     pattern: /\b(?:MRN|mrn)[\s\-_#:]*([A-Z0-9]{6,12})\b/gi,
     category: PolicyCategory.MEDICAL,
@@ -578,6 +611,12 @@ export const POLICIES: Policy[] = [
     replacement: "[SENDGRID_API_KEY]",
   },
   {
+    name: "CLOUDFLARE_API_TOKEN",
+    pattern: /\b[a-zA-Z0-9_-]{40}\b/g,
+    category: PolicyCategory.API_KEY,
+    replacement: "[CLOUDFLARE_TOKEN]",
+  },
+  {
     name: "AZURE_SUBSCRIPTION_ID",
     pattern:
       /\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/gi,
@@ -640,6 +679,25 @@ export const POLICIES: Policy[] = [
     pattern: /\b[a-z0-9_-]+@[a-z0-9_-]+\.iam\.gserviceaccount\.com\b/gi,
     category: PolicyCategory.CLOUD_CREDENTIALS,
     replacement: "[GCP_SERVICE_ACCOUNT]",
+  },
+  {
+    name: "AWS_ACCOUNT_ID",
+    pattern: /\b(?:aws(?:-|_)?account(?:-|_)?id)[:\s#]+([0-9]{12})\b/gi,
+    category: PolicyCategory.CLOUD_CREDENTIALS,
+    replacement: "[AWS_ACCOUNT_ID]",
+  },
+  {
+    name: "GCP_API_KEY",
+    pattern: /\bAIza[0-9A-Za-z_-]{35}\b/g,
+    category: PolicyCategory.CLOUD_CREDENTIALS,
+    replacement: "[GCP_API_KEY]",
+  },
+  {
+    name: "AZURE_STORAGE_CONNECTION_STRING",
+    pattern:
+      /\bDefaultEndpointsProtocol=https;AccountName=[^;]+;AccountKey=[A-Za-z0-9+/=]{88};EndpointSuffix=[^\s;]+\b/g,
+    category: PolicyCategory.CLOUD_CREDENTIALS,
+    replacement: "[AZURE_STORAGE_CONNECTION]",
   },
   {
     name: "MONGODB_CONNECTION_STRING",
@@ -973,6 +1031,32 @@ export const POLICIES: Policy[] = [
     replacement: "[OAUTH_ACCESS_TOKEN]",
   },
   {
+    name: "BASIC_AUTH_HEADER",
+    pattern: /\bAuthorization:\s*Basic\s+([A-Za-z0-9+/]+=*)\b/g,
+    category: PolicyCategory.AUTH_SECRETS,
+    replacement: "Authorization: Basic [REDACTED]",
+  },
+  {
+    name: "BEARER_TOKEN_HEADER",
+    pattern: /\bAuthorization:\s*Bearer\s+([A-Za-z0-9._~+/-]+=*)\b/g,
+    category: PolicyCategory.AUTH_SECRETS,
+    replacement: "Authorization: Bearer [REDACTED]",
+  },
+  {
+    name: "API_KEY_HEADER",
+    pattern:
+      /\b(?:X-API-Key|API-Key|X-Api-Key|ApiKey):\s*([A-Za-z0-9._~+/-]{20,})\b/g,
+    category: PolicyCategory.AUTH_SECRETS,
+    replacement: "[API_KEY_HEADER]: [REDACTED]",
+  },
+  {
+    name: "SESSION_ID_COOKIE",
+    pattern:
+      /\b(?:sessionid|PHPSESSID|JSESSIONID|connect\.sid|express\.sid)=([A-Za-z0-9._~+/%-]{20,})\b/gi,
+    category: PolicyCategory.AUTH_SECRETS,
+    replacement: "[SESSION_COOKIE]=[REDACTED]",
+  },
+  {
     name: "QUAY_IO_TOKEN",
     pattern:
       /\bquay\.io[\s_-]?(?:token|robot)[\s:#=-]*([a-zA-Z0-9+/=]{40,})\b/gi,
@@ -1089,6 +1173,19 @@ export const POLICIES: Policy[] = [
     name: "CASSANDRA_CONNECTION_STRING",
     pattern:
       /\b(cassandra:\/\/)([^:\s]+):(.+)@([^\s/@]+(?::\d+)?(?:\/[^\s]*)?)/g,
+    category: PolicyCategory.DATABASE_CREDENTIALS,
+    replacement: "$1[REDACTED]:[REDACTED]@$4",
+  },
+  {
+    name: "JDBC_CONNECTION_STRING",
+    pattern:
+      /\b(jdbc:[a-zA-Z0-9]+:\/\/)([^:\s]+):(.+)@([^\s/@]+(?::\d+)?(?:\/[^\s]*)?)/g,
+    category: PolicyCategory.DATABASE_CREDENTIALS,
+    replacement: "$1[REDACTED]:[REDACTED]@$4",
+  },
+  {
+    name: "SMTP_CONNECTION_STRING",
+    pattern: /\b(smtps?:\/\/)([^:\s]+):(.+)@([^\s/@:]+(?::\d+)?)/g,
     category: PolicyCategory.DATABASE_CREDENTIALS,
     replacement: "$1[REDACTED]:[REDACTED]@$4",
   },

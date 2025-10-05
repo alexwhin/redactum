@@ -8,7 +8,7 @@ search: false
 
 [← Back to Test Cases](/api/test-cases)
 
-This page shows 29 test cases that validate Government IDs patterns.
+This page shows 41 test cases that validate Government IDs patterns.
 
 | Policy | Test Case |
 |--------|-----------|
@@ -41,3 +41,15 @@ This page shows 29 test cases that validate Government IDs patterns.
 | `NATIONAL_ID` | `citizen-id MNO99999999` |
 | `NATIONAL_ID` | `national_id: PQR12345678` |
 | `NATIONAL_ID` | `National ID: STU987654321` |
+| `PASSPORT_MRZ` | `P<USADOE<<JOHN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\nL898902C<3USA6908061M9511084710000307<715816` |
+| `ITIN` | `900-70-1234` |
+| `ITIN` | `900-71-5678` |
+| `ITIN` | `910-70-9999` |
+| `ITIN` | `920-72-0000` |
+| `ITIN` | `930-73-1111` |
+| `ITIN` | `940-74-2222` |
+| `ITIN` | `950-75-3333` |
+| `ITIN` | `960-76-4444` |
+| `ITIN` | `970-77-5555` |
+| `ITIN` | `980-78-6666` |
+| `ITIN` | `990-79-7777` |

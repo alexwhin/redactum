@@ -23,12 +23,6 @@ const DEFAULT_CATEGORIES: Record<
     replacement: "[SSN]",
     preserveFormat: false,
   },
-  [PolicyCategory.CREDIT_CARD]: {
-    enabled: true,
-    mode: "replace",
-    replacement: "[CREDIT_CARD]",
-    preserveFormat: false,
-  },
   [PolicyCategory.IP_ADDRESS]: {
     enabled: true,
     mode: "replace",

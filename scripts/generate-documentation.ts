@@ -16,7 +16,6 @@ function getCategoryDisplayName(category: PolicyCategory): string {
     EMAIL: "Email",
     PHONE: "Phone Numbers",
     SSN: "Social Security Numbers",
-    CREDIT_CARD: "Credit Cards",
     IP_ADDRESS: "IP Addresses",
     API_KEY: "API Keys",
     AWS_KEY: "AWS Credentials",
@@ -68,6 +67,9 @@ export const exampleMap: Record<string, string> = {
   ROUTING_NUMBER_US: "021000021",
   IBAN: "GB82WEST12345698765432",
   SWIFT_CODE: "BOFAUS3N",
+  ACCOUNT_NUMBER_US: "Account Number: 123456789012",
+  ACH_ROUTING_NUMBER: "Routing Number: 021000021",
+  CREDIT_CARD_CVV: "CVV: 123",
   BITCOIN_ADDRESS: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
   ETHEREUM_ADDRESS: "0x742d35Cc6634C0532925a3b844Bc9e7595f5a123",
   MEDICAL_RECORD_NUMBER: "MRN-123456",
@@ -110,6 +112,7 @@ export const exampleMap: Record<string, string> = {
   TWILIO_API_KEY: "SK1234567890abcdef1234567890abcdef",
   SENDGRID_API_KEY:
     "SG.abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ1234",
+  CLOUDFLARE_API_TOKEN: "1234567890abcdefghijklmnopqrstuvwxyz1234",
   STRIPE_KEY: "sk_live_1234567890abcdefghijklmnop",
   SQUARE_ACCESS_TOKEN: "sq0atp-1234567890abcdef",
   PAYPAL_CLIENT_ID:
@@ -130,6 +133,10 @@ export const exampleMap: Record<string, string> = {
     "dop_v1_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
   GCP_SERVICE_ACCOUNT_KEY:
     "my-service-account@my-project.iam.gserviceaccount.com",
+  AWS_ACCOUNT_ID: "aws-account-id: 123456789012",
+  GCP_API_KEY: "AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI",
+  AZURE_STORAGE_CONNECTION_STRING:
+    "DefaultEndpointsProtocol=https;AccountName=myaccount;AccountKey=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUV==;EndpointSuffix=core.windows.net",
   CREDIT_CARD_WITH_SEPARATORS: "4111-1111-1111-1111",
   BASE64_URL_PARAM:
     "https://example.com?token=aGVsbG93b3JsZHNlY3JldGtleXZhbHVl",
@@ -146,6 +153,8 @@ export const exampleMap: Record<string, string> = {
   RABBITMQ_CONNECTION_STRING: "amqp://user:password@localhost:5672/",
   KAFKA_CONNECTION_STRING: "localhost:9092",
   CASSANDRA_CONNECTION_STRING: "cassandra://user:pass@host:9042/keyspace",
+  JDBC_CONNECTION_STRING: "jdbc:mysql://dbuser:dbpass@localhost:3306/mydb",
+  SMTP_CONNECTION_STRING: "smtp://user:password@smtp.gmail.com:587",
   DATABASE_CONNECTION_STRING:
     "Server=localhost;Database=myDb;User Id=myUser;Password=myPass;",
   DATABASE_URL: "postgres://user:pass@host:5432/dbname",
@@ -206,6 +215,9 @@ export const exampleMap: Record<string, string> = {
   US_DRIVER_LICENSE: "D12345678",
   US_PASSPORT_NUMBER: "M12345678",
   NATIONAL_ID: "National ID: ID123456789",
+  PASSPORT_MRZ:
+    "P<USADOE<<JOHN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\nL898902C<3USA6908061M9511084710000307<715816",
+  ITIN: "900-70-1234",
   US_LICENSE_PLATE: "ABC-1234",
   US_ZIP_CODE: "12345",
   CANADIAN_POSTAL_CODE: "K1A 0B1",
@@ -242,6 +254,11 @@ export const exampleMap: Record<string, string> = {
   OAUTH_CLIENT_SECRET: "client_secret: GOCSPX-1234567890abcdefghijklmnop",
   OAUTH_REFRESH_TOKEN: "refresh_token: 1//0gFU7abcdefghijklmnopqrstuvw",
   OAUTH_ACCESS_TOKEN: "access_token: ya29.a0ARrdaMabcdefghijklmnopqr",
+  BASIC_AUTH_HEADER: "Authorization: Basic dXNlcjpwYXNzd29yZA==",
+  BEARER_TOKEN_HEADER:
+    "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U",
+  API_KEY_HEADER: "X-API-Key: 1234567890abcdefghijklmnopqrst",
+  SESSION_ID_COOKIE: "sessionid=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0",
   OKTA_API_TOKEN: "okta-token: 001234567890aBcDeFgHiJkLmNoPqRsTuVwXyZ12",
   KEYCLOAK_CLIENT_SECRET:
     "keycloak-client-secret: 12345678-1234-1234-1234-123456789012",
@@ -285,7 +302,6 @@ export const exampleMap: Record<string, string> = {
   QUAY_IO_TOKEN: "quay.io-token: 1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ123456",
   JFROG_ARTIFACTORY_TOKEN: "AKCp1234567890abcdefghijklmnopqrstuvwxyz",
   NEXUS_REPOSITORY_TOKEN: "nexus-token: 1234567890abcdef-1234-1234-1234",
-  CLOUDFLARE_API_TOKEN: "1234567890abcdefghijklmnopqrstuvwxyz1234",
   SSH_KEY_FINGERPRINT: "SHA256:1234567890abcdefghijklmnopqrstuvwxyz1234567",
   PGP_KEY_ID: "0x1234567890ABCDEF",
   AGE_SECRET_KEY:
@@ -332,7 +348,6 @@ const categoryOrder: PolicyCategory[] = [
   "TAX_IDENTIFIER" as PolicyCategory,
   "GOVERNMENT_ID" as PolicyCategory,
   "SSN" as PolicyCategory,
-  "CREDIT_CARD" as PolicyCategory,
   "EMAIL" as PolicyCategory,
   "PHONE" as PolicyCategory,
   "ADDRESS" as PolicyCategory,

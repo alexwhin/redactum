@@ -20,6 +20,7 @@ describe("api key patterns", () => {
     "TWILIO_API_KEY",
     "SENDGRID_API_KEY",
     "PASSWORD_ASSIGNMENT",
+    "CLOUDFLARE_API_TOKEN",
   ]);
 
   describe("OPENAI_API_KEY", () => {
@@ -335,6 +336,32 @@ describe("api key patterns", () => {
         'password = "abc"', // too short
         "password: 'tiny'", // insufficient length
         "password-invalid", // wrong format
+      ],
+    });
+  });
+
+  describe("CLOUDFLARE_API_TOKEN", () => {
+    testPolicySuite({
+      policyName: "CLOUDFLARE_API_TOKEN",
+      replacement: "[CLOUDFLARE_TOKEN]",
+      shouldMatch: [
+        "1234567890abcdefghijklmnopqrstuvwxyz1234", // 40-character token
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcd", // mixed case
+        "aBcDeFgHiJkLmNoPqRsTuVwXyZ1234567890aBcD", // alternating case
+        "0000000000111111111122222222223333333333", // numeric pattern
+        "zyxwvutsrqponmlkjihgfedcba9876543210abcd", // reverse alpha
+        "abcdefghijklmnopqrstuvwxyz12345678901234", // lowercase heavy
+        "ZYXWVUTSRQPONMLKJIHGFEDCBA1234567890ABCD", // uppercase heavy
+        "xAxBxCxDxExFxGxHxIxJxKxLxMxNxOxPxQxRxSxT", // alternating pattern with x
+        "zZyYxXwWvVuUtTsSrRqQpPoOnNmMlLkKjJiIhHgG", // alternating upper/lower
+      ],
+      shouldNotMatch: [
+        "123456789012345678901234567890123456789", // 39 characters (too short)
+        "12345678901234567890123456789012345678901", // 41 characters (too long)
+        "cloudflare-token-abc", // wrong format
+        "regular text", // plain text
+        "api-key-123", // wrong prefix
+        "short", // way too short
       ],
     });
   });

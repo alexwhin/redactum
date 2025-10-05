@@ -10,6 +10,8 @@ describe("government id patterns", () => {
     "US_DRIVER_LICENSE",
     "US_PASSPORT_NUMBER",
     "NATIONAL_ID",
+    "PASSPORT_MRZ",
+    "ITIN",
   ]);
 
   describe("US_DRIVER_LICENSE", () => {
@@ -89,6 +91,52 @@ describe("government id patterns", () => {
         "citizen-id 12", // too short
         "national_id:", // missing ID
         "national id", // missing colon/hyphen
+      ],
+    });
+  });
+
+  describe("PASSPORT_MRZ", () => {
+    testPolicySuite({
+      policyName: "PASSPORT_MRZ",
+      replacement: "[PASSPORT_MRZ]",
+      shouldMatch: [
+        "P<USADOE<<JOHN<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\nL898902C<3USA6908061M9511084710000307<715816", // standard US passport MRZ
+      ],
+      shouldNotMatch: [
+        "P<USADOE<<JOHN<<<<", // incomplete MRZ (too short)
+        "invalid text", // plain text
+        "P<USA", // way too short
+        "regular passport number", // not MRZ format
+        "123456789", // just numbers
+        "PASSPORT", // just text
+      ],
+    });
+  });
+
+  describe("ITIN", () => {
+    testPolicySuite({
+      policyName: "ITIN",
+      replacement: "[ITIN]",
+      shouldMatch: [
+        "900-70-1234", // valid ITIN (9XX-7X-XXXX)
+        "900-71-5678", // valid ITIN
+        "910-70-9999", // valid ITIN
+        "920-72-0000", // valid ITIN
+        "930-73-1111", // valid ITIN
+        "940-74-2222", // valid ITIN
+        "950-75-3333", // valid ITIN
+        "960-76-4444", // valid ITIN
+        "970-77-5555", // valid ITIN
+        "980-78-6666", // valid ITIN
+        "990-79-7777", // valid ITIN
+      ],
+      shouldNotMatch: [
+        "900-60-1234", // invalid middle group (not 7X)
+        "800-70-1234", // invalid first group (not 9XX)
+        "900-70-123", // too short
+        "900-70-12345", // too long
+        "123-45-6789", // SSN format, not ITIN
+        "regular text", // plain text
       ],
     });
   });

@@ -8,7 +8,7 @@ search: false
 
 [← Back to Test Cases](/api/test-cases)
 
-This page shows 42 test cases that validate Cloud Credentials patterns.
+This page shows 69 test cases that validate Cloud Credentials patterns.
 
 | Policy | Test Case |
 |--------|-----------|
@@ -54,3 +54,30 @@ This page shows 42 test cases that validate Cloud Credentials patterns.
 | `GCP_SERVICE_ACCOUNT_KEY` | `storage-admin@backup-project-789.iam.gserviceaccount.com` |
 | `GCP_SERVICE_ACCOUNT_KEY` | `app-service@my-app-project-2024.iam.gserviceaccount.com` |
 | `GCP_SERVICE_ACCOUNT_KEY` | `ci-cd-pipeline@devops-project.iam.gserviceaccount.com` |
+| `AWS_ACCOUNT_ID` | `aws-account-id: 123456789012` |
+| `AWS_ACCOUNT_ID` | `aws_account_id: 987654321098` |
+| `AWS_ACCOUNT_ID` | `AWS-ACCOUNT-ID: 111111111111` |
+| `AWS_ACCOUNT_ID` | `aws-account-id 234567890123` |
+| `AWS_ACCOUNT_ID` | `AWS_ACCOUNT_ID: 000000000001` |
+| `AWS_ACCOUNT_ID` | `aws-account-id# 999999999999` |
+| `AWS_ACCOUNT_ID` | `aws_account_id 555555555555` |
+| `AWS_ACCOUNT_ID` | `AWS-ACCOUNT-ID: 777777777777` |
+| `AWS_ACCOUNT_ID` | `awsaccountid: 888888888888` |
+| `AWS_ACCOUNT_ID` | `aws-account_id: 444444444444` |
+| `GCP_API_KEY` | `AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI` |
+| `GCP_API_KEY` | `AIzaABCDEF1234567890abcdefGHIJKLMNOPQRS` |
+| `GCP_API_KEY` | `AIza1234567890abcdefghijklmnopqrstuv123` |
+| `GCP_API_KEY` | `AIzaZYXWVUTSRQPONMLKJIHGFEDCBA987654321` |
+| `GCP_API_KEY` | `AIzaabcdefghijklmnopqrstuvwxyz123456789` |
+| `GCP_API_KEY` | `AIzaABCDEFGHIJKLMNOPQRSTUVWXYZ123456789` |
+| `GCP_API_KEY` | `AIza_1234567890abcdefghijklmnopqrstuv-1` |
+| `GCP_API_KEY` | `AIza-ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678` |
+| `GCP_API_KEY` | `AIza1234567890abcdefghijklmnopqrstuvwxy` |
+| `AZURE_STORAGE_CONNECTION_STRING` | `DefaultEndpointsProtocol=https;AccountName=myaccount;AccountKey=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUV==;EndpointSuffix=core.windows.net` |
+| `AZURE_STORAGE_CONNECTION_STRING` | `DefaultEndpointsProtocol=https;AccountName=storageacct;AccountKey=HIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabc==;EndpointSuffix=core.windows.net` |
+| `AZURE_STORAGE_CONNECTION_STRING` | `DefaultEndpointsProtocol=https;AccountName=prod-storage;AccountKey=OPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij==;EndpointSuffix=core.windows.net` |
+| `AZURE_STORAGE_CONNECTION_STRING` | `DefaultEndpointsProtocol=https;AccountName=devstorage;AccountKey=VWXYZabcdefghijklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq==;EndpointSuffix=core.windows.net` |
+| `AZURE_STORAGE_CONNECTION_STRING` | `DefaultEndpointsProtocol=https;AccountName=backup123;AccountKey=cdefghijklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwx==;EndpointSuffix=core.windows.net` |
+| `AZURE_STORAGE_CONNECTION_STRING` | `DefaultEndpointsProtocol=https;AccountName=logs-store;AccountKey=jklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234==;EndpointSuffix=core.windows.net` |
+| `AZURE_STORAGE_CONNECTION_STRING` | `DefaultEndpointsProtocol=https;AccountName=media2024;AccountKey=qrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/==;EndpointSuffix=core.windows.net` |
+| `AZURE_STORAGE_CONNECTION_STRING` | `DefaultEndpointsProtocol=https;AccountName=archive-data;AccountKey=xyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/ABCDEFG==;EndpointSuffix=core.windows.net` |

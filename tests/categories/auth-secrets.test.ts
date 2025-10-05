@@ -14,6 +14,10 @@ describe("auth secrets patterns", () => {
     "OKTA_API_TOKEN",
     "AUTH0_API_TOKEN",
     "KEYCLOAK_CLIENT_SECRET",
+    "BASIC_AUTH_HEADER",
+    "BEARER_TOKEN_HEADER",
+    "API_KEY_HEADER",
+    "SESSION_ID_COOKIE",
   ]);
 
   describe("OAUTH_CLIENT_ID", () => {
@@ -182,6 +186,112 @@ describe("auth secrets patterns", () => {
         "keycloak_client_secret: abc", // Not a valid UUID
         "keycloak-client-secret: 12345678-1234-1234-1234", // Missing last UUID segment
         "keycloak-invalid", // Invalid Keycloak label format
+      ],
+    });
+  });
+
+  describe("BASIC_AUTH_HEADER", () => {
+    testPolicySuite({
+      policyName: "BASIC_AUTH_HEADER",
+      replacement: "Authorization: Basic [REDACTED]",
+      shouldMatch: [
+        "Authorization: Basic dXNlcjpwYXNzd29yZA==", // user:password in Base64
+        "Authorization: Basic YWRtaW46cGFzc3dvcmQxMjM=", // admin:password123
+        "Authorization: Basic dGVzdDp0ZXN0MTIz", // test:test123
+        "Authorization: Basic bXlfdXNlcjpteV9wYXNzd29yZA==", // my_user:my_password
+        "Authorization: Basic YXBpX2tleV91c2VyOmFwaV9rZXlfcGFzc3dvcmQ=", // api_key_user:api_key_password
+        "Authorization: Basic cm9vdDpyb290", // root:root
+        "Authorization: Basic QUJDREVGR0hJSkw=", // short Base64
+        "Authorization: Basic YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY3ODkw", // long Base64
+        "Authorization: Basic cXdlcnR5OnBhc3N3b3Jk", // qwerty:password
+      ],
+      shouldNotMatch: [
+        "Authorization: Bearer token123", // Bearer, not Basic
+        "Authorization: Basic", // missing Base64 value
+        "Basic dXNlcjpwYXNzd29yZA==", // missing Authorization prefix
+        "Authorization: basic invalid", // lowercase basic
+        "Auth: Basic dXNlcjpwYXNzd29yZA==", // wrong header name
+        "regular text", // plain text
+      ],
+    });
+  });
+
+  describe("BEARER_TOKEN_HEADER", () => {
+    testPolicySuite({
+      policyName: "BEARER_TOKEN_HEADER",
+      replacement: "Authorization: Bearer [REDACTED]",
+      shouldMatch: [
+        "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U", // JWT token
+        "Authorization: Bearer 1234567890abcdefghijklmnopqrstuvwxyz", // simple Bearer token
+        "Authorization: Bearer sk-1234567890abcdefghijklmnopqrstuvwxyz", // API key as Bearer token
+        "Authorization: Bearer ghp_abcdefghijklmnopqrstuvwxyz1234567890", // GitHub token
+        "Authorization: Bearer ya29.a0ARrdaMabcdefghijklmnopqrstuvwxyz", // Google OAuth token
+        "Authorization: Bearer AQIC5wM2LY4Sfcw", // OpenAM token
+        "Authorization: Bearer mF_9.B5f-4.1JqM", // dotted Bearer token
+        "Authorization: Bearer abc_def-ghi~jkl+mno/pqr", // URL-safe characters
+        "Authorization: Bearer token123==", // with padding
+      ],
+      shouldNotMatch: [
+        "Authorization: Basic dXNlcjpwYXNzd29yZA==", // Basic, not Bearer
+        "Authorization: Bearer", // missing token
+        "Bearer token123", // missing Authorization prefix
+        "Authorization: bearer invalid", // lowercase bearer
+        "Auth: Bearer token123", // wrong header name
+        "regular text", // plain text
+      ],
+    });
+  });
+
+  describe("API_KEY_HEADER", () => {
+    testPolicySuite({
+      policyName: "API_KEY_HEADER",
+      replacement: "[API_KEY_HEADER]: [REDACTED]",
+      shouldMatch: [
+        "X-API-Key: 1234567890abcdefghijklmnopqrst", // standard X-API-Key
+        "API-Key: abcdefghijklmnopqrstuvwxyz1234567890", // API-Key variant
+        "X-Api-Key: sk-1234567890abcdefghijklmnop", // X-Api-Key variant
+        "ApiKey: ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", // ApiKey variant
+        "X-API-Key: ghp_1234567890abcdefghijklmnopqrstuvwxyz", // GitHub-like key
+        "API-Key: AIzaSy1234567890abcdefghijklmnopqrst", // Google-like key
+        "X-Api-Key: pk_test_1234567890abcdefghijklmnop", // Stripe-like key
+        "ApiKey: SG.1234567890abcdefghijklmnopqrstuvwxyz", // SendGrid-like key
+        "X-API-Key: 1234567890_abcdefghijklmnopqrstuvwxyz", // with underscore
+        "API-Key: 1234567890-abcdefghijklmnopqrstuvwxyz", // with hyphen
+      ],
+      shouldNotMatch: [
+        "X-API-Key: short", // too short
+        "X-API-Key:", // missing value
+        "API-Key", // missing colon and value
+        "Authorization: Bearer token123", // different header
+        "X-API-Key: abc", // too short
+        "regular text", // plain text
+      ],
+    });
+  });
+
+  describe("SESSION_ID_COOKIE", () => {
+    testPolicySuite({
+      policyName: "SESSION_ID_COOKIE",
+      replacement: "[SESSION_COOKIE]=[REDACTED]",
+      shouldMatch: [
+        "sessionid=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0", // Django session
+        "PHPSESSID=1234567890abcdefghijklmnopqrstuvwxyz", // PHP session
+        "JSESSIONID=ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890", // Java session
+        "connect.sid=s%3A1234567890abcdefghijklmnopqrstuvwxyz", // Express session
+        "express.sid=1234567890abcdefghijklmnopqrstuvwxyz.signature", // Express session with signature
+        "sessionid=abc-def-ghi-jkl-mno-pqr", // session with hyphens (must be 20+ chars)
+        "PHPSESSID=aBcDeF1234567890aBcDeF1234567890", // mixed case
+        "JSESSIONID=1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ.node01", // with node identifier
+        "connect.sid=abcdefghijklmnopqrstuvwxyz1234567890", // plain connect.sid
+        "express.sid=1234567890_abcdefghijklmnopqrstuvwxyz", // with underscore
+      ],
+      shouldNotMatch: [
+        "sessionid=short", // too short
+        "sessionid=", // missing value
+        "PHPSESSID", // missing equals and value
+        "cookie=value", // different cookie name
+        "JSESSIONID=abc", // too short
+        "regular text", // plain text
       ],
     });
   });

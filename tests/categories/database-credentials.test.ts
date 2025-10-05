@@ -15,6 +15,8 @@ describe("Database Credentials Redaction", () => {
     "POSTGRESQL_CONNECTION_STRING",
     "MYSQL_CONNECTION_STRING",
     "CASSANDRA_CONNECTION_STRING",
+    "JDBC_CONNECTION_STRING",
+    "SMTP_CONNECTION_STRING",
   ]);
 
   describe("DATABASE_URL", () => {
@@ -216,6 +218,58 @@ describe("Database Credentials Redaction", () => {
         "http://cassandra.com", // HTTP not Cassandra
         "cassandra://user@host/keyspace", // missing password
         "cassandra://host:9042", // missing user and password
+      ],
+    });
+  });
+
+  describe("JDBC_CONNECTION_STRING", () => {
+    testPolicySuite({
+      policyName: "JDBC_CONNECTION_STRING",
+      replacement: "[REDACTED]",
+      shouldMatch: [
+        "jdbc:mysql://dbuser:dbpass@localhost:3306/mydb", // MySQL JDBC
+        "jdbc:postgresql://admin:secret123@postgres.example.com:5432/proddb", // PostgreSQL JDBC
+        "jdbc:oracle://oracleuser:oraclepass@oracle.internal:1521/ORCL", // Oracle JDBC
+        "jdbc:sqlserver://sqluser:sqlpass@sqlserver.local:1433/master", // SQL Server JDBC
+        "jdbc:mariadb://mariauser:mariapass@mariadb.example.com:3307/webapp", // MariaDB JDBC
+        "jdbc:h2://h2user:h2pass@mem:testdb", // H2 in-memory JDBC
+        "jdbc:derby://derbyuser:derbypass@derby.local:1527/sampledb", // Derby JDBC
+        "jdbc:db2://db2user:db2pass@db2.example.com:50000/testdb", // DB2 JDBC
+        "jdbc:informix://infuser:infpass@informix.local:9088/stores_demo", // Informix JDBC
+      ],
+      shouldNotMatch: [
+        "jdbc:mysql://localhost:3306/mydb", // missing credentials
+        "jdbc://user:pass@host/db", // missing driver
+        "mysql://user:pass@host/db", // not JDBC format
+        "invalid", // plain text
+        "jdbc:postgresql://host", // missing credentials and database
+        "jdbc:oracle://host:1521", // missing credentials
+      ],
+    });
+  });
+
+  describe("SMTP_CONNECTION_STRING", () => {
+    testPolicySuite({
+      policyName: "SMTP_CONNECTION_STRING",
+      replacement: "[REDACTED]",
+      shouldMatch: [
+        "smtp://user:password@smtp.gmail.com:587", // Gmail SMTP
+        "smtps://admin:secret123@smtp.example.com:465", // SMTPS (SSL)
+        "smtp://noreply:mailpass@smtp.sendgrid.net:587", // SendGrid SMTP
+        "smtps://mailuser:mailpass@smtp.office365.com:587", // Office 365 SMTP
+        "smtp://app:apppass123@smtp.mailgun.org:587", // Mailgun SMTP
+        "smtps://service:P@ssw0rd!@smtp.aws.amazon.com:465", // AWS SES SMTP
+        "smtp://contact:contact123@smtp.zoho.com:587", // Zoho SMTP
+        "smtps://alerts:alert456@smtp.custom.com:465", // Custom SMTP server
+        "smtp://notifications:n0tify@smtp.internal.local:25", // Internal SMTP
+      ],
+      shouldNotMatch: [
+        "smtp://smtp.gmail.com:587", // missing credentials
+        "smtps://smtp.example.com", // missing credentials and port
+        "http://smtp.example.com", // HTTP not SMTP
+        "invalid", // plain text
+        "smtp://user@host:587", // missing password
+        "smtp://host:587", // missing credentials
       ],
     });
   });

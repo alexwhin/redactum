@@ -12,6 +12,9 @@ describe("cloud credentials patterns", () => {
     "DIGITALOCEAN_TOKEN",
     "RAILWAY_TOKEN",
     "GCP_SERVICE_ACCOUNT_KEY",
+    "AWS_ACCOUNT_ID",
+    "GCP_API_KEY",
+    "AZURE_STORAGE_CONNECTION_STRING",
   ]);
 
   describe("AZURE_SUBSCRIPTION_ID", () => {
@@ -137,6 +140,84 @@ describe("cloud credentials patterns", () => {
         "test@gserviceaccount.com", // missing IAM part
         "account@project.com", // non-GCP email
         "my-service-account@project", // incomplete domain
+      ],
+    });
+  });
+
+  describe("AWS_ACCOUNT_ID", () => {
+    testPolicySuite({
+      policyName: "AWS_ACCOUNT_ID",
+      replacement: "[AWS_ACCOUNT_ID]",
+      shouldMatch: [
+        "aws-account-id: 123456789012", // standard labeled format
+        "aws_account_id: 987654321098", // underscore separator
+        "AWS-ACCOUNT-ID: 111111111111", // uppercase
+        "aws-account-id 234567890123", // without colon
+        "AWS_ACCOUNT_ID: 000000000001", // with leading zeros
+        "aws-account-id# 999999999999", // with hash
+        "aws_account_id 555555555555", // underscore without colon
+        "AWS-ACCOUNT-ID: 777777777777", // mixed case prefix
+        "awsaccountid: 888888888888", // no separator in label
+        "aws-account_id: 444444444444", // mixed separators
+      ],
+      shouldNotMatch: [
+        "aws-account-id: 12345678901", // too short (11 digits)
+        "aws-account-id: 1234567890123", // too long (13 digits)
+        "aws-account-id:", // missing value
+        "123456789012", // no label
+        "account-id: 123456789012", // incomplete label
+        "regular text", // plain text
+      ],
+    });
+  });
+
+  describe("GCP_API_KEY", () => {
+    testPolicySuite({
+      policyName: "GCP_API_KEY",
+      replacement: "[GCP_API_KEY]",
+      shouldMatch: [
+        "AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI", // Google Maps API key (39 total chars = AIza + 35)
+        "AIzaABCDEF1234567890abcdefGHIJKLMNOPQRS", // generic GCP API key
+        "AIza1234567890abcdefghijklmnopqrstuv123", // alphanumeric
+        "AIzaZYXWVUTSRQPONMLKJIHGFEDCBA987654321", // mixed case
+        "AIzaabcdefghijklmnopqrstuvwxyz123456789", // lowercase heavy
+        "AIzaABCDEFGHIJKLMNOPQRSTUVWXYZ123456789", // uppercase heavy
+        "AIza_1234567890abcdefghijklmnopqrstuv-1", // with special chars
+        "AIza-ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678", // with hyphen
+        "AIza1234567890abcdefghijklmnopqrstuvwxy", // numeric start
+      ],
+      shouldNotMatch: [
+        "AIza123", // too short
+        "AIzaSy", // too short
+        "AiZaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI", // wrong case prefix
+        "AIZA1234567890abcdefghijklmnopqrstuv", // wrong prefix case
+        "api-key-123", // wrong format
+        "regular text", // plain text
+      ],
+    });
+  });
+
+  describe("AZURE_STORAGE_CONNECTION_STRING", () => {
+    testPolicySuite({
+      policyName: "AZURE_STORAGE_CONNECTION_STRING",
+      replacement: "[AZURE_STORAGE_CONNECTION]",
+      shouldMatch: [
+        "DefaultEndpointsProtocol=https;AccountName=myaccount;AccountKey=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUV==;EndpointSuffix=core.windows.net", // standard Azure Storage
+        "DefaultEndpointsProtocol=https;AccountName=storageacct;AccountKey=HIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabc==;EndpointSuffix=core.windows.net", // uppercase key
+        "DefaultEndpointsProtocol=https;AccountName=prod-storage;AccountKey=OPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij==;EndpointSuffix=core.windows.net", // prod storage
+        "DefaultEndpointsProtocol=https;AccountName=devstorage;AccountKey=VWXYZabcdefghijklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq==;EndpointSuffix=core.windows.net", // dev storage
+        "DefaultEndpointsProtocol=https;AccountName=backup123;AccountKey=cdefghijklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwx==;EndpointSuffix=core.windows.net", // backup storage
+        "DefaultEndpointsProtocol=https;AccountName=logs-store;AccountKey=jklmnopqrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234==;EndpointSuffix=core.windows.net", // logs storage
+        "DefaultEndpointsProtocol=https;AccountName=media2024;AccountKey=qrstuvwxyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/==;EndpointSuffix=core.windows.net", // media storage
+        "DefaultEndpointsProtocol=https;AccountName=archive-data;AccountKey=xyz0123456789+/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/ABCDEFG==;EndpointSuffix=core.windows.net", // archive storage
+      ],
+      shouldNotMatch: [
+        "DefaultEndpointsProtocol=https;AccountName=myaccount", // incomplete connection string
+        "AccountKey=abcdefghijklmnopqrstuvwxyz==", // missing protocol and account
+        "DefaultEndpointsProtocol=https;AccountName=myaccount;AccountKey=short==;EndpointSuffix=core.windows.net", // key too short
+        "regular text", // plain text
+        "azure-storage-connection", // just label
+        "EndpointSuffix=core.windows.net", // missing key parts
       ],
     });
   });

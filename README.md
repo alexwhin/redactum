@@ -16,7 +16,7 @@ Fast, zero-dependency PII redaction library for TypeScript and JavaScript that a
 - 🔑 Developer secrets (API keys, database URLs, JWT tokens)
 - 🏗️ Infrastructure details (IP addresses, AWS credentials)
 
-**180+ built-in patterns across 29 categories** for comprehensive detection of personal, financial, and technical sensitive data.
+**190+ built-in patterns across 32 categories** for comprehensive detection of personal, financial, and technical sensitive data.
 
 ## Installation
 

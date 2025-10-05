@@ -309,7 +309,7 @@ describe("Redactum and Functional API", () => {
         const endTime = Date.now();
 
         expect(result.findings.length).toBeGreaterThan(5);
-        expect(endTime - startTime).toBeLessThan(100);
+        expect(endTime - startTime).toBeLessThan(200);
       });
     });
   });

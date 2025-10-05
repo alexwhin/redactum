@@ -8,7 +8,7 @@ search: false
 
 [← Back to Test Cases](/api/test-cases)
 
-This page shows 85 test cases that validate API Keys patterns.
+This page shows 94 test cases that validate API Keys patterns.
 
 | Policy | Test Case |
 |--------|-----------|
@@ -97,3 +97,12 @@ This page shows 85 test cases that validate API Keys patterns.
 | `SENDGRID_API_KEY` | `SG.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234` |
 | `SENDGRID_API_KEY` | `SG.zyxwvutsrqponmlkjihgfedcba9876543210ZYXWVUTSRQPONMLKJIHGFEDCBA9876` |
 | `SENDGRID_API_KEY` | `SG.aBcDeFgHiJkLmNoPqRsTuVwXyZ1234567890aBcDeFgHiJkLmNoPqRsTuVwXyZ1234` |
+| `PASSWORD_ASSIGNMENT` | `1234567890abcdefghijklmnopqrstuvwxyz1234` |
+| `PASSWORD_ASSIGNMENT` | `ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcd` |
+| `PASSWORD_ASSIGNMENT` | `aBcDeFgHiJkLmNoPqRsTuVwXyZ1234567890aBcD` |
+| `PASSWORD_ASSIGNMENT` | `0000000000111111111122222222223333333333` |
+| `PASSWORD_ASSIGNMENT` | `zyxwvutsrqponmlkjihgfedcba9876543210abcd` |
+| `PASSWORD_ASSIGNMENT` | `abcdefghijklmnopqrstuvwxyz12345678901234` |
+| `PASSWORD_ASSIGNMENT` | `ZYXWVUTSRQPONMLKJIHGFEDCBA1234567890ABCD` |
+| `PASSWORD_ASSIGNMENT` | `xAxBxCxDxExFxGxHxIxJxKxLxMxNxOxPxQxRxSxT` |
+| `PASSWORD_ASSIGNMENT` | `zZyYxXwWvVuUtTsSrRqQpPoOnNmMlLkKjJiIhHgG` |

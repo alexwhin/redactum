@@ -45,7 +45,7 @@ describe("getDefaultConfig", () => {
       PolicyCategory.EMAIL,
       PolicyCategory.PHONE,
       PolicyCategory.SSN,
-      PolicyCategory.CREDIT_CARD,
+      PolicyCategory.FINANCIAL,
       PolicyCategory.API_KEY,
       PolicyCategory.AWS_KEY,
       PolicyCategory.PRIVATE_KEY,

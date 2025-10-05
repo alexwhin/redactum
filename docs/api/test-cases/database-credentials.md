@@ -8,7 +8,7 @@ search: false
 
 [← Back to Test Cases](/api/test-cases)
 
-This page shows 64 test cases that validate Database Credentials patterns.
+This page shows 82 test cases that validate Database Credentials patterns.
 
 | Policy | Test Case |
 |--------|-----------|
@@ -76,3 +76,21 @@ This page shows 64 test cases that validate Database Credentials patterns.
 | `CASSANDRA_CONNECTION_STRING` | `cassandra://service:Str0ng!P@ss@cassandra-prod.internal:9042/services` |
 | `CASSANDRA_CONNECTION_STRING` | `cassandra://webapp:web789@cassandra.example.com:9042/session_store` |
 | `CASSANDRA_CONNECTION_STRING` | `cassandra://timeseries:ts123@cassandra-ts.local:9042/timeseries_data` |
+| `JDBC_CONNECTION_STRING` | `jdbc:mysql://dbuser:dbpass@localhost:3306/mydb` |
+| `JDBC_CONNECTION_STRING` | `jdbc:postgresql://admin:secret123@postgres.example.com:5432/proddb` |
+| `JDBC_CONNECTION_STRING` | `jdbc:oracle://oracleuser:oraclepass@oracle.internal:1521/ORCL` |
+| `JDBC_CONNECTION_STRING` | `jdbc:sqlserver://sqluser:sqlpass@sqlserver.local:1433/master` |
+| `JDBC_CONNECTION_STRING` | `jdbc:mariadb://mariauser:mariapass@mariadb.example.com:3307/webapp` |
+| `JDBC_CONNECTION_STRING` | `jdbc:h2://h2user:h2pass@mem:testdb` |
+| `JDBC_CONNECTION_STRING` | `jdbc:derby://derbyuser:derbypass@derby.local:1527/sampledb` |
+| `JDBC_CONNECTION_STRING` | `jdbc:db2://db2user:db2pass@db2.example.com:50000/testdb` |
+| `JDBC_CONNECTION_STRING` | `jdbc:informix://infuser:infpass@informix.local:9088/stores_demo` |
+| `SMTP_CONNECTION_STRING` | `smtp://user:password@smtp.gmail.com:587` |
+| `SMTP_CONNECTION_STRING` | `smtps://admin:secret123@smtp.example.com:465` |
+| `SMTP_CONNECTION_STRING` | `smtp://noreply:mailpass@smtp.sendgrid.net:587` |
+| `SMTP_CONNECTION_STRING` | `smtps://mailuser:mailpass@smtp.office365.com:587` |
+| `SMTP_CONNECTION_STRING` | `smtp://app:apppass123@smtp.mailgun.org:587` |
+| `SMTP_CONNECTION_STRING` | `smtps://service:P@ssw0rd!@smtp.aws.amazon.com:465` |
+| `SMTP_CONNECTION_STRING` | `smtp://contact:contact123@smtp.zoho.com:587` |
+| `SMTP_CONNECTION_STRING` | `smtps://alerts:alert456@smtp.custom.com:465` |
+| `SMTP_CONNECTION_STRING` | `smtp://notifications:n0tify@smtp.internal.local:25` |
