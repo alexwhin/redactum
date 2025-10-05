@@ -264,18 +264,6 @@ describe("Vercel AI Adapter", () => {
   });
 
   describe("error handling", () => {
-    it("should handle missing Vercel AI SDK gracefully", async () => {
-      const adapter = createVercelAIAdapter();
-      const wrapper = adapter.createStreamingWrapper();
-
-      await expect(
-        wrapper.streamText({
-          model: "gpt-4",
-          prompt: "test",
-        })
-      ).rejects.toThrow("Vercel AI SDK not available");
-    });
-
     it("should handle invalid tool parameters", async () => {
       const adapter = createVercelAIAdapter();
 

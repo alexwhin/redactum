@@ -8,13 +8,27 @@ search: false
 
 [← Back to Test Cases](/api/test-cases)
 
-This page shows 6 test cases that validate Medical patterns.
+This page shows 20 test cases that validate Medical patterns.
 
 | Policy | Test Case |
 |--------|-----------|
 | `MEDICAL_RECORD_NUMBER` | `MRN-123456` |
 | `MEDICAL_RECORD_NUMBER` | `mrn: ABC123456` |
 | `MEDICAL_RECORD_NUMBER` | `MRN 123456789012` |
+| `MEDICAL_RECORD_NUMBER` | `MRN-987654` |
+| `MEDICAL_RECORD_NUMBER` | `mrn: XYZ9876543` |
+| `MEDICAL_RECORD_NUMBER` | `MRN 111111111111` |
+| `MEDICAL_RECORD_NUMBER` | `MRN-ABCD12345` |
+| `MEDICAL_RECORD_NUMBER` | `mrn: 1234567890AB` |
+| `MEDICAL_RECORD_NUMBER` | `MRN 000000000001` |
+| `MEDICAL_RECORD_NUMBER` | `MRN-999999` |
 | `HEALTH_INSURANCE_ID` | `Insurance HIB123456789` |
 | `HEALTH_INSURANCE_ID` | `policy: ABC12345678` |
 | `HEALTH_INSURANCE_ID` | `insurance-ID12345678901` |
+| `HEALTH_INSURANCE_ID` | `Insurance XYZ987654321` |
+| `HEALTH_INSURANCE_ID` | `policy: 1234567890AB` |
+| `HEALTH_INSURANCE_ID` | `insurance-ABC123456789` |
+| `HEALTH_INSURANCE_ID` | `Insurance 0000000000001` |
+| `HEALTH_INSURANCE_ID` | `policy: ZZZ99999999` |
+| `HEALTH_INSURANCE_ID` | `insurance-HIB111111111` |
+| `HEALTH_INSURANCE_ID` | `Insurance DEF123456789` |

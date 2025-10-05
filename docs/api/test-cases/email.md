@@ -8,7 +8,7 @@ search: false
 
 [← Back to Test Cases](/api/test-cases)
 
-This page shows 11 test cases that validate Email patterns.
+This page shows 15 test cases that validate Email patterns.
 
 | Policy | Test Case |
 |--------|-----------|
@@ -23,3 +23,7 @@ This page shows 11 test cases that validate Email patterns.
 | `EMAIL_ADDRESS` | `test.user_name@my-domain.org` |
 | `EMAIL_ADDRESS` | `info@company.museum` |
 | `EMAIL_ADDRESS` | `admin@localhost.local` |
+| `EMAIL_ADDRESS` | `Contact us at: support@example.com.` |
+| `EMAIL_ADDRESS` | `Email: sales@company.co.uk` |
+| `EMAIL_ADDRESS` | `feedback@site.example.io` |
+| `EMAIL_ADDRESS` | `(notifications@alerts.net)` |

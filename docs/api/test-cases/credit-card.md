@@ -8,7 +8,7 @@ search: false
 
 [← Back to Test Cases](/api/test-cases)
 
-This page shows 18 test cases that validate Credit Cards patterns.
+This page shows 23 test cases that validate Credit Cards patterns.
 
 | Policy | Test Case |
 |--------|-----------|
@@ -20,6 +20,9 @@ This page shows 18 test cases that validate Credit Cards patterns.
 | `CREDIT_CARD` | `5105105105105100` |
 | `CREDIT_CARD` | `4012888888881881` |
 | `CREDIT_CARD` | `4222222222222220` |
+| `CREDIT_CARD` | `Card: 4111111111111111` |
+| `CREDIT_CARD` | `CC 5555555555554444` |
+| `CREDIT_CARD` | `Payment card 378282246310005.` |
 | `CREDIT_CARD_WITH_SEPARATORS` | `4111-1111-1111-1111` |
 | `CREDIT_CARD_WITH_SEPARATORS` | `5555-5555-5555-4444` |
 | `CREDIT_CARD_WITH_SEPARATORS` | `3782-822463-10005` |
@@ -30,3 +33,5 @@ This page shows 18 test cases that validate Credit Cards patterns.
 | `CREDIT_CARD_WITH_SEPARATORS` | `3622-720627-1667` |
 | `CREDIT_CARD_WITH_SEPARATORS` | `4012-8888-8888-1881` |
 | `CREDIT_CARD_WITH_SEPARATORS` | `5105-1051-0510-5100` |
+| `CREDIT_CARD_WITH_SEPARATORS` | `Card: 4111-1111-1111-1111` |
+| `CREDIT_CARD_WITH_SEPARATORS` | `CC: 5555 5555 5555 4444.` |

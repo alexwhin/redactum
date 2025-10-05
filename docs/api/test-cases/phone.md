@@ -8,7 +8,7 @@ search: false
 
 [← Back to Test Cases](/api/test-cases)
 
-This page shows 35 test cases that validate Phone Numbers patterns.
+This page shows 56 test cases that validate Phone Numbers patterns.
 
 | Policy | Test Case |
 |--------|-----------|
@@ -21,6 +21,12 @@ This page shows 35 test cases that validate Phone Numbers patterns.
 | `PHONE_NUMBER_UK` | `+441632960123` |
 | `PHONE_NUMBER_UK` | `01632960456` |
 | `PHONE_NUMBER_UK` | `+443001234567` |
+| `PHONE_NUMBER_UK` | `Call: +442087654321` |
+| `PHONE_NUMBER_UK` | `Tel: 02087654321` |
+| `PHONE_NUMBER_UK` | `+447400123456` |
+| `PHONE_NUMBER_UK` | `08001234567` |
+| `PHONE_NUMBER_UK` | `+448081234567` |
+| `PHONE_NUMBER_UK` | `09991234567` |
 | `PHONE_NUMBER_CANADIAN` | `+1-416-555-0123` |
 | `PHONE_NUMBER_CANADIAN` | `1 416 555 0123` |
 | `PHONE_NUMBER_CANADIAN` | `(416) 555-0123` |
@@ -29,6 +35,11 @@ This page shows 35 test cases that validate Phone Numbers patterns.
 | `PHONE_NUMBER_CANADIAN` | `(250) 555-0123` |
 | `PHONE_NUMBER_CANADIAN` | `+1-403-555-0100` |
 | `PHONE_NUMBER_CANADIAN` | `1 613 555 0123` |
+| `PHONE_NUMBER_CANADIAN` | `+1-778-555-0145` |
+| `PHONE_NUMBER_CANADIAN` | `(905) 555-0199` |
+| `PHONE_NUMBER_CANADIAN` | `1 647 555 0123` |
+| `PHONE_NUMBER_CANADIAN` | `+1-438-555-0188` |
+| `PHONE_NUMBER_CANADIAN` | `+1-211-555-0123` |
 | `PHONE_NUMBER_INTERNATIONAL` | `Call +14155551234` |
 | `PHONE_NUMBER_INTERNATIONAL` | `Contact +33123456789` |
 | `PHONE_NUMBER_INTERNATIONAL` | `Phone +861234567890` |
@@ -37,6 +48,12 @@ This page shows 35 test cases that validate Phone Numbers patterns.
 | `PHONE_NUMBER_INTERNATIONAL` | `+81312345678` |
 | `PHONE_NUMBER_INTERNATIONAL` | `+61212345678` |
 | `PHONE_NUMBER_INTERNATIONAL` | `+551199887766` |
+| `PHONE_NUMBER_INTERNATIONAL` | `+35314012345` |
+| `PHONE_NUMBER_INTERNATIONAL` | `+31201234567` |
+| `PHONE_NUMBER_INTERNATIONAL` | `+46812345678` |
+| `PHONE_NUMBER_INTERNATIONAL` | `+34911234567` |
+| `PHONE_NUMBER_INTERNATIONAL` | `+390212345678` |
+| `PHONE_NUMBER_INTERNATIONAL` | `+41443456789` |
 | `PHONE_NUMBER_US` | `555-123-4567` |
 | `PHONE_NUMBER_US` | `(555) 123-4567` |
 | `PHONE_NUMBER_US` | `555.123.4567` |
@@ -47,3 +64,7 @@ This page shows 35 test cases that validate Phone Numbers patterns.
 | `PHONE_NUMBER_US` | `+1-212-555-0123` |
 | `PHONE_NUMBER_US` | `9995551234` |
 | `PHONE_NUMBER_US` | `555.867.5309` |
+| `PHONE_NUMBER_US` | `Call: (415) 555-0100` |
+| `PHONE_NUMBER_US` | `1-800-555-0199` |
+| `PHONE_NUMBER_US` | `+1 (555) 867-5309` |
+| `PHONE_NUMBER_US` | `(702) 555-0123` |

@@ -8,12 +8,20 @@ search: false
 
 [← Back to Test Cases](/api/test-cases)
 
-This page shows 44 test cases that validate Digital Identity patterns.
+This page shows 56 test cases that validate Digital Identity patterns.
 
 | Policy | Test Case |
 |--------|-----------|
 | `UUID` | `550e8400-e29b-41d4-a716-446655440000` |
 | `UUID` | `123e4567-e89b-12d3-a456-426614174000` |
+| `UUID` | `6ba7b810-9dad-11d1-80b4-00c04fd430c8` |
+| `UUID` | `a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11` |
+| `UUID` | `A0EEBC99-9C0B-4EF8-BB6D-6BB9BD380A11` |
+| `UUID` | `Request ID: 550e8400-e29b-41d4-a716-446655440000` |
+| `UUID` | `user_id=123e4567-e89b-12d3-a456-426614174000` |
+| `UUID` | `{550e8400-e29b-41d4-a716-446655440000}` |
+| `UUID` | `urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6` |
+| `UUID` | `123e4567-e89b-12d3-a456-426614174000-extra` |
 | `BITCOIN_ADDRESS` | `1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa` |
 | `BITCOIN_ADDRESS` | `3J98t1WpEZ73CNmYviecrnyiWrnqRhWNLy` |
 | `BITCOIN_ADDRESS` | `bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq` |
@@ -56,3 +64,7 @@ This page shows 44 test cases that validate Digital Identity patterns.
 | `SHA_HASH` | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
 | `SHA_HASH` | `2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae` |
 | `SHA_HASH` | `38b060a751ac96384cd9327eb1b1e36a21fdb71114be07434c0cc7bf63f6e1da274edebfe76f65fbd51ad2f14898b95b` |
+| `SHA_HASH` | `Commit hash: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12` |
+| `SHA_HASH` | `SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| `SHA_HASH` | `File integrity: 2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae.` |
+| `SHA_HASH` | `E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855` |

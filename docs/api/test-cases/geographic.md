@@ -8,16 +8,49 @@ search: false
 
 [← Back to Test Cases](/api/test-cases)
 
-This page shows 9 test cases that validate Geographic patterns.
+This page shows 42 test cases that validate Geographic patterns.
 
 | Policy | Test Case |
 |--------|-----------|
 | `US_ZIP_CODE` | `12345` |
 | `US_ZIP_CODE` | `12345-6789` |
+| `US_ZIP_CODE` | `90210` |
+| `US_ZIP_CODE` | `10001` |
+| `US_ZIP_CODE` | `60601` |
+| `US_ZIP_CODE` | `02134` |
+| `US_ZIP_CODE` | `94102` |
+| `US_ZIP_CODE` | `33101-1234` |
+| `US_ZIP_CODE` | `00000` |
+| `US_ZIP_CODE` | `99999-9999` |
+| `US_ZIP_CODE` | `12345-678` |
+| `US_ZIP_CODE` | `12345-67890` |
 | `CANADIAN_POSTAL_CODE` | `K1A 0B1` |
 | `CANADIAN_POSTAL_CODE` | `K1A0B1` |
+| `CANADIAN_POSTAL_CODE` | `M5V 3A8` |
+| `CANADIAN_POSTAL_CODE` | `V6B 1A1` |
+| `CANADIAN_POSTAL_CODE` | `H2Y 1C6` |
+| `CANADIAN_POSTAL_CODE` | `T2P 2M5` |
+| `CANADIAN_POSTAL_CODE` | `R3C 0A6` |
+| `CANADIAN_POSTAL_CODE` | `A1A 1A1` |
+| `CANADIAN_POSTAL_CODE` | `Z9Z9Z9` |
+| `CANADIAN_POSTAL_CODE` | `B2B 2B2` |
 | `UK_POSTCODE` | `SW1A 1AA` |
 | `UK_POSTCODE` | `M1 1AE` |
 | `UK_POSTCODE` | `B33 8TH` |
+| `UK_POSTCODE` | `CR2 6XH` |
+| `UK_POSTCODE` | `DN55 1PT` |
+| `UK_POSTCODE` | `W1A 0AX` |
+| `UK_POSTCODE` | `EC1A 1BB` |
+| `UK_POSTCODE` | `NW1 6XE` |
+| `UK_POSTCODE` | `G1 1AA` |
+| `UK_POSTCODE` | `EH1 1AA` |
 | `GPS_COORDINATES` | `40.7128,-74.0060` |
 | `GPS_COORDINATES` | `-33.8688, 151.2093` |
+| `GPS_COORDINATES` | `51.5074,-0.1278` |
+| `GPS_COORDINATES` | `48.8566,2.3522` |
+| `GPS_COORDINATES` | `35.6762,139.6503` |
+| `GPS_COORDINATES` | `-22.9068,-43.1729` |
+| `GPS_COORDINATES` | `1.3521,103.8198` |
+| `GPS_COORDINATES` | `-37.8136,144.9631` |
+| `GPS_COORDINATES` | `55.7558,37.6173` |
+| `GPS_COORDINATES` | `34.0522,-118.2437` |
